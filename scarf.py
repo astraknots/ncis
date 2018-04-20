@@ -3,74 +3,94 @@
 from itertools import groupby
 
 import aspects
+import astrology_aspects as _aspects
 import constants
 import patterns
 import shapes
 import util as putil
 import re
+import logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
-ASPECTS_FOR_DEG_IDX = 0
-NUM_ROWS_IDX = 1
-LIST_POSS_PATTS_IDX = 2
 
-def groupByAspect(dict):
+ASPECTS_FOR_DEG_IDX = 0  # Index of the list of aspect patterns for this row
+NUM_ROWS_IDX = 1         # Index of the number of rows this aspect pattern repeats
+LIST_POSS_PATTS_IDX = 2  # Index of the list of possible patterns
+
+
+def group_by_aspect(orb_degree_dict):
     ret_group = []
     # Calc nominal value
     for d in range(1, 361):
-        ret_list = dict[d]
-        # print(d, total, degree_dict[d])
+        ret_list = orb_degree_dict[d]
+        logging.debug("orb_degree_dict[d]:")
+        logging.debug(orb_degree_dict[d])
         ret_group.append(ret_list)
 
     grouped_byList = [(k, sum(1 for i in g)) for k, g in groupby(ret_group)]
-    # print(grouped_byAspect)
+    logging.debug("grouped_byList:")
+    logging.debug(grouped_byList)
     return grouped_byList
 
-def groupByElement(patternList):
+
+def group_by_element(patternList):
     grouped_byList = [(k, sum(1 for i in g)) for k, g in groupby(patternList)]
     return grouped_byList
 
-def figureScarfPattern(orb_degree_dict, sign_degree_dict):
-    grouped_byAspect = groupByAspect(orb_degree_dict)
-    ##print("aspects by rows:", grouped_byAspect)
 
-    possible_patterns_for_row_cnt = patterns.getPatternsForRowCount(grouped_byAspect)
-    ##print("possible_patterns_for_row_cnt", possible_patterns_for_row_cnt)
+def figure_scarf_pattern(orb_degree_dict, sign_degree_dict):
+    grouped_by_aspect = group_by_aspect(orb_degree_dict)
+    logging.debug("aspects by rows:")
+    logging.debug(grouped_by_aspect)
+
+    # This groups repeating rows of aspects with possible patterns
+    possible_patterns_for_row_cnt = patterns.get_patterns_for_row_count(grouped_by_aspect)
+    logging.debug("possible_patterns_for_row_cnt")
+    logging.debug(possible_patterns_for_row_cnt)
 
     scarf_pattern = []
     i = 1
 
     for p in possible_patterns_for_row_cnt:
-        ##print("***** Starting on row:", i, "****", orb_degree_dict[i], sign_degree_dict[i], " Repeat for ", p[NUM_ROWS_IDX], " rows. Poss patts for rowcnt:", p[LIST_POSS_PATTS_IDX])
+        logging.debug("***** Starting on row (i=:" + str(i) + ") ***** orb_degree_dict[i]:" )
+        logging.debug(orb_degree_dict[i])
+        logging.debug("sign_degree_dict[i]")
+        logging.debug(sign_degree_dict[i])
+        logging.debug("Repeat for " + str(p[NUM_ROWS_IDX]) + " rows. Poss patts for rowcnt:")
+        logging.debug(p[LIST_POSS_PATTS_IDX])
 
-        bestPatt = ''
+        best_patt = ''
 
         # Start with simplifying if there really is only 1 pattern that fits this many rows
         if len(p[LIST_POSS_PATTS_IDX]) == 1:
-            ##print("..Only pattern for ", p[NUM_ROWS_IDX], " rows:", p[LIST_POSS_PATTS_IDX])
-            bestPatt = p[LIST_POSS_PATTS_IDX][0]
+            logging.debug("..Only pattern for " + str(p[NUM_ROWS_IDX]) + " rows:")
+            logging.debug(p[LIST_POSS_PATTS_IDX])
+            best_patt = p[LIST_POSS_PATTS_IDX][0]
         else:
-            bestPatt = determineBestPattern(i, p[ASPECTS_FOR_DEG_IDX], p[LIST_POSS_PATTS_IDX], p[NUM_ROWS_IDX], sign_degree_dict)
+            best_patt = determine_best_pattern(i, p[ASPECTS_FOR_DEG_IDX], p[LIST_POSS_PATTS_IDX], p[NUM_ROWS_IDX], sign_degree_dict)
 
-        scarf_pattern.append([bestPatt, p[NUM_ROWS_IDX]])
+        scarf_pattern.append([best_patt, p[NUM_ROWS_IDX]])
         i += p[NUM_ROWS_IDX]
 
     return scarf_pattern
 
 
+def determine_best_pattern(row_num, row_aspects, poss_patterns, num_rows_repeat, sign_degree_dict):
+    """Try to figure out the best pattern for all this info"""
 
-
-def determineBestPattern(rowNum, rowAspects, possPatterns, numRowsRepeat, sign_degree_dict):
     # Add additional aspects for patterns repeating over rows that cross signs
-    rowAspects = aspects.addSignAspectsForSpan(sign_degree_dict, rowNum, numRowsRepeat, rowAspects)
+    row_aspects = aspects.add_sign_aspects_for_span(sign_degree_dict, row_num, num_rows_repeat, row_aspects)
 
-    possPatterns = patterns.addPossPatternsForSpan(sign_degree_dict, rowNum, numRowsRepeat, possPatterns)
+    poss_patterns = patterns.add_poss_patterns_for_span(sign_degree_dict, row_num, num_rows_repeat, poss_patterns)
 
-    maxRow = aspects.getValidMaxRow(rowNum+numRowsRepeat)
-    print("Determining best pattern for row num:", rowNum, " with aspects:", rowAspects, " repeating for ",
-          numRowsRepeat, "rows in sign(s):", sign_degree_dict[rowNum], "-", sign_degree_dict[maxRow],
-          " with poss patts by rowCnt, sign aspects:", possPatterns)
+    maxRow = _aspects.adjust_degree_for_360(row_num + num_rows_repeat)
+    print("Determining best pattern for row num:", row_num, " with aspects:", row_aspects, " repeating for ",
+          num_rows_repeat, "rows in sign(s):", sign_degree_dict[row_num], "-", sign_degree_dict[maxRow],
+          " with poss patts by rowCnt, sign aspects:", poss_patterns)
 
-    bestPattsByShape = shapes.determineBestPatternsForShapeMatch(possPatterns, rowAspects)
+    bestPattsByShape = shapes.determineBestPatternsForShapeMatch(poss_patterns, row_aspects)
     isBest = patterns.pickIfOnePattern(bestPattsByShape)
     if isBest not in ['Nope', 'None']:
         ##print("..Found best pattern by shape match", isBest)
@@ -78,18 +98,18 @@ def determineBestPattern(rowNum, rowAspects, possPatterns, numRowsRepeat, sign_d
     elif isBest in ['None']:
         # do something else
         ##print("Unable to determine by shape", possPatterns)
-        bestPatt = patterns.determineBestPatternBySomething(possPatterns, numRowsRepeat, rowNum, sign_degree_dict,
-                                                            rowAspects)
+        bestPatt = patterns.determineBestPatternBySomething(poss_patterns, num_rows_repeat, row_num, sign_degree_dict,
+                                                            row_aspects)
         return bestPatt
     else:
         # narrow further
         ##print("Narrowed by shape to", bestPattsByShape)
-        bestPatt = patterns.determineBestPatternBySomething(bestPattsByShape, numRowsRepeat, rowNum, sign_degree_dict, rowAspects)
+        bestPatt = patterns.determineBestPatternBySomething(bestPattsByShape, num_rows_repeat, row_num, sign_degree_dict, row_aspects)
         return bestPatt
 
 
-def figurePatternRows(scarf_pattern):
-    groupedByStitch = groupByElement(scarf_pattern)
+def figure_pattern_rows(scarf_pattern):
+    groupedByStitch = group_by_element(scarf_pattern)
     # print("Groupd By Stitch", groupedByStitch)
     pattern_rows = []
     for stitchRows, repeat in groupedByStitch:
@@ -100,9 +120,10 @@ def figurePatternRows(scarf_pattern):
 
     return pattern_rows
 
-def figurePatternWidth(scarf_pattern_w_rows):
+
+def figure_pattern_width(scarf_pattern_w_rows):
     tot = len(scarf_pattern_w_rows)
-    rowWidth = findRowWidthForPatterns(scarf_pattern_w_rows)
+    rowWidth = find_row_width_for_patterns(scarf_pattern_w_rows)
     '''fRw(scarf) = lcm(fRw(scarfMult[0], fRw(scarfMult[1]), fRw(scarfMult[2]))'''
 
 
@@ -123,7 +144,7 @@ def rowLenForMultAdd(m1, a1, m2, a2):
         return lcm(m1, m2)
 
 
-def getMultFromList(multAddList):
+def get_mult_from_list(multAddList):
     listOfNums = []
     for mult, add in multAddList:
         if mult not in listOfNums:
@@ -131,7 +152,7 @@ def getMultFromList(multAddList):
     return listOfNums
 
 
-def getAddFromList(multAddList):
+def get_add_from_list(multAddList):
     listOfNums = []
     for mult, add in multAddList:
         if add not in listOfNums:
@@ -139,7 +160,7 @@ def getAddFromList(multAddList):
     return listOfNums
 
 
-def getLcmFromList(numList):
+def get_lcm_from_list(numList):
     tot = len(numList)
     half = tot // 2
     ##print(tot, " start getlcmfromlist with:", numList, ", ", numList[:half], " - ", numList[half:])
@@ -148,10 +169,10 @@ def getLcmFromList(numList):
     elif tot == 2:
         return lcm(numList[:half][0], numList[half:][0])
     else:
-        return lcm(getLcmFromList(numList[:half]), getLcmFromList(numList[half:]))
+        return lcm(get_lcm_from_list(numList[:half]), get_lcm_from_list(numList[half:]))
 
 
-def getLargest(numList):
+def get_largest(numList):
     largest = 0
     for num in numList:
         if num > largest:
@@ -159,33 +180,32 @@ def getLargest(numList):
 
     return largest
 
-def multCoversAllAdds(pattList, lcm):
+
+def mult_covers_all_adds(pattList, lcm):
     for mult, add in pattList:
         if (lcm - add) % mult != 0:
             return False
     return True
 
 
-
-def findBestRowLen(some_patts):
-    multList = getMultFromList(some_patts)
-    lcm = getLcmFromList(multList)
+def find_best_row_len(some_patts):
+    multList = get_mult_from_list(some_patts)
+    lcm = get_lcm_from_list(multList)
     ##print(" LCM:", lcm)
 
-    if multCoversAllAdds(some_patts, lcm):
+    if mult_covers_all_adds(some_patts, lcm):
         return lcm
     else:
         # Try adding the largest add and then keep going
-        largestAdd = getLargest(multList)
+        largestAdd = get_largest(multList)
         ##print("largest add:", largestAdd)
-        while not multCoversAllAdds(some_patts, lcm):
+        while not mult_covers_all_adds(some_patts, lcm):
             lcm += largestAdd
             ##print("Added largestAdd to get:", lcm)
         return lcm
 
 
-
-def findRowWidthForPatterns(s_pat):
+def find_row_width_for_patterns(s_pat):
     even_add_pats = []
     odd_add_pats = []
     for instr in s_pat:
@@ -209,7 +229,8 @@ def findRowWidthForPatterns(s_pat):
 
     return 0
 
-def rectifyDegreeByAsc(ascDeg, chartPlanetDeg):
+
+def rectify_degree_by_asc(ascDeg, chartPlanetDeg):
     #print("chartPlanetDeg:", chartPlanetDeg, " ascDeg:", ascDeg)
     if ascDeg > 360 or chartPlanetDeg > 360:
         raise ValueError('Chart or ASC degree should never exceed 360')
@@ -225,11 +246,12 @@ def rectifyDegreeByAsc(ascDeg, chartPlanetDeg):
         #print("Rect deg: ", tryDeg)
         return tryDeg
 
-def printPattRowWithCnt(rowcount, pattInstr, chart_degrees):
+
+def print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees):
     '''Move the chart degree back the asc degree, since we started the pattern at the asc as row 1'''
     ascDeg = chart_degrees['ASC']
     for a_planet in chart_degrees:
-        planetDeg = rectifyDegreeByAsc(ascDeg, chart_degrees[a_planet])
+        planetDeg = rectify_degree_by_asc(ascDeg, chart_degrees[a_planet])
         if rowcount == planetDeg:
             print("--> Place ", a_planet, " button on the following row. <--")
     #print(pattInstr)
@@ -237,31 +259,31 @@ def printPattRowWithCnt(rowcount, pattInstr, chart_degrees):
     print(prtstr)
 
 
-def replaceRepStr(pattInstr, intSub):
+def replace_rep_str(pattInstr, intSub):
     '''Replaces the rep from * piece of a pattern with the number of repeats'''
     return pattInstr.replace('rep from *', 'rep from * (' + str(intSub) + ') times')
 
 
-def printPattInstr(pattName, intSub, rowcount, chart_degrees):
+def print_patt_instr(pattName, intSub, rowcount, chart_degrees):
     for pattInstr in putil.PATTERN_INSTRUCTIONS[pattName]:
         if 'rep from' in pattInstr:
-            pattInstr = replaceRepStr(pattInstr, intSub)
-            printPattRowWithCnt(rowcount, pattInstr, chart_degrees)
+            pattInstr = replace_rep_str(pattInstr, intSub)
+            print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees)
         else:
-            printPattRowWithCnt(rowcount, pattInstr, chart_degrees)
+            print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees)
         rowcount = rowcount + 1
     return rowcount
 
 
-def printPartialPattInstr(pattName, intSub, rowcount, repeat, chart_degrees):
+def print_partial_patt_instr(pattName, intSub, rowcount, repeat, chart_degrees):
     # TODO: Need to move printing filler sts and that logic down to the indiv row level of a pattern
     maxcnt = 0
     for pattInstr in putil.PATTERN_INSTRUCTIONS[pattName]:
         if 'rep from' in pattInstr:
-            pattInstr = replaceRepStr(pattInstr, intSub)
-            printPattRowWithCnt(rowcount, pattInstr, chart_degrees)
+            pattInstr = replace_rep_str(pattInstr, intSub)
+            print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees)
         else:
-            printPattRowWithCnt(rowcount, pattInstr, chart_degrees)
+            print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees)
         rowcount = rowcount + 1
         maxcnt = maxcnt + 1
         if maxcnt == repeat:
@@ -270,14 +292,14 @@ def printPartialPattInstr(pattName, intSub, rowcount, repeat, chart_degrees):
     return rowcount
 
 
-def printMissingRows(pattName, intSub, rowcount, missingRows, chart_degrees):
+def print_missing_rows(pattName, intSub, rowcount, missingRows, chart_degrees):
     maxcnt = 0
     for pattInstr in putil.PATTERN_INSTRUCTIONS[pattName]:
         if 'rep from' in pattInstr:
-            pattInstr = replaceRepStr(pattInstr, intSub)
-            printPattRowWithCnt(rowcount, pattInstr, chart_degrees)
+            pattInstr = replace_rep_str(pattInstr, intSub)
+            print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees)
         else:
-            printPattRowWithCnt(rowcount, pattInstr, chart_degrees)
+            print_patt_row_with_cnt(rowcount, pattInstr, chart_degrees)
         rowcount = rowcount + 1
         maxcnt = maxcnt + 1
         if maxcnt == missingRows:
@@ -286,20 +308,20 @@ def printMissingRows(pattName, intSub, rowcount, missingRows, chart_degrees):
     return rowcount
 
 
-def calcFillerSts(mult_add, rowWidth):
+def calc_filler_sts(mult_add, rowWidth):
     '''Figure out if we need to add some filler stitches because it wont fit'''
     #TODO:  Def think there's a bug in here, not every row has same length of sts for add/mult of the whole pattern
     # subtract add from rowWidth
     add_ = mult_add[1]
     mult_ = mult_add[0]
-    intSub = calcIntSub(mult_add, rowWidth)
+    intSub = calc_int_sub(mult_add, rowWidth)
     # Figure out if we need to add some filler stitches because it wont fit
     fillerSts = rowWidth - intSub * mult_ + add_
 
     return fillerSts
 
 
-def calcIntSub(mult_add, rowWidth):
+def calc_int_sub(mult_add, rowWidth):
     '''Figure out how many times to repeat the stitch'''
     # TODO: this is another source of the bug since the add also doesn't necessarily apply for every row within the pattern
     add_ = mult_add[1]
@@ -312,13 +334,13 @@ def calcIntSub(mult_add, rowWidth):
     return intSub
 
 
-def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
+def fit_repeats_to_row_width(pattName, rowWidth, rowcount, repeat, chart_degrees):
     # TODO: Need to loop over individual patt instructions (row by row) to determine filler, etc
     mult_add = constants.PATTERN_MULT_ADD[pattName]
     # Figure out how many times to repeat the stitch
-    intSub = calcIntSub(mult_add, rowWidth)
+    intSub = calc_int_sub(mult_add, rowWidth)
     # Figure out if we need to add some filler stitches because it wont fit
-    fillerSts = calcFillerSts(mult_add, rowWidth)
+    fillerSts = calc_filler_sts(mult_add, rowWidth)
 
     startCnt = rowcount
 
@@ -329,7 +351,7 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
             numRepeats = repeat // constants.PATTERN_ROWS[pattName]
         elif constants.PATTERN_ROWS[pattName] > repeat:
             print("------Printing partial pattern")
-            rowcount = printPartialPattInstr(pattName, intSub, rowcount, repeat, chart_degrees)
+            rowcount = print_partial_patt_instr(pattName, intSub, rowcount, repeat, chart_degrees)
             return rowcount
         else:
             numRepeats = 1
@@ -337,14 +359,14 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
         for rep in range(numRepeats):
             # if rep > 0:
             #     print("REP: ", rep)
-            rowcount = printPattInstr(pattName, intSub, rowcount, chart_degrees)
+            rowcount = print_patt_instr(pattName, intSub, rowcount, chart_degrees)
 
         pattRowsPrinted = rowcount - startCnt
         if pattRowsPrinted < repeat:
             # Print some more rows
             print("----Here's some missing: ", repeat - pattRowsPrinted)
             missingRows = repeat - pattRowsPrinted
-            rowcount = printMissingRows(pattName, intSub, rowcount, missingRows, chart_degrees)
+            rowcount = print_missing_rows(pattName, intSub, rowcount, missingRows, chart_degrees)
 
     else:
         print(mult_add, " Repeat ", pattName, " ", intSub, " times, filling in ", fillerSts, " extra sts")
@@ -395,10 +417,11 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
     return rowcount
     '''
 
-def findRowWidthForPattern():
-    mul = getMultFromList(constants.PATTERN_MULT_ADD.values())
+
+def find_row_width_for_pattern():
+    mul = get_mult_from_list(constants.PATTERN_MULT_ADD.values())
     # print("largest mult:", getLargest(mul))
-    adl = getAddFromList(constants.PATTERN_MULT_ADD.values())
+    adl = get_add_from_list(constants.PATTERN_MULT_ADD.values())
     # print("largest add:", getLargest(adl))
 
-    return getLargest(mul) + getLargest(adl)
+    return get_largest(mul) + get_largest(adl)

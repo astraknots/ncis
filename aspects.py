@@ -1,34 +1,37 @@
 #!/usr/bin/python
 
-import sys, getopt
-import translate
-#import xlsxwriter
 import constants
-from itertools import groupby
-from collections import Counter
+import astrology_signs as signs
+import astrology_aspects as aspects
+import astrology_planets as planets
+import logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
-def addSignAspectsForSpan(sign_degree_dict, rowNum, numRowsRepeat, rowAspects):
-    '''Add additional aspects for patterns repeating over rows that cross signs, or sign aspects if none'''
-    if len(rowAspects) == 0:
-        rowAspects.append(constants.SIGN_ASPECT[sign_degree_dict[rowNum]])
 
-    maxRow = getValidMaxRow(rowNum+numRowsRepeat)
-    if sign_degree_dict[rowNum] != sign_degree_dict[maxRow]:
-        rowAspects.append(constants.SIGN_ASPECT[sign_degree_dict[maxRow]])
-    #TODO: If the numRowsRepeat > 30, get the sign in the middle too
-    return rowAspects
+def add_sign_aspects_for_span(sign_degree_dict, row_num, num_rows_repeat, row_aspects):
+    """Add aspects for sign to list if there are no row aspects, """
+    """Add additional aspects for patterns repeating over rows that cross signs, and sign aspects if no row aspects"""
+    # If there are no aspects for this row, add the aspects associated with the sign of this row
+    if len(row_aspects) == 0:
+        logging.debug("sign_degree_dict[row_num]:")
+        logging.debug(sign_degree_dict[row_num])
+        row_aspects.append(aspects.get_aspect_by_name(sign_degree_dict[row_num].aspect))
 
-def getValidMaxRow(maxRow):
-    if maxRow > 360:
-        maxRow -= 360
-    return maxRow
+    #
+    max_row = aspects.adjust_degree_for_360(row_num + num_rows_repeat)
+    if sign_degree_dict[row_num] != sign_degree_dict[max_row]:
+        logging.debug("sign_degree_dict[max_row]:" + str(max_row))
+        logging.debug(sign_degree_dict[max_row])
+        row_aspects.append(aspects.get_aspect_by_name(sign_degree_dict[max_row].aspect))
 
-def getAspectOrb(aspect, planet):
-    if planet in constants.BIG_THREE:
-        asp_orb = constants.ORBS['BIG3']
-    else:
-        asp_orb = constants.ORBS[aspect]
-    return asp_orb
+    # TODO: If the numRowsRepeat > 30, get the sign in the middle too
+    if num_rows_repeat > 30:
+        logging.warning("Consider getting sign in the middle since this repeats over 30 rows")
+
+    return row_aspects
+
 
 def pickIfOnePattern(bestPatts):
     if len(bestPatts) == 1:
@@ -164,36 +167,33 @@ def narrowByNumAspectsMod(numAspects, possPatts):
                 ##print("NarrowAspNum=", narrowAspNum)
     return narrowAspNum
 
+
 def getFirstNonZero(trylist):
     for a in trylist:
         if a > 0:
             return a
 
 
-def getAspectsForDegree(orbs_by_planet, d, sign_for_degree):
+def get_aspects_for_degree(orbs_by_planet, d, sign_for_degree):
+    '''Get list of aspects for a particular degree and the aspect for the sign at this degree'''
     aspect_list = []
 
     #Add aspects for planet orbs
-    for planet in constants.PLANETS:
-        asps = orbs_by_planet[planet]
-        for aspect in constants.ASPECTS:
-            deg_range = asps[aspect]
-            if isDegInRange(d, deg_range):
+    for planet in planets.THE_PLANETS:
+        asps = orbs_by_planet[planet.name]
+        for aspect in aspects.THE_ASPECTS:
+            deg_range = asps[aspect.name]
+            if aspects.is_degree_in_range(d, deg_range):
                 aspect_list.append(aspect)
 
+
     #Add aspect for sign
-    aspect_for_sign = constants.SIGN_ASPECT[sign_for_degree]
+    logging.debug("Sign for degree:")
+    logging.debug(sign_for_degree)
+    aspect_for_sign = aspects.get_aspect_by_name(sign_for_degree.aspect)
+    logging.debug("aspect_for_sign:")
+    logging.debug(aspect_for_sign)
+
     aspect_list.append(aspect_for_sign)
     return aspect_list
 
-
-def isDegInRange(deg, rang):
-    return (rang[0] <= deg <= rang[1])
-
-def adjustDegFor360(degree):
-	adj_degree = degree
-	if degree > 360:
-		adj_degree = degree - 360
-	elif degree < 0:
-		adj_degree = degree + 360
-	return adj_degree

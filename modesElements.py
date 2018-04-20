@@ -3,14 +3,18 @@
 import sys, getopt
 import translate, calculateOrbs, patterns, scarf
 import xlsxwriter
+import astrology_modes as _modes
+import astrology_signs as _signs
 import constants
 from itertools import groupby
 from collections import Counter
 
+
+
 def narrowPatternsByModesElements(possPatts, sign1, sign2):
     narrowedPatts = narrowedPatts2 = narrowedPatts3 = narrowedPatts4 = narrowedPatts5 = narrowedPatts6 = narrowedPatts7 = []
-    modes = getModesForSigns(sign1, sign2)
-    elements = getElementsForSigns(sign1, sign2)
+    modes = _signs.get_modes_for_signs(sign1, sign2)
+    elements = _signs.get_elements_for_signs(sign1, sign2)
 
     # Try to narrow by mode, element to mult, add (permutations) but exact
     narrowedPatts = narrowPattsByMode(modes, possPatts)
@@ -124,8 +128,8 @@ def narrowPattsByAddMultElementFirst(modes, elements, possPatts):
 
 def narrowBySignScore(sign1, sign2, nextList):
     narrowed_list = narrowed_list2 = narrowed_list3 = narrowed_list4 = []
-    score1 = constants.SIGN_SCORE[sign1]
-    score2 = constants.SIGN_SCORE[sign2]
+    score1 = sign1.score
+    score2 = sign2.score
     #print("score1 ", score1, " score2", score2)
 
     # Try to narrow by mult match score
@@ -281,22 +285,3 @@ def narrowPattsByModeMult(modes, possPatts):
 
     return narrowed_patts
 
-def getModesForSigns(sign1, sign2):
-    modes = [constants.SIGN_MODE[sign1]]
-    if constants.SIGN_MODE[sign2] not in modes:
-        modes.append(constants.SIGN_MODE[sign2])
-    ##print("modes ", modes)
-    #for mode in modes:
-       # print("mode score:", constants.MODE_SCORES[mode])
-
-    return modes
-
-def getElementsForSigns(sign1, sign2):
-    elements = [constants.SIGN_ELEMENT[sign1]]
-    if constants.SIGN_ELEMENT[sign2] not in elements:
-        elements.append(constants.SIGN_ELEMENT[sign2])
-    ##print("elements ", elements)
-    #for element in elements:
-       # print("element score:", constants.ELEMENT_SCORES[element])
-
-    return elements

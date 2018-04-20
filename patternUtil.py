@@ -5,7 +5,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-def convertPatternFromWeb(txtfilename):
+def convert_pattern_from_web(txtfilename):
     '''Utility fcn to translate the repeating instructions to the format I want to store'''
     # Open the file for reading as text
     patfile = open(txtfilename, 'r')
@@ -22,7 +22,7 @@ def convertPatternFromWeb(txtfilename):
         logging.debug(rowRep)
         if rowRep != -1:
             logging.debug(rows[int(rowRep)])
-            rows[rownum] = replaceRepRow(rowinstr, rows[int(rowRep)])
+            rows[rownum] = replace_rep_row(rowinstr, rows[int(rowRep)])
 
 
     #Look for instr that repeat like 'Rows 3 and 4:'
@@ -30,20 +30,20 @@ def convertPatternFromWeb(txtfilename):
 
     # Loop over the rows and add in details for any missing rows; i.e. "and all other odd rows"
     try:
-        if firstRowRepeatsOdd(rows[1]) and rowMissingInstr(rows[3]):
+        if first_row_repeats_odd(rows[1]) and row_missing_instr(rows[3]):
             # For now we're assuming if the word odd is in the first row instr, and some odd rows are missing instructions, to rep 1st row for odd
             for rownum, rowinstr in rows.items():
                 if rownum != 1 and rownum % 2 != 0:
                     logging.debug(rows[1])
-                    rows[rownum] = replaceRowWithNumInstr(rownum, rows[1])
+                    rows[rownum] = replace_row_with_num_instr(rownum, rows[1])
                     logging.debug("m odd instr:")
                     logging.debug(rowinstr)
-        elif secondRowRepeatsEven(rows[1]) and rowMissingInstr(rows[2]):
+        elif second_row_repeats_even(rows[1]) and row_missing_instr(rows[2]):
             # For now we're assuming if the word even is in the second row instr, and some even rows are missing instructions, to rep 2nd row for even
             for rownum, rowinstr in rows.items():
                 if rownum > 2 and rownum % 2 == 0:
                     logging.debug(rows[2])
-                    rows[rownum] = replaceRowWithNumInstr(rownum, rows[2])
+                    rows[rownum] = replace_row_with_num_instr(rownum, rows[2])
                     logging.debug("m even instr:")
                     logging.debug(rowinstr)
     except:
@@ -70,7 +70,7 @@ def convertPatternFromWeb(txtfilename):
     patfile.close()
 
 
-def replaceRowWithNumInstr(rowNum, rowInstr):
+def replace_row_with_num_instr(rowNum, rowInstr):
     '''Return the new row instru to contain the rowNum given'''
     rowIdx = rowInstr.index(':')
     endNewRowInstr = rowInstr[rowIdx+1:]
@@ -78,7 +78,7 @@ def replaceRowWithNumInstr(rowNum, rowInstr):
     return "Row " + str(rowNum) + ":" + endNewRowInstr
 
 
-def firstRowRepeatsOdd(rowOneInstr):
+def first_row_repeats_odd(rowOneInstr):
     '''Returns True if the first row instruction contains the word odd'''
     if "odd" in rowOneInstr:
         # Possibly a repeating odd row instruction
@@ -86,7 +86,8 @@ def firstRowRepeatsOdd(rowOneInstr):
         return True
     return False
 
-def secondRowRepeatsEven(rowTwoInstr):
+
+def second_row_repeats_even(rowTwoInstr):
     '''Returns True if the first row instruction contains the word even'''
     if "even" in rowTwoInstr:
         # Possibly a repeating even row instruction
@@ -94,7 +95,8 @@ def secondRowRepeatsEven(rowTwoInstr):
         return True
     return False
 
-def rowMissingInstr(row):
+
+def row_missing_instr(row):
     '''Returns True if the only instr is the Row number'''
     rowpieces = row.split(' ')
     if len(rowpieces) == 3 and rowpieces[0] == "Row" and len(rowpieces[2]) == 0:
@@ -103,8 +105,7 @@ def rowMissingInstr(row):
     return False
 
 
-
-def replaceRepRow(rowinstr, replaceWithRowInstr):
+def replace_rep_row(rowinstr, replaceWithRowInstr):
     '''Replace the 'Rep Row x' with the instruction replaceWithRowInstr'''
     logging.debug(rowinstr)
     logging.debug(replaceWithRowInstr)
@@ -147,7 +148,7 @@ def storeRowsInDict(patlines):
             if piece:
                 # Get the Row num in the piece
                 rowinstr = piece
-                rowNum = getRowNumFromInstr(rowinstr)
+                rowNum = get_row_num_from_instr(rowinstr)
                 if rowNum != str(cntr):
                     # Loop over, filling in missing rows until we get to the right number
                     for x in range(cntr, int(rowNum)):
@@ -161,39 +162,39 @@ def storeRowsInDict(patlines):
     return rows
 
 
-def getRowNumFromInstr(rowinstr):
+def get_row_num_from_instr(row_instr):
     '''Return the row num in this instruction, or if mult are listed, the first one; i.e. Rows 2,4,6 would return 2; if not found returns -1'''
-    rowNum = getNumFromNextWordAfterTerm(rowinstr, "Row")
-    if rowNum == -1:
-        rowNum = getNumFromNextWordAfterTerm(rowinstr, "Rows")
+    row_num = get_num_from_next_word_after_term(row_instr, "Row")
+    if row_num == -1:
+        row_num = get_num_from_next_word_after_term(row_instr, "Rows")
 
-    return rowNum
+    return row_num
 
 
-def getNumFromNextWordAfterTerm(sentence, searchTerm):
+def get_num_from_next_word_after_term(sentence, searchTerm):
     '''Get a number in the sentence following the word searchTerm; else return -1'''
-    nextWord = getNextWordAfterTerm(sentence, searchTerm, " ")
-    if nextWord:
-        return getJustNumber(nextWord)
+    next_word = get_next_word_after_term(sentence, searchTerm, " ")
+    if next_word:
+        return get_just_number(next_word)
     return -1
 
 
-def getNextWordAfterTerm(sentence, searchTerm, splitter):
+def get_next_word_after_term(sentence, searchTerm, splitter):
     '''Splits sentence on splitter, then gives you the word after the searchTerm; returns empty string '''
-    wordList = sentence.split(splitter)
+    word_list = sentence.split(splitter)
     try:
-        searchTermIdx = wordList.index(searchTerm)
+        search_term_idx = word_list.index(searchTerm)
     except ValueError:
         logging.warning("searchTerm:" + searchTerm + " was not found in sentence:" + sentence)
         return ''
 
-    nextWordIdx = searchTermIdx + 1
-    if nextWordIdx > len(wordList):
+    next_word_idx = search_term_idx + 1
+    if next_word_idx >= len(word_list):
         logging.warning("searchTerm:" + searchTerm + " was the last word in sentence:" + sentence)
         return ''
-    return wordList[nextWordIdx]  # Adding 1 'cause it should be 'Row', '<row num we want>:'
+    return word_list[next_word_idx]  # Adding 1 'cause it should be 'Row', '<row num we want>:'
 
 
-def getJustNumber(wordStrWNumber):
+def get_just_number(word_str_w_number):
     '''Searches the wordStr for a number and strips out anything non-numeric; returns number as a string, or empty string if no number found'''
-    return str(re.sub("[^0-9]", "", wordStrWNumber))
+    return str(re.sub("[^0-9]", "", word_str_w_number))

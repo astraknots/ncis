@@ -1,27 +1,29 @@
 #!/usr/bin/python
 
-import sys, getopt
-import translate, calculateOrbs
-#import xlsxwriter
 import constants, aspects, shapes, modesElements
-from itertools import groupby
-from collections import Counter
+import astrology_aspects as asp
+import logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
-def addPossPatternsForSpan(sign_degree_dict, rowNum, numRowsRepeat, possPatterns):
-    '''Add potential patterns for span by sign aspects'''
+
+def add_poss_patterns_for_span(sign_degree_dict, row_num, num_rows_repeat, poss_patterns):
+    """Add potential patterns for span by sign aspects"""
     #For now only add possibles if there aren't any
-    if len(possPatterns) == 0:
-        rowAspects = aspects.addSignAspectsForSpan(sign_degree_dict, rowNum, numRowsRepeat, [])
-        possPatterns = getPatternsForAspectShapes(rowAspects)
-        return possPatterns
+    if len(poss_patterns) == 0:
+        logging.info("Adding possible patterns for span with aspect shapes since no current poss patterns")
+        row_aspects = aspects.add_sign_aspects_for_span(sign_degree_dict, row_num, num_rows_repeat, [])
+        poss_patterns = get_patterns_for_aspect_shapes(row_aspects)
+        return poss_patterns
     else:
-        return possPatterns
+        return poss_patterns
 
-def getPatternsForAspectShapes(aspects):
+def get_patterns_for_aspect_shapes(aspects_list):
     poss_shapes = []
-    for asp in aspects:
-        #print("asp:", asp, "add:", constants.PATTERN_ASPECT_SHAPES[asp])
-        for ashape in constants.PATTERN_ASPECT_SHAPES[asp]:
+    for aspct in aspects_list:
+        logging.debug("aspct:" + str(aspct) + "  add patterns for aspect shapes:" + str(constants.PATTERN_ASPECT_SHAPES[aspct.name],))
+        for ashape in constants.PATTERN_ASPECT_SHAPES[aspct.name]:
             poss_shapes.append(ashape)
     #print("poss shapes:", poss_shapes, " for aspects:", aspects)
 
@@ -35,7 +37,7 @@ def getPatternsForAspectShapes(aspects):
                         poss_patts.append(patt)
     #print("poss patts:", poss_patts, " for aspects:", aspects)
 
-    somePatts = shapes.determineBestPatternsForShapeMatch(poss_patts, aspects)
+    somePatts = shapes.determineBestPatternsForShapeMatch(poss_patts, aspects_list)
 
     return getJustPatternNames(somePatts)
 
@@ -57,7 +59,7 @@ def determineBestPatternBySomething(possPatts, numRowsRepeat, rowNum, sign_degre
         narrowedByScorePatts = possPatts
 
     # Let's look at the mult-add as it relates to the element and mode of this degree
-    maxRow = aspects.getValidMaxRow(rowNum + numRowsRepeat)
+    maxRow = asp.adjust_degree_for_360(rowNum + numRowsRepeat)
     print(sign_degree_dict[rowNum], "-", sign_degree_dict[maxRow])
 
     narrowedByModeElements = modesElements.narrowPatternsByModesElements(narrowedByScorePatts, sign_degree_dict[rowNum], sign_degree_dict[maxRow])
@@ -104,7 +106,7 @@ def subtractFromLarger(v1, v2):
 
 def forceRankPatternMatch(possPatts, signAtRowNum):
     # Choose the pattern with the (mult+add) closest to the signAtRowNum score
-    meetScore = constants.SIGN_SCORE[signAtRowNum]
+    meetScore = signAtRowNum.score
     ##print("meetScore:", meetScore)
     bestPatts = []
     closeCnt = 0
@@ -173,10 +175,12 @@ def getJustPatternNames(scoredPatts):
     return justPatts
 
 
-def getPatternsForRowCount(grouped_byAspect):
+def get_patterns_for_row_count(grouped_by_aspect):
+    """From the list of aspects grouped by count of the same aspect list, (same aspect list will be several rows of repeating trend)
+    get the possible patterns for that count whose row count matches"""
     possible_patterns = []
-    for aspList, cnt in grouped_byAspect:
-        possible_patterns.append([aspList, cnt, getPatternsForCnt(cnt)])
+    for aspList, cnt in grouped_by_aspect:
+        possible_patterns.append([aspList, cnt, get_patterns_for_cnt(cnt)])
     return possible_patterns
 
 
@@ -194,10 +198,10 @@ def getPatternsForMaxRowCount(grouped_byAspect):
     return possible_patterns
 
 
-def getPatternsForCnt(cnt):
+def get_patterns_for_cnt(cnt):
+    """Create a list of patterns who row count matches the cnt passed in"""
     poss_pats = []
     for pat in constants.PATTERN_ROWS:
-        # print(pat, constants.PATTERN_ROWS[pat])
         if constants.PATTERN_ROWS[pat] == cnt:
             poss_pats.append(pat)
     return poss_pats

@@ -14,12 +14,13 @@ def determineMatchScore(pattShapes, aspects):
         #print("Aspect shapes:", constants.PATTERN_ASPECT_SHAPES[asp])
         for shape in pattShapes:
             # print("Shape:", shape)
-            if shape in constants.PATTERN_ASPECT_SHAPES[asp]:
+            if shape in constants.PATTERN_ASPECT_SHAPES[asp.name]:
                 # print("******Shape Match!:", shape, constants.PATTERN_ASPECT_SHAPES[asp])
                 matchScore += 1
 
     return matchScore
 
+#first transforming method - match shapes of aspects..
 def determineBestPatternsForShapeMatch(possPatterns, aspects):
     best_patterns = []
     # print("Determining best pattern for:", str(len(possPatterns)), "poss patterns ", str(len(aspects)), " aspects")

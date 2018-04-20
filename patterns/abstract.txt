@@ -1,0 +1,9 @@
+Row 1 (RS): With Color B, k1, *k2, sl 3, k3; rep from *, end k2
+Row 2 and all even rows: P the k sts and slip the slip sts from the previous row
+Row 3: With Color A, k1, *k1, sl 1, k5, sl 1; rep from *, end k2
+Row 5: With Color B, k1, *sl 1, k3, sl 1, k3; rep from *, end sl 1, k1
+Row 7: With Color A, k1, *k3, sl 1, k1, sl 1, k2; rep from *, end k2
+Row 9: With Color B, k1, *sl 1, k5, sl 2; rep from *, end sl 1, k1
+Row 11: With Color A, k1, *k1, sl 1, k1, sl 1, k4; rep from *, end k2
+Row 13: With Color B, k1, *k2, sl 1, k3, sl 1, k1; rep from *, end k2
+Row 15: With Color A, k1, *k5, sl 1, k1, sl 1; rep from *, end k2

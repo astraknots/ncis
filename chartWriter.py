@@ -48,7 +48,7 @@ def writePatternByRow(worksheet, sPat, patWidth, chart_degrees):
         # Get some general info
         mult_add = constants.PATTERN_MULT_ADD[pattName]
         # Figure out how many times to repeat the stitch
-        intSub = scarf.calcIntSub(mult_add, patWidth)
+        intSub = scarf.calc_int_sub(mult_add, patWidth)
         # Store the starting count so we can see if we are missing rows at the end
         startCnt = rowcount
         missingRows = 0
@@ -129,7 +129,7 @@ def getPlanetPlacementText(chart_degrees, rowcount):
     planetText = None
     ascDeg = chart_degrees['ASC']
     for a_planet in chart_degrees:
-        planetDeg = scarf.rectifyDegreeByAsc(ascDeg, chart_degrees[a_planet])
+        planetDeg = scarf.rectify_degree_by_asc(ascDeg, chart_degrees[a_planet])
         if rowcount == planetDeg:
             planetText = "--> Place ", a_planet, " button on the following row. <--"
 
@@ -149,7 +149,7 @@ def writePattInstr(pattName, mult_add, rowWidth, rowcount, chart_degrees):
 def fixRepeatStrInPatternInstruction(pattInstr, intSub):
     '''If the pattern instruction has a repeat sts instr, fix the printable wording to read better'''
     if 'rep from' in pattInstr:
-        pattInstr = scarf.replaceRepStr(pattInstr, intSub)
+        pattInstr = scarf.replace_rep_str(pattInstr, intSub)
     return pattInstr
 
 
@@ -188,7 +188,7 @@ def printPartialPattInstr(pattName, intSub, rowcount, repeat, chart_degrees):
 def getPattInstrToWrite(pattName, rowWidth):
     mult_add = constants.PATTERN_MULT_ADD[pattName]
     # Figure out if we need to add some filler stitches because it wont fit
-    fillerSts = scarf.calcFillerSts(mult_add, rowWidth)
+    fillerSts = scarf.calc_filler_sts(mult_add, rowWidth)
 
     return "...Work ", pattName, ", filling in ", fillerSts, " extra sts", " as:"
 
@@ -196,9 +196,9 @@ def getPattInstrToWrite(pattName, rowWidth):
 def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
     mult_add = constants.PATTERN_MULT_ADD[pattName]
     # Figure out how many times to repeat the stitch
-    intSub = scarf.calcIntSub(mult_add, rowWidth)
+    intSub = scarf.calc_int_sub(mult_add, rowWidth)
     # Figure out if we need to add some filler stitches because it wont fit
-    fillerSts = scarf.calcFillerSts(mult_add, rowWidth)
+    fillerSts = scarf.calc_filler_sts(mult_add, rowWidth)
 
     startCnt = rowcount
 

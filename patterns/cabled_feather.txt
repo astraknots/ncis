@@ -1,0 +1,9 @@
+Row 1 (WS): Purl
+Row 2: *(k2tog) 3 times, (yo, k1) 6 times, (k2tog) 3 times; rep from *
+Row 3: K 15, *p6, k12; rep from *, end k3
+Row 4: K 15, *sl next 3 sts to cable needle and hold in back, k3, then k3 from cable needle, k12; rep from *, end k3
+Rows 5, 6, & 7: Repeat Rows 1, 2, and 3
+Row 8: Knit
+
+
+['Row 1 (WS): Purl', 'Row 2: *(k2tog) 3 times, (yo, k1) 6 times, (k2tog) 3 times; rep from *', 'Row 3: K 15, *p6, k12; rep from *, end k3', 'Row 4: K 15, *sl next 3 sts to cable needle and hold in back, k3, then k3 from cable needle, k12; rep from *, end k3', 'Rows 5: Purl', 'Row 6: *(k2tog) 3 times, (yo, k1) 6 times, (k2tog) 3 times; rep from *', 'Row 7:  K 15, *p6, k12; rep from *, end k3', 'Row 8: Knit']
