@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
-import sys, getopt
-import translate, calculateOrbs
-#import xlsxwriter
 import constants, aspects, shapes, modesElements
-from itertools import groupby
-from collections import Counter
+# import xlsxwriter
+import aspects
+import constants
+import modesElements
+import shapes
+
 
 def addPossPatternsForSpan(sign_degree_dict, rowNum, numRowsRepeat, possPatterns):
     '''Add potential patterns for span by sign aspects'''

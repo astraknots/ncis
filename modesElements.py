@@ -1,11 +1,8 @@
 #!/usr/bin/python
 
-import sys, getopt
-import translate, calculateOrbs, patterns, scarf
-import xlsxwriter
 import constants
-from itertools import groupby
-from collections import Counter
+import patterns
+
 
 def narrowPatternsByModesElements(possPatts, sign1, sign2):
     narrowedPatts = narrowedPatts2 = narrowedPatts3 = narrowedPatts4 = narrowedPatts5 = narrowedPatts6 = narrowedPatts7 = []

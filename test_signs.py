@@ -1,6 +1,7 @@
 from unittest import TestCase
 import signs
 
+
 class TestSigns(TestCase):
     def test_getFirstHouseSignIdx(self):
         # Test if the sign isnt in the const, we raise exception

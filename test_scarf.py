@@ -1,5 +1,6 @@
 import unittest, scarf
 
+
 class TestScarfMethods(unittest.TestCase):
 
     def test_replaceRepStr(self):
@@ -16,7 +17,6 @@ class TestScarfMethods(unittest.TestCase):
         with self.assertRaises(ValueError):
             scarf.rectifyDegreeByAsc(1, 364)
             scarf.rectifyDegreeByAsc(365, 364)
-
 
 
 if __name__ == '__main__':

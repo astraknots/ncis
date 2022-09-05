@@ -1,11 +1,6 @@
 #!/usr/bin/python
 
-import sys, getopt
-import translate, calculateOrbs, patterns, scarf
-import xlsxwriter
 import constants
-from itertools import groupby
-from collections import Counter
 
 
 def determineMatchScore(pattShapes, aspects):
