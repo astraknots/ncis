@@ -345,8 +345,6 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
 # worksheet.insert_image('B5', 'logo.png')
 
 
-
-
 def chart_writer(argv):
     chartname = ''
     try:
