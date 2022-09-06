@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import AstraChart
+
 # Start with a chart
 # Genevieve's chart
 gchart = { 'SUN' : ['PISCES',1], 'MOON' : ['CAPRICORN', 17], 'ASC' : ['VIRGO', 28], 'MERCURY' : ['AQUARIUS', 5], 'VENUS' : ['CAPRICORN', 25], 'MARS' : ['LIBRA', 19], 'JUPITER' : ['SCORPIO', 10], 'SATURN' : ['LIBRA', 21], 'URANUS' : ['SAGITARRIUS', 4], 'NEPTUNE' : ['SAGITARRIUS', 26], 'PLUTO' : ['LIBRA', 26]}

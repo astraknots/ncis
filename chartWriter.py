@@ -9,10 +9,62 @@ import xlsxwriter
 import logging
 
 import util as putil
+from AstraChart import AstraChart
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
+
+def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
+    """Write an astrology Chart to a spreadsheet"""
+    wchart = AstraXslxChart(wname)
+    wchart.create_chart_booksheet(sheet_name)
+    # this changes based on the pattern and how many degrees are represented by a stitch
+    wchart.set_garment(garment_type)
+    deg_increments = wchart.degree_inc()
+
+    #logging.info("Creating a blank astrology chart workbook named:" + wname)
+
+    ## Constants ##
+    # columns in spreadsheet
+    SHEET_DEGREE_SIGN_COL = 2
+    SHEET_DEGREE_COL = 3
+
+    # iterating rows in spreadsheet
+    row_cnt = 0
+    # loop through signs array
+    sign_cnt = 0
+
+    # set width of first 2 columns
+    wchart.set_col_width(0, SHEET_DEGREE_SIGN_COL, 15)
+
+    # Loop over 360 chart degrees
+    for deg in range(constants.MIN_SIGN_DEGREES, constants.MAX_CHART_DEGREES, deg_increments):
+        #  write out chart degrees in Col C
+        wchart.write_to_sheet(row_cnt, SHEET_DEGREE_COL, str(deg))
+
+        # increment counter to next sign after 30
+        if deg % constants.MAX_SIGN_DEGREES == constants.MIN_SIGN_DEGREES:
+            if deg != constants.MIN_SIGN_DEGREES:
+                sign_cnt += 1
+
+        # Get sign name from array
+        sign_name = constants.SIGNS[sign_cnt]
+        sign_deg = str(deg % constants.MAX_SIGN_DEGREES)
+        # Add row of ex: '0 Aries" etc
+        wchart.write_to_sheet(row_cnt, SHEET_DEGREE_SIGN_COL, sign_deg + ' ' + sign_name.capitalize())
+
+        wchart.set_row_cnt(row_cnt)
+        ## Section for writing specifics of a chart out ##
+        if achart:
+            write_astra_chart(achart, wchart, sign_name, sign_deg)
+
+        ## End section for writing chart specifics
+        row_cnt += 1
+
+    # Close the workbook
+    wchart.close_book()
 
 
 def createWorkbook(wname):
@@ -22,154 +74,25 @@ def createWorkbook(wname):
     return workbook
 
 
-def write_blank_astra_chart_to_xcel(wname):
-    """Write a blank astrology Chart to a spreadsheet"""
-    logging.info("Creating a blank astrology chart workbook named:" + wname)
-    # Create the workbook
-    workbook = createWorkbook(wname)
+def write_astra_chart(achart, xchart, sign_name, sign_deg):
+    '''Write out the specific astra info of a chart'''
+    USER_CHART_PLANET_COL = 1
 
-    # Add blank chart worksheet
-    worksheet = workbook.add_worksheet("blank chart")
+    # Loop through each degree looking for matching planets and write them in
+    start_deg = int(sign_deg)
+    end_deg = int(sign_deg) + xchart.degree_inc()
+    user_chart_planets = ''
+    planets = []
+    for single_deg in range(start_deg, end_deg):
+        # Write a planet from the chart here if present
+        planets = achart.find_planets_at_sign_and_degree(sign_name, single_deg, True)
+        if len(planets) > 0:
+            user_chart_planets += str(single_deg) + ": [" + ' '.join(planets) + "] "
 
-    ## Constants ##
-    # loop through signs array
-    sign_cnt = 0
-    # columns in spreadsheet
-    degree_sign_col = 2
-    degree_col = 3
-    # iterating rows in spreadsheet
-    row_cnt = 0
-    # iterating the chart and signs
-    max_sign_degrees = 30
-    min_sign_degrees = 0
-    max_chart_degrees = 360
-    deg_increments = 3  # this changes based on the pattern and how many degrees are represented by a stitch
-
-    # set width of first 2 columns
-    worksheet.set_column(0, degree_sign_col, 15)
-
-    # Loop through and write out chart degrees in Col C //scarf - deg = 1 st
-    for deg in range(min_sign_degrees, max_chart_degrees, deg_increments):
-        # print(str(deg))
-        worksheet.write(row_cnt, degree_col, str(deg))
-
-        # increment counter to next sign after 30
-        if deg % max_sign_degrees == min_sign_degrees:
-            if deg != min_sign_degrees:
-                sign_cnt += 1
-
-        # Get sign name from array
-        sign_name = constants.SIGNS[sign_cnt]
-        sign_deg = str(deg % max_sign_degrees)
-        # Add row of ex: '0 Aries" etc
-        # print("sign + deg=", sign_deg + ' ' + sign_name.capitalize())
-        worksheet.write(row_cnt, degree_sign_col, sign_deg + ' ' + sign_name.capitalize())
-        row_cnt += 1
-        # print("sign_cnt = " + str(sign_cnt))
-        # print("sign_name = " + constants.SIGNS[sign_cnt])
-
-    # Close the workbook
-    workbook.close()
+    if user_chart_planets != '':
+        xchart.write_to_sheet(xchart.row_cnt, USER_CHART_PLANET_COL, user_chart_planets)
 
 
-def find_planet_at_degree(user_chart, sign_name, sign_deg):
-    '''Look for a planet at the sign and degree given, return blank if not found'''
-    logging.info("Looking for a planet at " + str(sign_deg) + ' ' + sign_name)
-
-    for planet in constants.PLANETS:
-        chart_sign = user_chart[planet][0]
-        chart_deg = user_chart[planet][1]
-        logging.info("Planet " + planet + " at " + str(chart_deg) + " of " + chart_sign)
-        if chart_sign == sign_name and str(chart_deg) == str(sign_deg):
-            return planet.capitalize()
-
-    return ''
-
-
-def find_planets_at_degree(user_chart, sign_name, sign_deg):
-    '''Look for planets at the sign and degree given, concatonate if multiple found return blank if not found'''
-    logging.info("Looking for planets at " + str(sign_deg) + ' ' + sign_name)
-
-    found_planets = ''
-
-    for planet in constants.PLANETS:
-        chart_sign = user_chart[planet][0]
-        chart_deg = user_chart[planet][1]
-        if chart_sign == sign_name and str(chart_deg) == str(sign_deg):
-            logging.info("Found Planet " + planet + " at " + str(chart_deg) + " of " + chart_sign)
-            found_planets += planet.capitalize() + ":(" + str(chart_deg) + ") "
-
-    return found_planets
-
-
-def write_astra_chart_to_xcel(chartname, user_chart):
-    '''Write a user's astra chart to xcel'''
-    logging.info("Creating astrology chart workbook named:" + chartname)
-    logging.info("Chart data:")
-    logging.info(user_chart)
-    # Create the workbook
-    workbook = createWorkbook(chartname)
-
-    # Add blank chart worksheet
-    worksheet = workbook.add_worksheet(chartname)
-
-    ## Constants ##
-    # loop through signs array
-    sign_cnt = 0
-    # columns in spreadsheet
-    user_chart_planet_col = 1
-    degree_sign_col = 2
-    degree_col = 3
-    # iterating rows in spreadsheet
-    row_cnt = 0
-    # iterating the chart and signs
-    max_sign_degrees = 30
-    min_sign_degrees = 0
-    max_chart_degrees = 360
-    deg_increments = 3  # this changes based on the pattern and how many degrees are represented by a stitch
-
-    # set width of first 2 columns
-    worksheet.set_column(0, degree_sign_col, 20)
-
-    # Loop through and write out chart degrees in Col C //scarf - deg = 1 st
-    for deg in range(min_sign_degrees, max_chart_degrees, deg_increments):
-        # print(str(deg))
-        worksheet.write(row_cnt, degree_col, str(deg))
-
-        # increment counter to next sign after 30
-        if deg % max_sign_degrees == min_sign_degrees:
-            if deg != min_sign_degrees:
-                sign_cnt += 1
-
-        # Get sign name from array
-        sign_name = constants.SIGNS[sign_cnt]
-        sign_deg = str(deg % max_sign_degrees)
-        # Add row of ex: '0 Aries" etc
-        logging.info("sign + deg=" + str(sign_deg) + " " + sign_name.capitalize())
-        worksheet.write(row_cnt, degree_sign_col, sign_deg + ' ' + sign_name.capitalize())
-
-        ## Begin section different from the base blank chart ##
-
-        # Modify if the degree increments for the pattern/chart differ from 1
-        start_deg = int(sign_deg)
-        end_deg = int(sign_deg) + deg_increments
-        user_chart_planets = ''
-        for single_deg in range(start_deg, end_deg):
-            # Write a planet from the chart here if present
-            user_chart_planet = find_planets_at_degree(user_chart, sign_name, single_deg)
-            user_chart_planets += user_chart_planet + ' '
-
-        if user_chart_planets != '':
-            worksheet.write(row_cnt, user_chart_planet_col, user_chart_planets)
-
-        ## End section diff from blank base
-
-        row_cnt += 1
-        # print("sign_cnt = " + str(sign_cnt))
-        # print("sign_name = " + constants.SIGNS[sign_cnt])
-
-    # Close the workbook
-    workbook.close()
 
 def writePatternToXcel(wname, patWidth, sPat, chart_degrees):
     '''Write the whole pattern to Xcel'''
@@ -421,6 +344,45 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
 # worksheet.insert_image('B5', 'logo.png')
 
 
+class XlsxChart:
+    def __init__(self, filename):
+        self.worksheet = None
+        self.workbook = None
+        self.filename = filename
+        self.row_cnt = 0
+
+    def create_chart_booksheet(self, sheet_name):
+        ''' Create an new Excel file and add a worksheet.'''
+        self.workbook = xlsxwriter.Workbook(self.filename + '.xlsx')
+
+        # Add blank chart worksheet
+        self.worksheet = self.workbook.add_worksheet(sheet_name)
+
+    def set_col_width(self, col_start, col_end, col_width):
+        self.worksheet.set_column(col_start, col_end, col_width)
+
+    def write_to_sheet(self, row, col, args):
+        self.worksheet.write(row, col, args)
+
+    def set_row_cnt(self, row_cnt):
+        self.row_cnt = row_cnt
+
+    def close_book(self):
+        self.workbook.close()
+
+
+class AstraXslxChart(XlsxChart):
+    def __init__(self, filename):
+        self.filename = filename
+        self.garment = None
+
+    def set_garment(self, garment):
+        self.garment = garment
+
+    def degree_inc(self):
+        return constants.GARMENT_ST_TO_DEGREES[self.garment]
+
+
 def chart_writer(argv):
     chartname = ''
     try:
@@ -439,25 +401,25 @@ def chart_writer(argv):
 
     if chartname == '':
         logging.info("Creating blank astra chart")
-        write_blank_astra_chart_to_xcel('blank_chart')
+        write_any_astra_chart_to_xcel("blank chart", 'HAT', "blank", None)
     else:
         logging.info("Chart argument given:" + chartname)
-        usechart = []
+
         if chartname == 'gchart':
-            usechart = chartData.gchart
+            usechart = AstraChart(chartname, 'Genevieve', chartData.gchart)
         elif chartname == 'bchart':
-            usechart = chartData.bchart
+            usechart = AstraChart(chartname, 'Brian', chartData.bchart)
         elif chartname == 'jchart':
-            usechart = chartData.jchart
+            usechart = AstraChart(chartname, 'Jacob', chartData.jchart)
         elif chartname == 'rchart':
-            usechart = chartData.rchart
+            usechart = AstraChart(chartname, 'Rebecca', chartData.rchart)
         else:
             print('Couldn\'t find the chart you are looking for..')
             return
 
-        logging.info("User chart:")
-        logging.info(usechart)
-        write_astra_chart_to_xcel(chartname, usechart)
+        usechart.print_info()
+        write_any_astra_chart_to_xcel(chartname, 'HAT', usechart.person, usechart)
+        #write_astra_chart_to_xcel(chartname, usechart)
 
 
 if __name__ == "__main__":
