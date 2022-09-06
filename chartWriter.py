@@ -10,6 +10,7 @@ import logging
 
 import util as putil
 from AstraChart import AstraChart
+from AstraXslxChart import AstraXslxChart
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
@@ -344,43 +345,6 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
 # worksheet.insert_image('B5', 'logo.png')
 
 
-class XlsxChart:
-    def __init__(self, filename):
-        self.worksheet = None
-        self.workbook = None
-        self.filename = filename
-        self.row_cnt = 0
-
-    def create_chart_booksheet(self, sheet_name):
-        ''' Create an new Excel file and add a worksheet.'''
-        self.workbook = xlsxwriter.Workbook(self.filename + '.xlsx')
-
-        # Add blank chart worksheet
-        self.worksheet = self.workbook.add_worksheet(sheet_name)
-
-    def set_col_width(self, col_start, col_end, col_width):
-        self.worksheet.set_column(col_start, col_end, col_width)
-
-    def write_to_sheet(self, row, col, args):
-        self.worksheet.write(row, col, args)
-
-    def set_row_cnt(self, row_cnt):
-        self.row_cnt = row_cnt
-
-    def close_book(self):
-        self.workbook.close()
-
-
-class AstraXslxChart(XlsxChart):
-    def __init__(self, filename):
-        self.filename = filename
-        self.garment = None
-
-    def set_garment(self, garment):
-        self.garment = garment
-
-    def degree_inc(self):
-        return constants.GARMENT_ST_TO_DEGREES[self.garment]
 
 
 def chart_writer(argv):
@@ -419,7 +383,6 @@ def chart_writer(argv):
 
         usechart.print_info()
         write_any_astra_chart_to_xcel(chartname, 'HAT', usechart.person, usechart)
-        #write_astra_chart_to_xcel(chartname, usechart)
 
 
 if __name__ == "__main__":
