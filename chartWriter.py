@@ -1,6 +1,7 @@
 import getopt
 import sys
 
+import calculateOrbs
 import chartData
 import constants
 import re
@@ -8,6 +9,7 @@ import scarf
 import xlsxwriter
 import logging
 
+import translate
 import util as putil
 from AstraChart import AstraChart
 from AstraXslxChart import AstraXslxChart
@@ -40,6 +42,12 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     # set width of first 2 columns
     wchart.set_col_width(0, SHEET_DEGREE_SIGN_COL, 15)
 
+    ## Section to prepare chart data ##
+    if achart:
+        #orbs_by_planet = calculateOrbs.calcOrbsByPlanet(achart.get_chart_in_360degrees_for_planets())
+        orbs_by_planet = calculateOrbs.calcOrbsByPlanet(achart.get_chart_in_360degrees_for_planets())
+    ## End section to prepare chart data
+
     # Loop over 360 chart degrees
     for deg in range(constants.MIN_SIGN_DEGREES, constants.MAX_CHART_DEGREES, deg_increments):
         #  write out chart degrees in Col C
@@ -60,6 +68,7 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
         ## Section for writing specifics of a chart out ##
         if achart:
             write_astra_chart(achart, wchart, sign_name, sign_deg)
+            write_orbs_to_sheet(achart, wchart, orbs_by_planet, deg)
 
         ## End section for writing chart specifics
         row_cnt += 1
@@ -79,7 +88,7 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
     '''Write out the specific astra info of a chart'''
     USER_CHART_PLANET_COL = 1
 
-    # Loop through each degree looking for matching planets and write them in
+    # Loop through each degree looking for matching planets and write them in, with formatting
     start_deg = int(sign_deg)
     end_deg = int(sign_deg) + xchart.degree_inc()
     user_chart_planets = ''
@@ -93,6 +102,24 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
     if user_chart_planets != '':
         xchart.write_to_sheet(xchart.row_cnt, USER_CHART_PLANET_COL, user_chart_planets)
 
+
+def write_orbs_to_sheet(achart, xchart, orbs_by_planet, deg):
+    '''Write out orbs of a chart'''
+    USER_CHART_PLANET_COL = 1
+
+    # Loop through each degree looking for matching Orbs and write them in, with formatting
+    start_deg = int(deg)
+    end_deg = int(deg) + xchart.degree_inc()
+    chart_planet_orbs = ''
+    aspects = []
+    for single_deg in range(start_deg, end_deg):
+        # Write a planet from the chart here if present
+        aspects = achart.find_aspect_center_at_360_degree(orbs_by_planet, single_deg, True)
+        if len(aspects) > 0:
+            chart_planet_orbs += str(single_deg) + ": [" + ' '.join(aspects) + "] "
+
+    if chart_planet_orbs != '':
+        xchart.write_to_sheet(xchart.row_cnt, USER_CHART_PLANET_COL, chart_planet_orbs)
 
 
 def writePatternToXcel(wname, patWidth, sPat, chart_degrees):
