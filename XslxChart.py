@@ -27,8 +27,15 @@ class XlsxChart:
     def write_to_sheet(self, row, col, args):
         self.worksheet.write(row, col, args)
 
+    def write_to_sheet_format(self, row, col, args, wformat):
+        self.worksheet.write(row, col, args, wformat)
+
     def set_row_cnt(self, row_cnt):
         self.row_cnt = row_cnt
+
+    def get_bold_format(self):
+        bold_format = self.workbook.add_format({'bold': True})
+        return bold_format
 
     def close_book(self):
         self.workbook.close()

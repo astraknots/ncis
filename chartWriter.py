@@ -31,8 +31,10 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
 
     ## Constants ##
     # columns in spreadsheet
+    USER_CHART_PLANET_COL = 1
     SHEET_DEGREE_SIGN_COL = 2
     SHEET_DEGREE_COL = 3
+    SHEET_PLANET_COLOR_COL_START = 4
 
     # iterating rows in spreadsheet
     row_cnt = 0
@@ -40,11 +42,23 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     sign_cnt = 0
 
     # set width of first 2 columns
-    wchart.set_col_width(0, SHEET_DEGREE_SIGN_COL, 15)
+    wchart.set_col_width(0, SHEET_DEGREE_SIGN_COL, 22)
+
+    ## Section for top of sheet headers ##
+    wchart.write_to_sheet_format(row_cnt, USER_CHART_PLANET_COL, "Planet / Orb", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, SHEET_DEGREE_SIGN_COL, "Degree Sign", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, SHEET_DEGREE_COL, "Degree range start", wchart.get_bold_format())
+    p_cnt = SHEET_PLANET_COLOR_COL_START
+    for planet in constants.PLANETS:
+        wchart.write_to_sheet_format(row_cnt, p_cnt, planet.capitalize(), wchart.get_bold_format())
+        p_cnt += 1
+        #wchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
+    row_cnt += 1
+
+    ## End section for top of sheet headers ##
 
     ## Section to prepare chart data ##
     if achart:
-        #orbs_by_planet = calculateOrbs.calcOrbsByPlanet(achart.get_chart_in_360degrees_for_planets())
         orbs_by_planet = calculateOrbs.calcOrbsByPlanet(achart.get_chart_in_360degrees_for_planets())
     ## End section to prepare chart data
 

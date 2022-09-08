@@ -17,3 +17,10 @@ class AstraXslxChart(XlsxChart):
 
     def degree_inc(self):
         return constants.GARMENT_ST_TO_DEGREES[self.garment]
+
+    def get_cell_color_format(self, color_name):
+        cell_format = self.workbook.add_format()
+        cell_format.set_pattern(1)
+        cell_format.set_bg_color(color_name)
+        return cell_format
+
