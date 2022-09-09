@@ -3,7 +3,7 @@
 SIGNS = ['ARIES', 'TAURUS', 'GEMINI', 'CANCER', 'LEO', 'VIRGO', 'LIBRA', 'SCORPIO', 'SAGITARRIUS', 'CAPRICORN', 'AQUARIUS', 'PISCES']
 
 PLANETS = ['SUN', 'MOON', 'ASC', 'MERCURY', 'VENUS', 'MARS', 'JUPITER', 'SATURN', 'URANUS', 'NEPTUNE', 'PLUTO']
-PLANET_COLORS = {'SUN': 'yellow', 'MOON': 'blue', 'ASC': 'lime', 'MERCURY': 'orange', 'VENUS': 'green', 'MARS': 'red', 'JUPITER': 'magenta', 'SATURN': 'brown', 'URANUS': 'cyan', 'NETPTUNE': 'purple', 'PLUTO': 'silver'}
+PLANET_COLORS = {'SUN': 'yellow', 'MOON': 'blue', 'ASC': 'lime', 'MERCURY': 'orange', 'VENUS': 'green', 'MARS': 'red', 'JUPITER': 'magenta', 'SATURN': 'brown', 'URANUS': 'cyan', 'NEPTUNE': 'purple', 'PLUTO': 'silver'}
 
 BIG_THREE = ['SUN', 'MOON', 'ASC']
 
