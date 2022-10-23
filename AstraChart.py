@@ -63,8 +63,8 @@ class AstraChart:
             chart_aspect_list = orbs_by_planet[planet]
             #logging.debug(chart_aspect_list)
             for aspect in constants.ASPECTS2:
-                deg_list = chart_aspect_list[aspect]
-                #logging.debug(chart_aspect_list[aspect])
+                deg_list = chart_aspect_list[aspect]  # like [308. 324]
+                #logging.debug("Deg list:" + str(chart_aspect_list[aspect]))
                 if deg in deg_list:
                     logging.debug("Found: " + planet + " " + aspect + " at " + str(deg))
                     if cap:

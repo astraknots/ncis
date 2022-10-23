@@ -14,3 +14,14 @@ jchart = { 'SUN' : ['SCORPIO',24], 'MOON' : ['CANCER', 28], 'ASC' : ['SAGITARRIU
 
 # Rebecca's chart
 rchart = { 'SUN' : ['CANCER',14], 'MOON' : ['VIRGO', 21], 'ASC' : ['CAPRICORN', 18], 'MERCURY' : ['GEMINI', 26], 'VENUS' : ['LEO', 8], 'MARS' : ['GEMINI', 22], 'JUPITER' : ['LIBRA', 2], 'SATURN' : ['LIBRA', 3], 'URANUS' : ['SCORPIO', 26], 'NEPTUNE' : ['SAGITARRIUS', 22], 'PLUTO' : ['LIBRA', 21]}
+
+# JenniAdams's chart
+jachart = { 'SUN' : ['TAURUS',17], 'MOON' : ['SCORPIO', 0], 'ASC' : ['AQUARIUS', 3], 'MERCURY' : ['TAURUS', 10], 'VENUS' : ['ARIES', 4], 'MARS' : ['PISCES', 12], 'JUPITER' : ['CANCER', 8], 'SATURN' : ['CAPRICORN', 25], 'URANUS' : ['CAPRICORN', 9], 'NEPTUNE' : ['CAPRICORN', 14], 'PLUTO' : ['SCORPIO', 16]}
+
+def get_chart(chartname):
+    print(chartname)
+    for name in globals().keys():
+        print(name)
+        if name == chartname:
+            print(globals()[name])
+            return globals()[name]

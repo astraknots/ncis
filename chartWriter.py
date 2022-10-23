@@ -27,7 +27,7 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     wchart.set_garment(garment_type)
     deg_increments = wchart.degree_inc()
 
-    #logging.info("Creating a blank astrology chart workbook named:" + wname)
+    # logging.info("Creating a blank astrology chart workbook named:" + wname)
 
     ## Constants ##
     # columns in spreadsheet
@@ -46,14 +46,15 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     wchart.set_col_width(0, SHEET_DEGREE_SIGN_COL, 22)
 
     ## Section for top of sheet headers ##
-    wchart.write_to_sheet_format(row_cnt, USER_CHART_PLANET_COL, "Planet / Orb", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, USER_CHART_PLANET_COL, "Sign Degree: [Planet]", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, USER_CHART_ASPECT_COL, "360 Degree: [Aspect Orb]", wchart.get_bold_format())
     wchart.write_to_sheet_format(row_cnt, SHEET_DEGREE_SIGN_COL, "Degree Sign", wchart.get_bold_format())
     wchart.write_to_sheet_format(row_cnt, SHEET_DEGREE_COL, "Degree range start", wchart.get_bold_format())
     p_cnt = SHEET_PLANET_COLOR_COL_START
     for planet in constants.PLANETS:
         wchart.write_to_sheet_format(row_cnt, p_cnt, planet.capitalize(), wchart.get_bold_format())
         p_cnt += 1
-        #wchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
+        # wchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
     row_cnt += 1
 
     ## End section for top of sheet headers ##
@@ -138,7 +139,20 @@ def write_orbs_to_sheet(achart, xchart, orbs_by_planet, deg):
         xchart.write_to_sheet(xchart.row_cnt, USER_CHART_ASPECT_COL, chart_planet_orbs)
 
 
-def write_orb_colors_to_sheet(achart, xchart, orbs_by_planet, header_row_cnt):
+def write_orb_range_to_fsheet(orb_range_start, orb_range_end, header_row_cnt, p_cnt, planet, aspect, xchart):
+    '''Write formatted planet color range of an orb to the sheet'''
+    degree_inc = xchart.degree_inc()  # the degree increment we're charting per row (i.e. COWL = 2)
+
+    for orb_color_range in range(orb_range_start, orb_range_end):
+        orb_color_row = int(orb_color_range / degree_inc)
+        orb_row = orb_color_row + header_row_cnt
+        logging.debug(
+            "Orb row:" + str(orb_row) + " p_cnt_col:" + str(p_cnt) + " for planet:" + planet + " and aspect:" + aspect)
+        xchart.write_to_sheet_format(orb_row, p_cnt, planet + aspect,
+                                     xchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
+
+
+def write_orb_colors_to_sheet(achart, xchart, orbs_by_planet, h_row_cnt):
     '''Color in the orb sections of the chart'''
     SHEET_PLANET_COLOR_COL_START = 5
 
@@ -147,14 +161,23 @@ def write_orb_colors_to_sheet(achart, xchart, orbs_by_planet, header_row_cnt):
     for planet in constants.PLANETS:
         aspects = orbs_by_planet[planet]
         for aspect in constants.ASPECTS:
-            aspect_orb_range = aspects[aspect]
+            aspect_orb_range = aspects[aspect]  # like [338 to 354] or [349 to 1]
             orb_range_start = aspect_orb_range[0]
             orb_range_end = aspect_orb_range[1]
-            logging.debug("orb range:[" + str(orb_range_start) + " to " + str(orb_range_end))
-            for orb_color_range in range(orb_range_start, orb_range_end):
-                orb_row = orb_color_range+header_row_cnt
-                logging.debug("Orb row:" + str(orb_row) + " p_cnt_col:" + str(p_cnt) + " for planet:" + planet + " and aspect:" + aspect)
-                xchart.write_to_sheet_format(orb_row, p_cnt, planet + aspect, xchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
+            logging.debug("orb range:[" + str(orb_range_start) + " to " + str(orb_range_end) + "]")
+            if orb_range_end < orb_range_start:  # then it's like [349 to 1] and loops over the end of Pisces to Aries
+                # so break it into two
+
+                write_orb_range_to_fsheet(orb_range_start, constants.MAX_CHART_DEGREES, h_row_cnt, p_cnt, planet,
+                                          aspect,
+                                          xchart)
+                write_orb_range_to_fsheet(constants.MIN_CHART_DEGREES, orb_range_end, h_row_cnt, p_cnt, planet,
+                                          aspect,
+                                          xchart)
+            else:
+                write_orb_range_to_fsheet(orb_range_start, orb_range_end, h_row_cnt, p_cnt, planet,
+                                          aspect,
+                                          xchart)
         p_cnt += 1
 
 
@@ -410,17 +433,20 @@ def fitRepeatsToRowWidth(pattName, rowWidth, rowcount, repeat, chart_degrees):
 
 def chart_writer(argv):
     chartname = ''
+    pattname = 'SCARF'
     try:
-        opts, args = getopt.getopt(argv, "hc:b:", ["chart="])
+        opts, args = getopt.getopt(argv, "hc:p:b:", ["chart=", "patt="])
     except getopt.GetoptError:
-        print('chartWriter.py -c <chart-name>')
+        print('chartWriter.py -c <chart-name> -p <pattern-style>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('chartWriter.py -c <chart-name>')
+            print('chartWriter.py -c <chart-name> -p <pattern-style>')
             sys.exit()
         elif opt in ("-c", "--chart"):
             chartname = arg
+        elif opt in ("-p", "--patt"):
+            pattname = arg.upper()
         elif opt in "-b":
             chartname = ''
 
@@ -439,11 +465,15 @@ def chart_writer(argv):
         elif chartname == 'rchart':
             usechart = AstraChart(chartname, 'Rebecca', chartData.rchart)
         else:
-            print('Couldn\'t find the chart you are looking for..')
-            return
+            findchart = chartData.get_chart(chartname)
+            if findchart is None:
+                print('Couldn\'t find the chart you are looking for..')
+                return
+            else:
+                usechart = AstraChart(chartname, 'OtherUser', findchart)
 
         usechart.print_info()
-        write_any_astra_chart_to_xcel(chartname, 'SCARF', usechart.person, usechart)
+        write_any_astra_chart_to_xcel(chartname, pattname, usechart.person, usechart)
 
 
 if __name__ == "__main__":
