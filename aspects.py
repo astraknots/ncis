@@ -34,6 +34,10 @@ def getAspectOrb(aspect, planet):
     return asp_orb
 
 
+def get_aspect_score(aspect):
+    score = constants.ASPECT_WEIGHTS[aspect]
+    return score
+
 def pickIfOnePattern(bestPatts):
     if len(bestPatts) == 1:
         ##print("...picking best patt:", bestPatts[0], type(bestPatts), type(bestPatts[0]))

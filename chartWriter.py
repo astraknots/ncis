@@ -1,6 +1,7 @@
 import getopt
 import sys
 
+import aspects
 import calculateOrbs
 import chartData
 import constants
@@ -29,32 +30,37 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
 
     # logging.info("Creating a blank astrology chart workbook named:" + wname)
 
-    ## Constants ##
-    # columns in spreadsheet
-    USER_CHART_PLANET_COL = 1
-    USER_CHART_ASPECT_COL = 2
-    SHEET_DEGREE_SIGN_COL = 3
-    SHEET_DEGREE_COL = 4
-    SHEET_PLANET_COLOR_COL_START = 5
-
     # iterating rows in spreadsheet
     row_cnt = 0
     # loop through signs array
     sign_cnt = 0
 
-    # set width of first 2 columns
-    wchart.set_col_width(0, SHEET_DEGREE_SIGN_COL, 22)
+    # set width of first few columns
+    wchart.set_col_width(0, constants.SHEET_DEGREE_SIGN_COL, 22)
 
     ## Section for top of sheet headers ##
-    wchart.write_to_sheet_format(row_cnt, USER_CHART_PLANET_COL, "Sign Degree: [Planet]", wchart.get_bold_format())
-    wchart.write_to_sheet_format(row_cnt, USER_CHART_ASPECT_COL, "360 Degree: [Aspect Orb]", wchart.get_bold_format())
-    wchart.write_to_sheet_format(row_cnt, SHEET_DEGREE_SIGN_COL, "Degree Sign", wchart.get_bold_format())
-    wchart.write_to_sheet_format(row_cnt, SHEET_DEGREE_COL, "Degree range start", wchart.get_bold_format())
-    p_cnt = SHEET_PLANET_COLOR_COL_START
+    wchart.write_to_sheet_format(row_cnt, constants.USER_CHART_PLANET_COL, "Sign Degree: [Planet]", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, constants.USER_CHART_DIGNITY_COL, "Dignity [Score]", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, constants.USER_CHART_ASPECT_COL, "360 Degree: [Aspect Orb]", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, constants.SHEET_DEGREE_SIGN_COL, "Degree Sign", wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, constants.SHEET_DEGREE_COL, "Degree range start", wchart.get_bold_format())
+    p_cnt = constants.SHEET_PLANET_COLOR_COL_START
     for planet in constants.PLANETS:
         wchart.write_to_sheet_format(row_cnt, p_cnt, planet.capitalize(), wchart.get_bold_format())
         p_cnt += 1
-        # wchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
+
+    # For planet aspect score
+    for planet in constants.PLANETS:
+        wchart.write_to_sheet_format(row_cnt, p_cnt, planet.capitalize() + " Aspect Score", wchart.get_bold_format())
+        p_cnt += 1
+
+
+    # Knitting pattern column setup
+    wchart.write_to_sheet_format(row_cnt, p_cnt, "Stitches", wchart.get_bold_format())
+    STITCH_COL = p_cnt
+    st_cnt = 1
+    # End knitting pattern header col setup
+
     row_cnt += 1
 
     ## End section for top of sheet headers ##
@@ -68,7 +74,7 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     # Loop over 360 chart degrees
     for deg in range(constants.MIN_SIGN_DEGREES, constants.MAX_CHART_DEGREES, deg_increments):
         #  write out chart degrees in Col C
-        wchart.write_to_sheet(row_cnt, SHEET_DEGREE_COL, str(deg))
+        wchart.write_to_sheet(row_cnt, constants.SHEET_DEGREE_COL, str(deg))
 
         # increment counter to next sign after 30
         if deg % constants.MAX_SIGN_DEGREES == constants.MIN_SIGN_DEGREES:
@@ -79,7 +85,7 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
         sign_name = constants.SIGNS[sign_cnt]
         sign_deg = str(deg % constants.MAX_SIGN_DEGREES)
         # Add row of ex: '0 Aries" etc
-        wchart.write_to_sheet(row_cnt, SHEET_DEGREE_SIGN_COL, sign_deg + ' ' + sign_name.capitalize())
+        wchart.write_to_sheet(row_cnt, constants.SHEET_DEGREE_SIGN_COL, sign_deg + ' ' + sign_name.capitalize())
 
         wchart.set_row_cnt(row_cnt)
         ## Section for writing specifics of a chart out ##
@@ -88,6 +94,13 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
             write_orbs_to_sheet(achart, wchart, orbs_by_planet, deg)
 
         ## End section for writing chart specifics
+
+        ## Section for writing knitting pattern
+        wchart.write_to_sheet(row_cnt, STITCH_COL, st_cnt)
+        st_cnt += 1
+
+        ## End section for writing knitting pattern
+
         row_cnt += 1
 
     # Close the workbook
@@ -102,8 +115,8 @@ def createWorkbook(wname):
 
 
 def write_astra_chart(achart, xchart, sign_name, sign_deg):
-    '''Write out the specific astra info of a chart'''
-    USER_CHART_PLANET_COL = 1
+    '''Write out the specific astra info of a chart
+    In Sign Degree: [Planet] column'''
 
     # Loop through each degree looking for matching planets and write them in, with formatting
     start_deg = int(sign_deg)
@@ -114,15 +127,15 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
         # Write a planet from the chart here if present
         planets = achart.find_planets_at_sign_and_degree(sign_name, single_deg, True)
         if len(planets) > 0:
-            user_chart_planets += str(single_deg) + ": [" + ' '.join(planets) + "] "
+            user_chart_planets += str(single_deg) + ": [" + '; '.join(planets) + "] "
 
     if user_chart_planets != '':
-        xchart.write_to_sheet(xchart.row_cnt, USER_CHART_PLANET_COL, user_chart_planets)
+        xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_PLANET_COL, user_chart_planets)
 
 
 def write_orbs_to_sheet(achart, xchart, orbs_by_planet, deg):
-    '''Write out orbs of a chart'''
-    USER_CHART_ASPECT_COL = 2
+    '''Write out orbs of a chart
+    In 360 Degree: [Aspect Orb] column'''
 
     # Loop through each degree looking for matching Orbs and write them in, with formatting
     start_deg = int(deg)
@@ -133,31 +146,33 @@ def write_orbs_to_sheet(achart, xchart, orbs_by_planet, deg):
         # Write a planet from the chart here if present
         aspects = achart.find_aspect_center_at_360_degree(orbs_by_planet, single_deg, True)
         if len(aspects) > 0:
-            chart_planet_orbs += str(single_deg) + ": [" + ' '.join(aspects) + "] "
+            chart_planet_orbs += str(single_deg) + ": [" + '; '.join(aspects) + "] "
 
     if chart_planet_orbs != '':
-        xchart.write_to_sheet(xchart.row_cnt, USER_CHART_ASPECT_COL, chart_planet_orbs)
+        xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_ASPECT_COL, chart_planet_orbs)
 
 
 def write_orb_range_to_fsheet(orb_range_start, orb_range_end, header_row_cnt, p_cnt, planet, aspect, xchart):
     '''Write formatted planet color range of an orb to the sheet'''
     degree_inc = xchart.degree_inc()  # the degree increment we're charting per row (i.e. COWL = 2)
 
+    aspect_score = aspects.get_aspect_score(aspect)
     for orb_color_range in range(orb_range_start, orb_range_end):
         orb_color_row = int(orb_color_range / degree_inc)
         orb_row = orb_color_row + header_row_cnt
         logging.debug(
             "Orb row:" + str(orb_row) + " p_cnt_col:" + str(p_cnt) + " for planet:" + planet + " and aspect:" + aspect)
-        xchart.write_to_sheet_format(orb_row, p_cnt, planet + aspect,
+        xchart.write_to_sheet_format(orb_row, p_cnt, planet + ' ' + aspect,
                                      xchart.get_cell_color_format(constants.PLANET_COLORS[planet]))
+        xchart.write_to_sheet(orb_row, p_cnt+len(constants.PLANETS), aspect_score)
+
 
 
 def write_orb_colors_to_sheet(achart, xchart, orbs_by_planet, h_row_cnt):
     '''Color in the orb sections of the chart'''
-    SHEET_PLANET_COLOR_COL_START = 5
 
     # Loop over the orbs by planet and color in
-    p_cnt = SHEET_PLANET_COLOR_COL_START
+    p_cnt = constants.SHEET_PLANET_COLOR_COL_START
     for planet in constants.PLANETS:
         aspects = orbs_by_planet[planet]
         for aspect in constants.ASPECTS:
