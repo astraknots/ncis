@@ -5,8 +5,6 @@ import xlsxwriter
 
 import constants
 
-
-
 class XlsxChart:
     def __init__(self, filename):
         self.worksheet = None

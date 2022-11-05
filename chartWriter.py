@@ -6,6 +6,8 @@ import calculateOrbs
 import chartData
 import constants
 import re
+
+import dignities
 import scarf
 import xlsxwriter
 import logging
@@ -122,15 +124,25 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
     start_deg = int(sign_deg)
     end_deg = int(sign_deg) + xchart.degree_inc()
     user_chart_planets = ''
+    user_chart_dignities = ''
     planets = []
+    planet_dignities = []
     for single_deg in range(start_deg, end_deg):
         # Write a planet from the chart here if present
         planets = achart.find_planets_at_sign_and_degree(sign_name, single_deg, True)
+        planetsUPPER = achart.find_planets_at_sign_and_degree(sign_name, single_deg, False)
+        planet_dignities = achart.find_planet_dignity_scores(planetsUPPER, sign_name)
         if len(planets) > 0:
             user_chart_planets += str(single_deg) + ": [" + '; '.join(planets) + "] "
 
+        if len(planet_dignities) > 0:
+            user_chart_dignities += dignities.get_printable_planet_dignities(planet_dignities, sign_name)
+
     if user_chart_planets != '':
         xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_PLANET_COL, user_chart_planets)
+
+    if user_chart_dignities != '':
+        xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_DIGNITY_COL, user_chart_dignities)
 
 
 def write_orbs_to_sheet(achart, xchart, orbs_by_planet, deg):
@@ -485,7 +497,7 @@ def chart_writer(argv):
                 print('Couldn\'t find the chart you are looking for..')
                 return
             else:
-                usechart = AstraChart(chartname, 'OtherUser', findchart)
+                usechart = AstraChart(chartname, chartData.get_chart_person(chartname), findchart)
 
         usechart.print_info()
         write_any_astra_chart_to_xcel(chartname, pattname, usechart.person, usechart)

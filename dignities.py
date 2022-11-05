@@ -1,14 +1,89 @@
 #!/usr/bin/python
+import constants
 
-PLANET_SIGN_RULERS = {'SUN': ('LEO'), 'MOON': ('CANCER'), 'MERCURY': ('GEMINI', 'VIRGO'), 'VENUS': ('TAURUS', 'LIBRA'), 'MARS': ('ARIES', 'SCORPIO'), 'JUPITER': ('SAGITTARIUS', 'PISCES'), 'SATURN': ('CAPRICORN', 'AQUARIUS'), 'URANUS': ('AQUARIUS'), 'NEPTUNE': ('PISCES'), 'PLUTO': ('SCORPIO')}
-PLANET_SIGN_DETRIMENT = {'SUN': ('AQUARIUS'), 'MOON': ('CAPRICORN'), 'MERCURY': ('SAGITTARIUS', 'PISCES'), 'VENUS': ('SCORPIO', 'ARIES'), 'MARS': ('LIBRA', 'TAURUS'), 'JUPITER': ('GEMINI', 'VIRGO'), 'SATURN': ('CANCER', 'LEO'), 'URANUS': ('LEO'), 'NEPTUNE': ('VIRGO'), 'PLUTO': ('TAURUS')}
-PLANET_SIGN_EXHAULTATION = {'SUN': ('ARIES'), 'MOON': ('TAURUS'), 'MERCURY': ('VIRGO'), 'VENUS': ('PISCES'), 'MARS': ('CAPRICORN'), 'JUPITER': ('CANCER'), 'SATURN': ('LIBRA'), 'URANUS': ('SCORPIO'), 'NEPTUNE': ('CANCER', 'LEO'), 'PLUTO': ('ARIES', 'PISCES')}
-PLANET_SIGN_FALL = {'SUN': ('LIBRA'), 'MOON': ('SCORPIO'), 'MERCURY': ('PISCES'), 'VENUS': ('VIRGO'), 'MARS': ('CANCER'), 'JUPITER': ('CAPRICORN'), 'SATURN': ('ARIES'), 'URANUS': ('TAURUS'), 'NEPTUNE': ('CAPRICORN', 'AQUARIUS'), 'PLUTO': ('VIRGO', 'LIBRA')}
+RULER = 'RULERSHIP'
+EXAULT = 'EXHAULTED'
+DETRMT = 'DETRIMENT'
+FALL = 'FALL'
+NO_DIG = 'NO_DIGNITY'
 
-#PLANET_DIGNITY_SCORES - based on how many of gender/heat, element, moisture, cardinality match with the energies of the ruler of the sign
-# Detriment are all 2
-# Rulership is all 4
-PLANET_EXHAULTATION_SCORES = {'SUN': (3), 'MOON': (1), 'MERCURY': (3), 'VENUS': (2), 'MARS': (2), 'JUPITER': (3), 'SATURN': (3), 'URANUS': (1), 'NEPTUNE': (3, 0), 'PLUTO': (0, 3)}
-PLANET_FALL_SCORES = {'SUN': (1), 'MOON': (3), 'MERCURY': (2), 'VENUS': (1.5), 'MARS': (1), 'JUPITER': (1), 'SATURN': (2), 'URANUS': (1), 'NEPTUNE': (1, 1), 'PLUTO': (1, 1)}
+def get_planet_dignity(planet, sign):
+    '''Return the dignity this planet has. If none, return NO_DIGNITY '''
+    if planet == 'ASC':
+        return None
+    rulership = constants.PLANET_SIGN_RULERS[planet]
+    exhaulted = constants.PLANET_SIGN_EXHAULTATION[planet]
+    detriment = constants.PLANET_SIGN_DETRIMENT[planet]
+    fall = constants.PLANET_SIGN_FALL[planet]
+    if sign in rulership:
+        return RULER
+    elif sign in exhaulted:
+        return EXAULT
+    elif sign in detriment:
+        return DETRMT
+    elif sign in fall:
+        return FALL
+    else:
+        return NO_DIG
 
 
+def get_planet_dignity_score(planet, dignity, sign):
+    '''Return the dignity score for this planet and dignity. NO_DIGNITY = 0'''
+    if dignity == RULER:
+        return 4
+    elif dignity == DETRMT:
+        return 2
+    elif dignity == EXAULT:
+        exhault_scores = constants.PLANET_EXHAULTATION_SCORES[planet]
+        if isinstance(exhault_scores, int):
+            return exhault_scores
+        else:
+            planets_exaults = constants.PLANET_SIGN_EXHAULTATION[planet]
+            if planets_exaults[0] == sign:
+                escore = exhault_scores[0]
+            else:
+                escore = exhault_scores[1]
+            return escore
+    elif dignity == FALL:
+        fall_scores = constants.PLANET_FALL_SCORES[planet]
+        if isinstance(fall_scores, int):
+            return fall_scores
+        else:
+            planets_falls = constants.PLANET_SIGN_FALL[planet]
+            if planets_falls[0] == sign:
+                fscore = fall_scores[0]
+            else:
+                fscore = fall_scores[1]
+            return fscore
+    else:
+        return 0
+
+
+def get_planet_dignity_w_score(planet, sign):
+    '''Return the dignity this planet has, along w the score of that dignity. If none, return NO_DIGNITY '''
+    dignity = get_planet_dignity(planet, sign)
+    if dignity == RULER:
+        return dignity + ' 4'
+    elif dignity == DETRMT:
+        return dignity + ' 2'
+    elif dignity == EXAULT:
+        exhault_scores = constants.PLANET_EXHAULTATION_SCORES[planet]
+        return dignity
+    elif dignity == FALL:
+        fall_scores = constants.PLANET_FALL_SCORES[planet]
+        return dignity
+    else:
+        return NO_DIG
+
+
+def get_printable_planet_dignities(planet_dignities, sign):
+    if len(planet_dignities) <= 0:
+        return ''
+    printable_dig = ''
+    for planet in constants.PLANETS:
+        if planet in planet_dignities:
+            dig = planet_dignities[planet]
+            if dig:
+                printable_dig += str(dig[sign][0]) + ' [' + str(dig[sign][1]) + ']'
+
+    return printable_dig

@@ -2,6 +2,7 @@
 import logging
 
 import constants
+import dignities
 import translate
 
 sign_idx = 0
@@ -47,7 +48,7 @@ class AstraChart:
             chart_sign = self.chart_data[planet][0]
             chart_deg = self.chart_data[planet][1]
             if chart_sign == sign_name and str(chart_deg) == str(sign_deg):
-                #logging.info("Found Planet " + planet + " at " + str(chart_deg) + " of " + chart_sign)
+                # logging.info("Found Planet " + planet + " at " + str(chart_deg) + " of " + chart_sign)
                 if cap:
                     found_planets.append(planet.capitalize())
                 else:
@@ -55,16 +56,26 @@ class AstraChart:
 
         return found_planets
 
+    def find_planet_dignity_scores(self, planet_list, sign):
+        planet_dignities = {}
+        sign_dignity = {}
+        for planet in planet_list:
+            dignity = dignities.get_planet_dignity(planet.upper(), sign.upper())
+            dscore = dignities.get_planet_dignity_score(planet.upper(), dignity, sign.upper())
+            planet_dignities[planet] = {sign: (dignity, dscore)}
+
+        return planet_dignities
+
     def find_aspect_center_at_360_degree(self, orbs_by_planet, deg, cap):
         '''Return a list of planet aspects on the 360 degree chart (Alt: by sign and degree)'''
         found_aspects = []
 
         for planet in constants.PLANETS:
             chart_aspect_list = orbs_by_planet[planet]
-            #logging.debug(chart_aspect_list)
+            # logging.debug(chart_aspect_list)
             for aspect in constants.ASPECTS:
                 deg_list = chart_aspect_list[aspect]  # like [308. 324]
-                #logging.debug("Deg list:" + str(chart_aspect_list[aspect]))
+                # logging.debug("Deg list:" + str(chart_aspect_list[aspect]))
                 if deg in deg_list:
                     logging.debug("Found: " + planet + " " + aspect + " at " + str(deg))
                     if cap:
@@ -86,5 +97,3 @@ class AstraChart:
             return self.chart_degrees
         else:
             return self.translate_chart_to_degrees_for_planets()
-
-
