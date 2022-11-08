@@ -21,6 +21,11 @@ jachart = { 'SUN' : ['TAURUS',17], 'MOON' : ['SCORPIO', 0], 'ASC' : ['AQUARIUS',
 # Linda Janiszewski's chart
 ljchart = { 'SUN' : ['SAGITTARIUS', 16], 'MOON' : ['GEMINI', 1], 'ASC' : ['CANCER', 2], 'MERCURY' : ['SAGITTARIUS', 7], 'VENUS' : ['SCORPIO', 14], 'MARS' : ['PISCES', 3], 'JUPITER' : ['CANCER', 29], 'SATURN' : ['SCORPIO', 16], 'URANUS' : ['CANCER', 27], 'NEPTUNE' : ['LIBRA', 27], 'PLUTO' : ['LEO', 26]}
 
+# AnnieWolff's chart
+awchart = { 'SUN' : ['TAURUS',27], 'MOON' : ['ARIES', 23], 'ASC' : ['CANCER', 22], 'MERCURY' : ['GEMINI', 0], 'VENUS' : ['ARIES', 14], 'MARS' : ['LEO', 10], 'JUPITER' : ['LIBRA', 5], 'SATURN' : ['AQUARIUS', 29], 'URANUS' : ['CAPRICORN', 21], 'NEPTUNE' : ['CAPRICORN', 20], 'PLUTO' : ['SCORPIO', 24]}
+
+# CaseyWeiss's chart
+cwchart = { 'SUN' : ['GEMINI',27], 'MOON' : ['AQUARIUS', 8], 'ASC' : ['SCORPIO', 0], 'MERCURY' : ['CANCER', 17], 'VENUS' : ['GEMINI', 29], 'MARS' : ['TAURUS', 3], 'JUPITER' : ['VIRGO', 8], 'SATURN' : ['AQUARIUS', 18], 'URANUS' : ['CAPRICORN', 16], 'NEPTUNE' : ['CAPRICORN', 18], 'PLUTO' : ['SCORPIO', 20]}
 
 def get_chart_person(chartname):
     '''Mapping of names to chart data is in this method'''
@@ -36,6 +41,10 @@ def get_chart_person(chartname):
         return 'Jenni Adams'
     elif chartname == 'ljchart':
         return 'Linda Janiszewski'
+    elif chartname == 'awchart':
+        return 'Annie Wolff'
+    elif chartname == 'cwchart':
+        return 'Casey Weiss'
     else:
         return 'Other User'
 
