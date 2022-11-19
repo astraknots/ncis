@@ -1,0 +1,4 @@
+Waving Rib
+(multiple of 6 sts; 8-rnd repeat)
+Rnds 1-4: *K4, p2; repeat from * to end of pattern section.
+Rnds 5-8: *K1, P2, k3; repeat from * to end of pattern section.

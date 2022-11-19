@@ -1,0 +1,6 @@
+Basketweave
+(multiple of 8 sts; 8-rnd repeat)
+Rnd 1: Knit
+Rnds 2-4: *K3, p5; repeat from * to end of pattern section
+Rnd 5: Knit
+Rnds 6-8: *P4, K3, P1; repeat from * to end of pattern section

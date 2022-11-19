@@ -1,0 +1,10 @@
+Ripple Rib St
+(multiple of 4 sts; 16-rnd repeat)
+Rnds 1-2: *P2, K2; repeat from * to end of pattern section.
+Rnds 3-4: *P1, K2, P1; repeat from * to end of pattern section.
+Rnds 5-6: *K2, p2; repeat from * to end of pattern section.
+Rnds 7-8: *K1, p2, k1; repeat from * to end of pattern section.
+Rnds 9-10: Repeat Rnd 1.
+Rnds 11-12: Repeat Rnd 7.
+Rnds 13-14: Repeat Rnd 5.
+Rnds 15-16: Repeat Rnd 3. 

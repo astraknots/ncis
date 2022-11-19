@@ -1,0 +1,8 @@
+Slanted Diamonds
+(multiple of 10 sts; 6-rnd repeat)
+Rnd 1: *K5, p5; repeat from * to end of pattern section
+Rnd 2: *P1, K5, p4; repeat from * to end of pattern section
+Rnd 3: *P2, k5, p3; repeat from * to end of pattern section
+Rnd 4: *P3, K5, P2; repeat from * to end of pattern section
+Rnd 5: *P4, k5, p1; repeat from * to end of pattern section
+Rnd 6: *P5, K5; repeat from * to end of pattern section

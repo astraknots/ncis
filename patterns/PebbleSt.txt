@@ -1,0 +1,5 @@
+Pebble St
+(Even number of sts; 4-rnd repeat)
+Rnds 1-2: Knit
+Rnd 3: *K2tog; repeat from * to end of pattern section
+Rnd 4: *P1 in horizontal bar before next st, p1; repeat from * to end of pattern section

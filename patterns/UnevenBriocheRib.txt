@@ -1,0 +1,5 @@
+Uneven Brioche Rib
+(odd number of sts; 2-rnd repeat)
+Set-up Rnd: P1, *K1, P1; repeat from * to end of pattern section.
+Rnd 1: P1, *K1b, p1; repeat from * to end of pattern section.
+Rnd 2: P1, *K1, p1b; repeat from * to end of pattern section.
