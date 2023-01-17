@@ -27,6 +27,7 @@ awchart = { 'SUN' : ['TAURUS',27], 'MOON' : ['ARIES', 23], 'ASC' : ['CANCER', 22
 # CaseyWeiss's chart
 cwchart = { 'SUN' : ['GEMINI',27], 'MOON' : ['AQUARIUS', 8], 'ASC' : ['SCORPIO', 0], 'MERCURY' : ['CANCER', 17], 'VENUS' : ['GEMINI', 29], 'MARS' : ['TAURUS', 3], 'JUPITER' : ['VIRGO', 8], 'SATURN' : ['AQUARIUS', 18], 'URANUS' : ['CAPRICORN', 16], 'NEPTUNE' : ['CAPRICORN', 18], 'PLUTO' : ['SCORPIO', 20]}
 
+
 def get_chart_person(chartname):
     '''Mapping of names to chart data is in this method'''
     if chartname == 'gchart':
@@ -47,6 +48,7 @@ def get_chart_person(chartname):
         return 'Casey Weiss'
     else:
         return 'Other User'
+
 
 def get_chart(chartname):
     print(chartname)

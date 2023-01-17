@@ -22,6 +22,19 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
+def inc_cnt_to_next_sign(deg, deg_inc):
+    '''If we've reached a degree in the next sign, return 1 to increment sign cnter, else return 0'''
+    thirty = constants.MAX_SIGN_DEGREES
+    zero = constants.MIN_SIGN_DEGREES
+    cnt_to_next_sign = 0
+    if deg % thirty == zero and deg != zero:
+        cnt_to_next_sign += 1
+    elif deg >= thirty and deg % thirty < deg_inc:
+        #print("deg=", deg, " deg % 30=", deg % thirty, " dec inc:", deg_inc)
+        cnt_to_next_sign += 1
+    return cnt_to_next_sign
+
+
 def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     """Write an astrology Chart to a spreadsheet"""
     wchart = AstraXslxChart(wname)
@@ -58,10 +71,29 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
 
 
     # Knitting pattern column setup
+    # AC:  Personal Total column (leave blank for now, will do some excel calc)
+    # AD-AE: Identifying cols for sig aspects (leave blank)
+    # AF: Pattern
+    # AG: Stitches
+    # AH: Rounds:
+    wchart.write_to_sheet_format(row_cnt, p_cnt, "Personal Total".capitalize(), wchart.get_bold_format())
+    p_cnt += 3
+
+    wchart.write_to_sheet_format(row_cnt, p_cnt, "Pattern", wchart.get_bold_format())
+    PATTERN_COL = p_cnt
+    p_cnt += 1
+
     wchart.write_to_sheet_format(row_cnt, p_cnt, "Stitches", wchart.get_bold_format())
     STITCH_COL = p_cnt
+    p_cnt += 1
     st_cnt = 1
-    # End knitting pattern header col setup
+
+    wchart.write_to_sheet_format(row_cnt, p_cnt, "Rounds:", wchart.get_bold_format())
+    p_cnt += 1
+    # write round numbers going to the right
+    for rnd_cnt in range(1, 8):  # TODO: replace 8 with something dynamic, perhaps later
+        wchart.write_to_sheet_format(row_cnt, p_cnt+rnd_cnt, str(rnd_cnt), wchart.get_bold_format())
+    ## End knitting pattern header col setup ##
 
     row_cnt += 1
 
@@ -78,10 +110,8 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
         #  write out chart degrees in Col C
         wchart.write_to_sheet(row_cnt, constants.SHEET_DEGREE_COL, str(deg))
 
-        # increment counter to next sign after 30
-        if deg % constants.MAX_SIGN_DEGREES == constants.MIN_SIGN_DEGREES:
-            if deg != constants.MIN_SIGN_DEGREES:
-                sign_cnt += 1
+        # increment counter to next sign after 30 - i.e. when it is time
+        sign_cnt += inc_cnt_to_next_sign(deg, deg_increments)
 
         # Get sign name from array
         sign_name = constants.SIGNS[sign_cnt]
@@ -125,15 +155,15 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
     end_deg = int(sign_deg) + xchart.degree_inc()
     user_chart_planets = ''
     user_chart_dignities = ''
-    planets = []
+    planets_at_sign_deg = []
     planet_dignities = []
     for single_deg in range(start_deg, end_deg):
         # Write a planet from the chart here if present
-        planets = achart.find_planets_at_sign_and_degree(sign_name, single_deg, True)
-        planetsUPPER = achart.find_planets_at_sign_and_degree(sign_name, single_deg, False)
-        planet_dignities = achart.find_planet_dignity_scores(planetsUPPER, sign_name)
-        if len(planets) > 0:
-            user_chart_planets += str(single_deg) + ": [" + '; '.join(planets) + "] "
+        planets_at_sign_deg = achart.find_planets_at_sign_and_degree(sign_name, single_deg, True)
+        planets_at_sign_deg_upper = achart.find_planets_at_sign_and_degree(sign_name, single_deg, False)
+        planet_dignities = achart.find_planet_dignity_scores(planets_at_sign_deg_upper, sign_name)
+        if len(planets_at_sign_deg) > 0:
+            user_chart_planets += str(single_deg) + ": [" + '; '.join(planets_at_sign_deg) + "] "
 
         if len(planet_dignities) > 0:
             user_chart_dignities += dignities.get_printable_planet_dignities(planet_dignities, sign_name)
