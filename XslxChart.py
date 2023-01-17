@@ -14,7 +14,7 @@ class XlsxChart:
 
     def create_chart_booksheet(self, sheet_name):
         ''' Create an new Excel file and add a worksheet.'''
-        self.workbook = xlsxwriter.Workbook(self.filename + '.xlsx')
+        self.workbook = xlsxwriter.Workbook('charts_xlsx/' + self.filename + '.xlsx')
 
         # Add blank chart worksheet
         self.worksheet = self.workbook.add_worksheet(sheet_name)
