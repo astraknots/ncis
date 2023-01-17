@@ -1,0 +1,12 @@
+Little Flames
+(Multiple of 8 sts; 10-rnd repeat)
+Rnd 1: Knit
+Rnd 2: *P1, k7;  repeat from * to end of pattern section.
+Rnd 3: *P2, K6;  repeat from * to end of pattern section.
+Rnd 4: *P3, k5;  repeat from * to end of pattern section.
+Rnd 5: *P4, k4;  repeat from * to end of pattern section.
+Rnd 6: *P5, k3;  repeat from * to end of pattern section.
+Rnd 7: *K1, p4, k3;  repeat from * to end of pattern section.
+Rnd 8: *K2, p3, k3;  repeat from * to end of pattern section.
+Rnd 9: *K3, p2, k3;  repeat from * to end of pattern section.
+Rnd 10: *K4, p1, k3;  repeat from * to end of pattern section.

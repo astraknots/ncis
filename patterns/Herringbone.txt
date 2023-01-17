@@ -1,0 +1,6 @@
+Herringbone
+(Multiple of 7 sts; 4-rnd repeat)
+Rnd 1: *K2tog, K2, RLI, k3;  repeat from * to end of pattern section.
+Rnd 2: Knit
+^Rnd 3: K1, *K2, RLI, K3, k2tog;  repeat from * to end of pattern section. [Perform the k2tog with the last st of Herringbone and first K st of following St st section in pattern]
+Rnd 4: Knit.

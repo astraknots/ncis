@@ -1,0 +1,4 @@
+Twin Rib
+(Multiple of 6 sts; 2-rnd repeat)
+rnd 1: *K3, p3; repeat from * to end of pattern section.
+Rnd 2: *K1, P1; repeat from * to end of pattern section.

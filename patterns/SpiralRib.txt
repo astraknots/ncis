@@ -1,0 +1,6 @@
+Spiral Rib
+(Multiple of 9 sts; 4-rnd repeat)
+Rnd 1: *P3, [RC] 3 times;  repeat from * to end of pattern section.
+Rnd 2: *P3, k6;  repeat from * to end of pattern section.
+Rnd 3: *P3, k1, [RC] twice, k1;  repeat from * to end of pattern section.
+Rnd 4: Repeat Rnd 2.

@@ -1,0 +1,8 @@
+Rosette St
+(Even number of sts; 4-rnd repeat)
+Work Rosette: P2tog, but do not drop sts from left-hand needle, k2tog same 2 sts, slip both sts from left-hand needle together.
+Note: Pattern results in a spiral and beginning of rnd marker moves forward 1 st every other rnd
+Rnd 1: Knit
+Rnd 2: *Work Rosette; repeat from * to end of pattern section.
+Rnd 3: Knit
+^Rnd 4: Slip 1, *work rosette; repeat from * to end of pattern section. [perform the last rosette repeat with the first K st of following St st section]

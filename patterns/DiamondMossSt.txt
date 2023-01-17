@@ -1,0 +1,8 @@
+Diamond Moss St
+(Multiple of 6 sts; 12-rnd repeat)
+Rnds 1 and 2: *K1, p1, k4; repeat from * to end of pattern section.
+Rnds 3 and 4: *P1, k1, p1, k3;  repeat from * to end of pattern section.
+Rnds 5 and 6: Repeat Rnd 1
+Rnds 7 and 8: *K4, p1, k1;  repeat from * to end of pattern section.
+Rnds 9 and 10: *K3, p1, k1, p1;  repeat from * to end of pattern section.
+Rnds 11 and 12: Repeat Rnd 7.
