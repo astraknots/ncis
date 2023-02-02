@@ -91,7 +91,7 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
     wchart.write_to_sheet_format(row_cnt, p_cnt, "Rounds:", wchart.get_bold_format())
     p_cnt += 1
     # write round numbers going to the right
-    for rnd_cnt in range(1, 8):  # TODO: replace 8 with something dynamic, perhaps later
+    for rnd_cnt in range(1, 17):  # TODO: replace 17 with something dynamic, perhaps later
         wchart.write_to_sheet_format(row_cnt, p_cnt+rnd_cnt, str(rnd_cnt), wchart.get_bold_format())
     ## End knitting pattern header col setup ##
 
@@ -122,7 +122,11 @@ def write_any_astra_chart_to_xcel(wname, garment_type, sheet_name, achart):
         wchart.set_row_cnt(row_cnt)
         ## Section for writing specifics of a chart out ##
         if achart:
-            write_astra_chart(achart, wchart, sign_name, sign_deg)
+            catch_more_degrees = write_astra_chart(achart, wchart, sign_name, sign_deg)
+            if catch_more_degrees > 0:
+                # call this again for just this shorter section for now, of the next sign
+                write_astra_chart_short(achart, wchart, constants.SIGNS[sign_cnt+1], catch_more_degrees)
+
             write_orbs_to_sheet(achart, wchart, orbs_by_planet, deg)
 
         ## End section for writing chart specifics
@@ -146,6 +150,36 @@ def createWorkbook(wname):
     return workbook
 
 
+def write_astra_chart_short(achart, xchart, next_sign_name, end_at_sign_deg):
+    '''Write out the specific astra info of a chart
+    In Sign Degree: [Planet] column'''
+
+    # Loop through each degree looking for matching planets and write them in, with formatting
+    start_deg = 0
+    end_deg = end_at_sign_deg+1
+    user_chart_planets = ''
+    user_chart_dignities = ''
+    planets_at_sign_deg = []
+    planet_dignities = []
+
+    for single_deg in range(start_deg, end_deg):
+        # Write a planet from the chart here if present
+        planets_at_sign_deg = achart.find_planets_at_sign_and_degree(next_sign_name, single_deg, True)
+        planets_at_sign_deg_upper = achart.find_planets_at_sign_and_degree(next_sign_name, single_deg, False)
+        planet_dignities = achart.find_planet_dignity_scores(planets_at_sign_deg_upper, next_sign_name)
+        if len(planets_at_sign_deg) > 0:
+            user_chart_planets += str(single_deg) + ": [" + '; '.join(planets_at_sign_deg) + "] "
+
+        if len(planet_dignities) > 0:
+            user_chart_dignities += dignities.get_printable_planet_dignities(planet_dignities, next_sign_name)
+
+    if user_chart_planets != '':
+        xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_PLANET_COL, user_chart_planets)
+
+    if user_chart_dignities != '':
+        xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_DIGNITY_COL, user_chart_dignities)
+
+
 def write_astra_chart(achart, xchart, sign_name, sign_deg):
     '''Write out the specific astra info of a chart
     In Sign Degree: [Planet] column'''
@@ -157,6 +191,7 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
     user_chart_dignities = ''
     planets_at_sign_deg = []
     planet_dignities = []
+
     for single_deg in range(start_deg, end_deg):
         # Write a planet from the chart here if present
         planets_at_sign_deg = achart.find_planets_at_sign_and_degree(sign_name, single_deg, True)
@@ -174,6 +209,11 @@ def write_astra_chart(achart, xchart, sign_name, sign_deg):
     if user_chart_dignities != '':
         xchart.write_to_sheet(xchart.row_cnt, constants.USER_CHART_DIGNITY_COL, user_chart_dignities)
 
+    # TODO:  If we are crossing the sign boundary (as in hat where increment is 4 deg), get the beg of the next sign too
+    if end_deg > 30:
+        return end_deg - 30
+    else:
+        return 0
 
 def write_orbs_to_sheet(achart, xchart, orbs_by_planet, deg):
     '''Write out orbs of a chart

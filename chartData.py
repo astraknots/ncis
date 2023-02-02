@@ -61,7 +61,7 @@ def get_chart_person(chartname):
     elif chartname == 'jcchart':
         return 'Jen Creighton'
     elif chartname == 'kschart':
-        return 'Katie Scuggs'
+        return 'Katie Scruggs'
     elif chartname == 'rbchart':
         return 'Rebecca Barnard'
     elif chartname == 'nmchart':
