@@ -27,6 +27,18 @@ awchart = { 'SUN' : ['TAURUS',27], 'MOON' : ['ARIES', 23], 'ASC' : ['CANCER', 22
 # CaseyWeiss's chart
 cwchart = { 'SUN' : ['GEMINI',27], 'MOON' : ['AQUARIUS', 8], 'ASC' : ['SCORPIO', 0], 'MERCURY' : ['CANCER', 17], 'VENUS' : ['GEMINI', 29], 'MARS' : ['TAURUS', 3], 'JUPITER' : ['VIRGO', 8], 'SATURN' : ['AQUARIUS', 18], 'URANUS' : ['CAPRICORN', 16], 'NEPTUNE' : ['CAPRICORN', 18], 'PLUTO' : ['SCORPIO', 20]}
 
+#Jen Creighton's chart
+jcchart = { 'SUN' : ['ARIES',7], 'MOON' : ['ARIES', 9], 'ASC' : ['CAPRICORN', 28], 'MERCURY' : ['ARIES', 0], 'VENUS' : ['AQUARIUS', 29], 'MARS' : ['PISCES', 22], 'JUPITER' : ['CANCER', 29], 'SATURN' : ['VIRGO', 8], 'URANUS' : ['SCORPIO', 20], 'NEPTUNE' : ['SAGITTARIUS', 20], 'PLUTO' : ['LIBRA', 18]}
+
+#Katie Scuggs's chart
+kschart = { 'SUN' : ['PISCES',23], 'MOON' : ['AQUARIUS', 26], 'ASC' : ['SCORPIO', 1], 'MERCURY' : ['ARIES', 4], 'VENUS' : ['ARIES', 24], 'MARS' : ['GEMINI', 19], 'JUPITER' : ['LEO', 3], 'SATURN' : ['AQUARIUS', 3], 'URANUS' : ['CAPRICORN', 13], 'NEPTUNE' : ['CAPRICORN', 16], 'PLUTO' : ['SCORPIO', 20]}
+
+#Rebecca Barnard's chart
+rbchart = { 'SUN' : ['AQUARIUS',0], 'MOON' : ['GEMINI', 4], 'ASC' : ['LEO', 11], 'MERCURY' : ['CAPRICORN', 23], 'VENUS' : ['AQUARIUS', 1], 'MARS' : ['SCORPIO', 22], 'JUPITER' : ['AQUARIUS', 22], 'SATURN' : ['SAGITTARIUS', 7], 'URANUS' : ['SAGITTARIUS', 20], 'NEPTUNE' : ['CAPRICORN', 4], 'PLUTO' : ['SCORPIO', 7]}
+
+#Natalie Montoya's chart
+nmchart = { 'SUN' : ['AQUARIUS',10], 'MOON' : ['VIRGO', 4], 'ASC' : ['PISCES', 20], 'MERCURY' : ['CAPRICORN', 17], 'VENUS' : ['PISCES', 1], 'MARS' : ['PISCES', 10], 'JUPITER' : ['SAGITTARIUS', 6], 'SATURN' : ['SCORPIO', 4], 'URANUS' : ['SAGITTARIUS', 8], 'NEPTUNE' : ['SAGITTARIUS', 28], 'PLUTO' : ['LIBRA', 29]}
+
 
 def get_chart_person(chartname):
     '''Mapping of names to chart data is in this method'''
@@ -46,6 +58,14 @@ def get_chart_person(chartname):
         return 'Annie Wolff'
     elif chartname == 'cwchart':
         return 'Casey Weiss'
+    elif chartname == 'jcchart':
+        return 'Jen Creighton'
+    elif chartname == 'kschart':
+        return 'Katie Scuggs'
+    elif chartname == 'rbchart':
+        return 'Rebecca Barnard'
+    elif chartname == 'nmchart':
+        return 'Natalie Montoya'
     else:
         return 'Other User'
 
