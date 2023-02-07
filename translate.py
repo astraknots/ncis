@@ -18,7 +18,7 @@ def translateChartToDegreesForPlanets(chart):
     for planet in constants.PLANETS:
         chart_sign = chart[planet][0]
         chart_deg = chart[planet][1]
-        chart_degrees[planet] = chart_deg + constants.SIGNS_DEGREE_BASE[chart_sign]
+        chart_degrees[planet] = chart_deg + constants.SIGNS_DEGREE_BASE[chart_sign] # chart_sign.value
 
     logging.info("chart degrees:")
     logging.info(chart_degrees)

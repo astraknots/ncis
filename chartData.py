@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
 import AstraChart
+from enums import SignDegreeBase as sd
 
 # Start with a chart
 # Genevieve's chart
-gchart = { 'SUN' : ['PISCES',1], 'MOON' : ['CAPRICORN', 17], 'ASC' : ['VIRGO', 28], 'MERCURY' : ['AQUARIUS', 5], 'VENUS' : ['CAPRICORN', 25], 'MARS' : ['LIBRA', 19], 'JUPITER' : ['SCORPIO', 10], 'SATURN' : ['LIBRA', 21], 'URANUS' : ['SAGITTARIUS', 4], 'NEPTUNE' : ['SAGITTARIUS', 26], 'PLUTO' : ['LIBRA', 26]}
+gchart = { 'SUN' : [sd.PISCES,1], 'MOON' : [sd.CAPRICORN, 17], 'ASC' : [sd.VIRGO, 28], 'MERCURY' : [sd.AQUARIUS, 5], 'VENUS' : [sd.CAPRICORN, 25], 'MARS' : [sd.LIBRA, 19], 'JUPITER' : [sd.SCORPIO, 10], 'SATURN' : [sd.LIBRA, 21], 'URANUS' : [sd.SAGITTARIUS, 4], 'NEPTUNE' : [sd.SAGITTARIUS, 26], 'PLUTO' : [sd.LIBRA, 26]}
 
 # Brian's chart
 bchart = { 'SUN' : ['VIRGO',8], 'MOON' : ['SCORPIO', 2], 'ASC' : ['LEO', 17], 'MERCURY' : ['VIRGO', 7], 'VENUS' : ['LIBRA', 15], 'MARS' : ['TAURUS', 6], 'JUPITER' : ['AQUARIUS', 3], 'SATURN' : ['CANCER', 2], 'URANUS' : ['LIBRA', 20], 'NEPTUNE' : ['SAGITTARIUS', 4], 'PLUTO' : ['LIBRA', 3]}

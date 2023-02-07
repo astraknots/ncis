@@ -1,11 +1,15 @@
 #!/usr/bin/python
 
 import sys, getopt
+
+import Aspect, Planet
 import aspects
 #import xlsxwriter
 import constants
 from itertools import groupby
 from collections import Counter
+
+from enums import AspectOrb, AspectDegree
 
 
 def calcOrbsOfInfluence(chart_degrees, sign_degree_dict):
@@ -42,4 +46,33 @@ def calcOrbsByPlanet(chart_degrees):
 
     return orbs_by_planet
 
+
+def calc_planet_orbs(chart_degrees):
+    orbs_by_planet = {}
+    # {Planet = {Aspect : [Deg,Deg], Aspect : [Deg, Deg]}}
+
+    for planet in Planet.Planets:  # Planet: #constants.PLANETS:
+        deg = chart_degrees[planet.name]
+        for aspect in Aspect.Aspects: #AspectOrb: #constants.ASPECTS:
+            aspect_name = aspect.name
+            aspect_orb = aspect.orb
+            # Going to omit changing the orb by planet for the big three for now
+          #  if planet.is_big_three: # in constants.BIG_THREE:
+          #      if AspectOrb.BIG3.value > aspect_orb:
+          #          aspect_orb = AspectOrb.BIG3.value
+
+            #asp_orb = aspects.getAspectOrb(aspect, planet)
+            asp_deg = aspect.degree #constants.ASPECT_DEGREES[aspect]
+            range0 = deg + asp_deg - aspect_orb #asp_orb
+            range1 = deg + asp_deg + aspect_orb #asp_orb
+            if planet in orbs_by_planet:
+                planet_dict = orbs_by_planet[planet]
+            else:
+                planet_dict = {}
+            planet_dict[aspect] = [aspects.adjustDegFor360(range0), aspects.adjustDegFor360(range1)]
+            orbs_by_planet[planet] = planet_dict
+
+    print("orb degree dict by planet:", orbs_by_planet)
+
+    return orbs_by_planet
 
