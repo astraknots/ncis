@@ -32,5 +32,6 @@ class ChartDegree:
         return self.get_str_rep()
 
     def calculate_and_set_360_degree_from_sign_degree(self, chart_sign):
+        # TODO: Assert that the calculated values are always between 0-359
         deg_base = SignDegreeBase[chart_sign]
         self.degree_360 = self.sign_degree + deg_base.value

@@ -2,7 +2,7 @@
 
 import sys, getopt
 
-import Aspect, Planet
+import AspectType, Planet
 import aspects
 #import xlsxwriter
 import constants
@@ -53,7 +53,7 @@ def calc_planet_orbs(chart_degrees):
 
     for planet in Planet.Planets:  # Planet: #constants.PLANETS:
         deg = chart_degrees[planet.name]
-        for aspect in Aspect.Aspects: #AspectOrb: #constants.ASPECTS:
+        for aspect in Aspect.AspectTypes: #AspectOrb: #constants.ASPECTS:
             aspect_name = aspect.name
             aspect_orb = aspect.orb
             # Going to omit changing the orb by planet for the big three for now
