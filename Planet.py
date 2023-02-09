@@ -31,10 +31,20 @@ class Planet:
         if len(args) > 3:
             self.dignities = args[3]
 
+    def get_str_rep(self):
+        return f"{self.name} (speed:{self.speed})"
+
+    def __str__(self):
+        return self.get_str_rep()
+
+    def __repr__(self):
+        return self.get_str_rep()
+
     def is_big_three(self):
         for big in BigThree:
             if big.name == self.name:
                 return big.value
+
 
 
 sun_leo = PlanetDignity(Dignity.RULERSHIP, Sign.Leo)
@@ -53,3 +63,9 @@ Pluto = Planet('PLUTO', 'silver', 1)
 
 Planets = [Sun, Moon, Ascendant, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto]
 
+
+def get_planet_by_name(planet_name):
+    for p in Planets:
+        if p.name == planet_name:
+            return p
+    print("No planet found by name: ", planet_name)

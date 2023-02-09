@@ -11,24 +11,25 @@ sun_idx = 0
 
 
 class AstraChart:
+    chart_degrees = None
+    chartname = ""
+    person = ""
+    chart_data = {}
+
     def __init__(self, chartname, person, chart_data):
         self.chart_degrees = None
         self.chartname = chartname
         self.person = person
         self.chart_data = chart_data  # Currently the chart data is a dict, see chartData.py
 
-    def print_info(self):
-        print(self.chartname + " for " + self.person)
-        print()
-        print(self.chart_data)
+    def get_str_rep(self):
+        return f"Chart Info: {self.chartname} for {self.person} \n Chart Data: {self.chart_data}"
 
-    def chartname(self):
-        print("The chart's name is: ", self.chartname)
-        return self.chartname
+    def __str__(self):
+        return self.get_str_rep()
 
-    def chart_for(self):
-        print("The chart is for: ", self.person)
-        return self.person
+    def __repr__(self):
+        return self.get_str_rep()
 
     def sun_sign(self):
         sun_planet = constants.PLANETS[sun_idx]

@@ -3,6 +3,7 @@
 import AstraChart
 from enums import SignDegreeBase as sd
 
+
 # Start with a chart
 # Genevieve's chart
 gchart = { 'SUN' : [sd.PISCES,1], 'MOON' : [sd.CAPRICORN, 17], 'ASC' : [sd.VIRGO, 28], 'MERCURY' : [sd.AQUARIUS, 5], 'VENUS' : [sd.CAPRICORN, 25], 'MARS' : [sd.LIBRA, 19], 'JUPITER' : [sd.SCORPIO, 10], 'SATURN' : [sd.LIBRA, 21], 'URANUS' : [sd.SAGITTARIUS, 4], 'NEPTUNE' : [sd.SAGITTARIUS, 26], 'PLUTO' : [sd.LIBRA, 26]}
@@ -72,9 +73,11 @@ def get_chart_person(chartname):
 
 
 def get_chart(chartname):
-    print(chartname)
+    print("Looking up chartname: ", chartname, " in chartData")
     for name in globals().keys():
-        print(name)
+        #print(name)
         if name == chartname:
-            print(globals()[name])
+            print("Found chart matching: ", globals()[name])
             return globals()[name]
+
+

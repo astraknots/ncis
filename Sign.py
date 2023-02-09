@@ -28,6 +28,15 @@ class Sign:
         self.mode = mode
         self.natural_house = natural_house
 
+    def get_str_rep(self):
+        return f"{self.name} (house: {self.natural_house}, element: {self.element.name}, mode: {self.mode.name})"
+
+    def __str__(self):
+        return self.get_str_rep()
+
+    def __repr__(self):
+        return self.get_str_rep()
+
 
 Aries = Sign('ARIES', 0, Element.FIRE, Mode.CARDINAL, 1)
 Taurus = Sign('TAURUS', 30, Element.EARTH, Mode.FIXED, 2)
@@ -43,3 +52,10 @@ Aquarius = Sign('AQUARIUS', 300, Element.AIR, Mode.FIXED, 11)
 Pisces = Sign('PISCES', 330, Element.WATER, Mode.MUTABLE, 12)
 
 Signs = [Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces]
+
+
+def get_sign_by_name(sign_name):
+    for s in Signs:
+        if s.name == sign_name:
+            return s
+    print("No sign found by name: ", sign_name)

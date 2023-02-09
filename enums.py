@@ -1,12 +1,11 @@
 from enum import Enum
 
 
-
 class SignDegreeBase(Enum):
     ARIES = 0
     TAURUS = 30
     GEMINI = 60
-    CANCER =90
+    CANCER = 90
     LEO = 120
     VIRGO = 150
     LIBRA = 180

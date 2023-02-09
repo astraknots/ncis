@@ -569,7 +569,7 @@ def chart_writer(argv):
             else:
                 usechart = AstraChart(chartname, chartData.get_chart_person(chartname), findchart)
 
-        usechart.print_info()
+        logging.info(usechart)
         write_any_astra_chart_to_xcel(chartname, pattname, usechart.person, usechart)
 
 
