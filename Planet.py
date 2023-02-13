@@ -1,8 +1,5 @@
 from enum import Enum
 
-import Sign
-from Dignity import PlanetDignity, Dignity
-
 
 class BigThree(Enum):
     SUN = True
@@ -18,18 +15,29 @@ class BigThree(Enum):
     PLUTO = False
 
 
+class PlanetName(Enum):
+    SUN = 'SUN'
+    MOON = 'MOON'
+    ASC = 'ASC'
+    MERCURY = 'MERCURY'
+    VENUS = 'VENUS'
+    MARS = 'MARS'
+    SATURN = 'SATURN'
+    JUPITER = 'JUPITER'
+    URANUS = 'URANUS'
+    NEPTUNE = 'NEPTUNE'
+    PLUTO = 'PLUTO'
+
+
 class Planet:
     name = None
     color = None
     speed = None
-    dignities = []
 
-    def __init__(self, *args): #name, color, speed, dignities):
-        self.name = args[0]
+    def __init__(self, *args):  # name, color, speed, dignities):
+        self.name = args[0].name
         self.color = args[1]
         self.speed = args[2]
-        if len(args) > 3:
-            self.dignities = args[3]
 
     def __iter__(self):
         return self.name
@@ -49,20 +57,17 @@ class Planet:
                 return big.value
 
 
-
-sun_leo = PlanetDignity(Dignity.RULERSHIP, Sign.Leo)
-
-Sun = Planet('SUN', 'yellow', 7, [sun_leo])
-Moon = Planet('MOON', 'blue', 10)
-Ascendant = Planet('ASC', 'lime', 0)
-Mercury = Planet('MERCURY', 'orange', 9)
-Venus = Planet('VENUS', 'green', 8)
-Mars = Planet('MARS', 'red', 6)
-Jupiter = Planet('JUPITER', 'magenta', 5)
-Saturn = Planet('SATURN', 'brown', 4)
-Uranus = Planet('URANUS', 'cyan', 3)
-Neptune = Planet('NEPTUNE', 'purple', 2)
-Pluto = Planet('PLUTO', 'silver', 1)
+Sun = Planet(PlanetName.SUN, 'yellow', 7)
+Moon = Planet(PlanetName.MOON, 'blue', 10)
+Ascendant = Planet(PlanetName.ASC, 'lime', 0)
+Mercury = Planet(PlanetName.MERCURY, 'orange', 9)
+Venus = Planet(PlanetName.VENUS, 'green', 8)
+Mars = Planet(PlanetName.MARS, 'red', 6)
+Jupiter = Planet(PlanetName.JUPITER, 'magenta', 5)
+Saturn = Planet(PlanetName.SATURN, 'brown', 4)
+Uranus = Planet(PlanetName.URANUS, 'cyan', 3)
+Neptune = Planet(PlanetName.NEPTUNE, 'purple', 2)
+Pluto = Planet(PlanetName.PLUTO, 'silver', 1)
 
 Planets = [Sun, Moon, Ascendant, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto]
 

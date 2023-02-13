@@ -6,7 +6,6 @@ import constants
 class AspectDirection(Enum):
     SEPARATING = -1
     APPLYING = 1
-    CENTERED = 0
     EXACT = 0
 
 
@@ -40,7 +39,7 @@ class AspectType:
         if degree > 180:
             self.direction = AspectDirection.SEPARATING
         elif degree == 0:
-            self.direction = AspectDirection.CENTERED
+            self.direction = AspectDirection.EXACT
         else:
             self.direction = AspectDirection.APPLYING
 
@@ -57,21 +56,24 @@ class AspectType:
 Conjunction = AspectType(AspectName.CONJ, 10, 0)
 Semisextile = AspectType(AspectName.SEMISEXTILE, 2, 30)
 Sextile = AspectType(AspectName.SEXTILE, 6, 60)
-Semisquare = AspectType(AspectName.SEMISQUARE, 3, 45)
+Semisquare = AspectType(AspectName.SEMISQUARE, 2, 45) # show tension but also challenges that can help us grow and learn. However, any conflicts felt are not as immediately apparent as they are in the case of the square, making it easier to avoid them and miss an opportunity for growth.
+Quintile = AspectType(AspectName.QUINTILE, 1, 72) # a greater emphasis on the purposeful manifestation of one's talents, or making something of them; be they artistic, scientific, or demonstrations of one's personal power. Thus quintiles appear with some frequency in the charts of both artists and repressive political leaders. In each case they suggest talent plus the ambition to make something of it in the world.
 Square = AspectType(AspectName.SQUARE, 8, 90)
 Trine = AspectType(AspectName.TRINE, 8, 120)
+Sesuisquare = AspectType(AspectName.SESQUISQUARE, 2, 135) # s tend to indicate a smouldering conflict that one would prefer to ignore. Any relief would then tend to be short-lived. Sesquiquadrates therefore tend to indicate themes of a long-term and stubborn nature.
+Biquintile = AspectType(AspectName.BIQUINTILE, 1, 144) # Individuals with such an aspect between two planets are often only vaguely aware of it. However, if someone is sensitive enough it can aid in developing creative powers which can help to find original solutions and throw a positive light on issues that initially appear problematic.
 Quincunx = AspectType(AspectName.QUINCUNX, 2, 150)
 Opposition = AspectType(AspectName.OPPOSITION, 10, 180)
-Quincunx_Sep = AspectType('QUINCUNX_B', 2, 210)
-Trine_Sep = AspectType('TRINE_B', 8, 240)
-Square_Sep = AspectType('SQUARE_B', 8, 270)
-Sextile_Sep = AspectType('SEXTILE_B', 6, 300)
-Semisextile_Sep = AspectType('SEMISEXTILE_B', 2, 330)
+Quincunx_Sep = AspectType(AspectName.QUINCUNX, 2, 210)
+Trine_Sep = AspectType(AspectName.TRINE, 8, 240)
+Square_Sep = AspectType(AspectName.SQUARE, 8, 270)
+Sextile_Sep = AspectType(AspectName.SEXTILE, 6, 300)
+Semisextile_Sep = AspectType(AspectName.SEMISEXTILE, 2, 330)
 # Sesqui-square: 2.5
 # Quintile: 0.8
 # Bi-quintile: 0.8
 
-AspectTypes = [Conjunction, Semisextile, Sextile, Semisquare, Square, Trine, Quincunx, Opposition, Quincunx_Sep,
+AspectTypes = [Conjunction, Semisextile, Sextile, Semisquare, Quintile, Square, Trine, Biquintile, Quincunx, Opposition, Quincunx_Sep,
                Trine_Sep,
                Square_Sep, Sextile_Sep, Semisextile_Sep]
 

@@ -3,7 +3,6 @@ import logging
 import sys
 
 import Planet
-import Sign
 import chartData
 import AspectType
 from ChartAspect import ChartAspect
@@ -12,6 +11,7 @@ from AstraChartCalc import AstraChartCalc
 from ChartDegree import ChartDegree
 from Garment import Garment, GarmentType
 from AspectType import AspectDirection, AspectName
+import Sign
 
 
 def create_chart_dict(raw_chart_data):
@@ -76,6 +76,8 @@ def determine_aspect_direction(deg_diff, calc_chart_diff):
         return AspectDirection.APPLYING
     elif (deg_diff > 0 and calc_chart_diff > 0) or (deg_diff < 0 and calc_chart_diff < 0):
         return AspectDirection.SEPARATING
+    elif deg_diff == 0:
+        return AspectDirection.EXACT
 
 
 def calc_planet_aspects(chart_dict, aspect_orbs):
@@ -115,19 +117,33 @@ def calc_planet_aspects(chart_dict, aspect_orbs):
                             p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, calc_chart_diff, [planet, asp_planet])
                         else:
                             a_direction = determine_aspect_direction(deg_diff, calc_chart_diff)
-
                             p_aspect = ChartAspect(aspect.name, a_direction, calc_chart_diff, [planet, asp_planet])
-                            if planet not in aspects_by_planet:
-                                aspects_by_planet[planet] = []
-                            aspects_by_planet[planet].append(p_aspect)
-                            print(aspects_by_planet[planet])
+
+                        # attempt to set the aspect score
+                        is_scored = p_aspect.get_aspect_score()
+                        # set the collective planet speed score
+                        p_aspect.score.determine_coll_planet_speed(planet, asp_planet)
+
+                        if planet not in aspects_by_planet:
+                            aspects_by_planet[planet] = []
+                        aspects_by_planet[planet].append(p_aspect)
+                        print(aspects_by_planet[planet])
 
     return aspects_by_planet
 
 
-def calc_garment_dict(garment, chart_dict, aspect_orbs):
+def calc_garment_dict(garment, astra_calc_chart):
     '''Put planets (and aspect start-end ranges) into a dict for the garment organized by garment degree incs'''
-    return None
+    deg_inc = garment.garment_type.value
+    for planet in astra_calc_chart.planet_sign_degrees:
+        p_sign_deg = astra_calc_chart.planet_sign_degrees[planet]
+        p_deg = p_sign_deg[1]
+        p_aspect = astra_calc_chart.planet_aspects[planet]
+        print(planet, " ", p_deg.degree_360, " ", p_aspect)
+        for g_deg in garment.garment_dict:
+            if g_deg <= p_deg.degree_360 <= g_deg+deg_inc:
+                planet_aspect_dict = {planet: p_aspect}
+                garment.garment_dict[g_deg].append(planet_aspect_dict)
 
 
 def calc_chart_info(a_chart, garment_type):
@@ -146,13 +162,13 @@ def calc_chart_info(a_chart, garment_type):
     # Calculate the actual aspects of the chart
     planet_aspects = calc_planet_aspects(chart_dict, aspect_orbs)
     astra_calc_chart.planet_aspects = planet_aspects
-
+    print(astra_calc_chart.planet_aspects)
     # Create the ordered dict by garment inc degrees
     # this contains a dict of the chart's degrees by deg increments for garment
     garment = Garment(garment_type)
-    print(garment.garment_dict)
     #TODO calc the garment dict organized
-    calc_garment_dict(garment, chart_dict, aspect_orbs)
+    calc_garment_dict(garment, astra_calc_chart)
+    print(garment.garment_dict)
 
     return astra_calc_chart
 
@@ -214,8 +230,8 @@ def calc_chart(argv):
 
         chart_info = calc_chart_info(usechart, garment)
         print()
-        print(" Here's the calculated chart info: ")
-        print(chart_info)
+        #print(" Here's the calculated chart info: ")
+        #print(chart_info)
         # write_any_astra_chart_to_xcel(chartname, pattname, usechart.person, usechart)
 
 
