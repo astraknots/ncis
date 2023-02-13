@@ -31,6 +31,9 @@ class Planet:
         if len(args) > 3:
             self.dignities = args[3]
 
+    def __iter__(self):
+        return self.name
+
     def get_str_rep(self):
         return f"{self.name} (speed:{self.speed})"
 

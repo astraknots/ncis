@@ -2,15 +2,16 @@ import getopt
 import logging
 import sys
 
-import AspectType
 import Planet
 import Sign
 import chartData
-import constants
+import AspectType
+from ChartAspect import ChartAspect
 from AstraChart import AstraChart
 from AstraChartCalc import AstraChartCalc
 from ChartDegree import ChartDegree
 from Garment import Garment, GarmentType
+from AspectType import AspectDirection, AspectName
 
 
 def create_chart_dict(raw_chart_data):
@@ -38,7 +39,7 @@ def calc_aspect_orbs(chart_dict):
     orbs_by_planet = {}
     # {Planet = {Aspect : [Deg,Deg], Aspect : [Deg, Deg]}}
 
-    print(chart_dict)
+    print("chart_dict:", chart_dict)
     for planet in chart_dict:
         sign_degree_data = chart_dict[planet]
         chart_degree = sign_degree_data[1]
@@ -55,43 +56,78 @@ def calc_aspect_orbs(chart_dict):
             planet_dict[aspect] = [AspectType.adjust_deg_for_360(range0), AspectType.adjust_deg_for_360(range1)]
             orbs_by_planet[planet] = planet_dict
 
-    logging.info("orb degree dict by planet:", orbs_by_planet)
+    logging.info("orb degree dict by planet (aspect_orbs):")
+    logging.info(orbs_by_planet)
 
     return orbs_by_planet
 
 
+def get_faster_planet_difference(planet1, planet2, planet1_deg, planet2_deg):
+    # TODO: Assert that the speeds are never the same, because they should be different
+    if planet1.speed > planet2.speed: # planet1 is faster
+        return planet1_deg - planet2_deg
+    else:
+        return planet2_deg - planet1_deg
+
+
+def determine_aspect_direction(deg_diff, calc_chart_diff):
+    #TODO: decide if this should determine an exact aspect or throw a message
+    if (deg_diff < 0 < calc_chart_diff) or (deg_diff > 0 > calc_chart_diff):
+        return AspectDirection.APPLYING
+    elif (deg_diff > 0 and calc_chart_diff > 0) or (deg_diff < 0 and calc_chart_diff < 0):
+        return AspectDirection.SEPARATING
+
+
 def calc_planet_aspects(chart_dict, aspect_orbs):
-    planet_aspects = {}
+    aspects_by_planet = {}
+
+    #Loop over the planets in the chart, then loop over every other planet and capture aspects and details
 
     for planet in chart_dict:
+        planet_name = planet.name
         planet_speed = planet.speed
-        chart_sign_deg = chart_dict[planet]
-        chart_deg = chart_sign_deg[1].degree_360
-        print(chart_deg)
+        chart_sign_deg = chart_dict[planet] # The planet's sign & degree in a list
 
-    '''
-    for single_deg in range(0, 360):
-        found_aspects = []
+        planet_chart_deg = chart_sign_deg[1].degree_360 # The planet's 360 degree degree
+        print("chart_deg:", planet_chart_deg)
 
-        for planet in chart_dict:
-            chart_aspect_list = aspect_orbs[planet]
-            # logging.debug(chart_aspect_list)
-            for aspect in chart_aspect_list:
-                deg_list = chart_aspect_list[aspect]  # like [308. 324]
-                # logging.debug("Deg list:" + str(chart_aspect_list[aspect]))
-                if single_deg in deg_list:
-                    logging.debug("Found: " + planet + " " + aspect + " at " + str(deg))
-                    if cap:
-                        found_aspects.append(planet.capitalize() + " " + aspect.capitalize())
-                    else:
-                        found_aspects.append(planet + " " + aspect)
+        planet_aspects = aspect_orbs[planet]
 
-    '''
+        for asp_planet in chart_dict:
+            # Loop over the chart planets looking for aspects to other planets
+            if asp_planet.name != planet_name:  # don't look for aspects to self
+                asp_planet_speed = asp_planet.speed
+                asp_planet_chart_deg = chart_dict[asp_planet][1].degree_360
+                deg_diff = get_faster_planet_difference(planet, asp_planet, planet_chart_deg, asp_planet_chart_deg)
 
-    return planet_aspects
+                # Loop over and calculate aspects
+                for aspect in planet_aspects:
+                    aspect_start_range = aspect.degree + aspect.orb
+                    aspect_end_range = aspect.degree - aspect.orb
+
+                    #print(aspect_start_range, " - ", aspect_end_range)
+
+                    # Calculate the diff and direction of the aspect if found, add to list
+                    p_aspect = None
+                    calc_chart_diff = abs(deg_diff) - aspect.degree
+                    if aspect_end_range <= deg_diff <= aspect_start_range: # There is an aspect here
+                        if deg_diff == aspect.degree:  # the aspect is exact
+                            p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, calc_chart_diff, [planet, asp_planet])
+                        else:
+                            a_direction = determine_aspect_direction(deg_diff, calc_chart_diff)
+
+                            p_aspect = ChartAspect(aspect.name, a_direction, calc_chart_diff, [planet, asp_planet])
+                            if planet not in aspects_by_planet:
+                                aspects_by_planet[planet] = []
+                            aspects_by_planet[planet].append(p_aspect)
+                            print(aspects_by_planet[planet])
+
+    return aspects_by_planet
+
 
 def calc_garment_dict(garment, chart_dict, aspect_orbs):
     '''Put planets (and aspect start-end ranges) into a dict for the garment organized by garment degree incs'''
+    return None
 
 
 def calc_chart_info(a_chart, garment_type):
@@ -112,6 +148,7 @@ def calc_chart_info(a_chart, garment_type):
     astra_calc_chart.planet_aspects = planet_aspects
 
     # Create the ordered dict by garment inc degrees
+    # this contains a dict of the chart's degrees by deg increments for garment
     garment = Garment(garment_type)
     print(garment.garment_dict)
     #TODO calc the garment dict organized

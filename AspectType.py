@@ -7,6 +7,7 @@ class AspectDirection(Enum):
     SEPARATING = -1
     APPLYING = 1
     CENTERED = 0
+    EXACT = 0
 
 
 class AspectName(Enum):
