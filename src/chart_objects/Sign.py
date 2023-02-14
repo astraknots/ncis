@@ -1,32 +1,6 @@
-from enum import Enum
-
-
-class Element(Enum):
-    WATER = (4, 8, 12)
-    FIRE = (1, 5, 9)
-    AIR = (3, 7, 11)
-    EARTH = (2, 6, 10)
-
-
-class Mode(Enum):
-    CARDINAL = (1, 10, 7, 4)
-    FIXED = (5, 2, 11, 8)
-    MUTABLE = (9, 6, 3, 12)
-
-
-class SignName(Enum):
-    ARIES = 'ARIES'
-    TAURUS = 'TAURUS'
-    GEMINI = 'GEMINI'
-    CANCER = 'CANCER'
-    LEO = 'LEO'
-    VIRGO = 'VIRGO'
-    LIBRA = 'LIBRA'
-    SCORPIO = 'SCORPIO'
-    SAGITTARIUS = 'SAGITTARIUS'
-    CAPRICORN = 'CAPRICORN'
-    AQUARIUS = 'AQUARIUS'
-    PISCES = 'PISCES'
+from src.chart_objects.enums.Element import Element
+from src.chart_objects.enums.Mode import Mode
+from src.chart_objects.enums.SignName import SignName
 
 
 class Sign:

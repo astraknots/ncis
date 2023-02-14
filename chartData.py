@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import AstraChart
 from enums import SignDegreeBase as sd
 
 

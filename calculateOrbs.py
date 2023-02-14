@@ -1,15 +1,9 @@
 #!/usr/bin/python
 
-import sys, getopt
-
-import AspectType, Planet
+from src.chart_objects import Planet
 import aspects
 #import xlsxwriter
 import constants
-from itertools import groupby
-from collections import Counter
-
-from enums import AspectOrb, AspectDegree
 
 
 def calcOrbsOfInfluence(chart_degrees, sign_degree_dict):

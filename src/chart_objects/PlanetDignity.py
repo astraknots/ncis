@@ -2,14 +2,7 @@ from enum import Enum
 
 from Planet import PlanetName
 import Sign
-
-
-class DignityType(Enum):
-    RULERSHIP = 4
-    EXHAULTATION = 3
-    DETRIMENT = 2
-    FALL = 1
-    PEREGRINE = 0
+from src.chart_objects.enums.DignityType import DignityType
 
 
 class PlanetDignity:
@@ -76,7 +69,8 @@ sun_leo = PlanetDignity(PlanetName.SUN, DignityType.RULERSHIP, Sign.get_sign_by_
 moon_cancer = PlanetDignity(PlanetName.MOON, DignityType.RULERSHIP, Sign.get_sign_by_sign_name(Sign.SignName.CANCER), 4)
 
 sun_aquarius = PlanetDignity(PlanetName.SUN, DignityType.DETRIMENT, Sign.get_sign_by_sign_name(Sign.SignName.AQUARIUS), 2)
-moon_capricorn = PlanetDignity(PlanetName.MOON, DignityType.DETRIMENT, Sign.get_sign_by_sign_name(Sign.SignName.CAPRICORN), 2)
+moon_capricorn = PlanetDignity(PlanetName.MOON, DignityType.DETRIMENT, Sign.get_sign_by_sign_name(
+    Sign.SignName.CAPRICORN), 2)
 
 sun_aries = PlanetDignity(PlanetName.SUN, DignityType.EXHAULTATION, Sign.get_sign_by_sign_name(Sign.SignName.ARIES), 3)
 moon_taurus = PlanetDignity(PlanetName.MOON, DignityType.EXHAULTATION, Sign.get_sign_by_sign_name(Sign.SignName.TAURUS), 1)
@@ -90,7 +84,8 @@ sun_cancer = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_
 sun_virgo = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.VIRGO), 1)
 sun_scorpio = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.SCORPIO), 1)
 sun_sag = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.SAGITTARIUS), 3)
-sun_capricorn = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.CAPRICORN), 1)
+sun_capricorn = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(
+    Sign.SignName.CAPRICORN), 1)
 sun_pisces = PlanetDignity(PlanetName.SUN, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.PISCES), 0)
 
 moon_aries = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.ARIES), 0)
@@ -99,7 +94,8 @@ moon_leo = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_b
 moon_virgo = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.VIRGO), 1)
 moon_libra = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.LIBRA), 1)
 moon_sag = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.SAGITTARIUS), 0)
-moon_aquarius = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.AQUARIUS), 1)
+moon_aquarius = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(
+    Sign.SignName.AQUARIUS), 1)
 moon_pisces = PlanetDignity(PlanetName.MOON, DignityType.PEREGRINE, Sign.get_sign_by_sign_name(Sign.SignName.PISCES), 3)
 
 PlanetDignities = {DignityType.RULERSHIP: [sun_leo, moon_cancer],

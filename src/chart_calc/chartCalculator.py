@@ -2,18 +2,15 @@ import getopt
 import logging
 import sys
 
-import Planet
 import chartData
-import AspectType
-from ChartAspect import ChartAspect
-from AstraChart import AstraChart
-from AstraChartCalc import AstraChartCalc
-from ChartDegree import ChartDegree
-from ChartPlanet import ChartPlanet
-from Garment import Garment, GarmentType
-from AspectType import AspectDirection, AspectName
-import Sign
-import PlanetDignity
+from src.chart_objects import AspectType, Planet, PlanetDignity, Sign
+from src.chart_objects.ChartAspect import ChartAspect
+from src.chart_objects.AstraChart import AstraChart
+from src.chart_objects.AstraChartCalc import AstraChartCalc
+from src.chart_objects.ChartDegree import ChartDegree
+from src.chart_objects.ChartPlanet import ChartPlanet
+from src.pattern.Garment import Garment, GarmentType
+from src.chart_objects.AspectType import AspectDirection
 
 
 def create_chart_planet_deg_dict(raw_chart_data):

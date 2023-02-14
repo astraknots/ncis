@@ -2,36 +2,7 @@ from AspectType import AspectName, AspectDirection
 from enum import Enum
 
 from Planet import Planet
-
-
-def get_aspect_intensity(name):
-    for an_ai in AspectIntensity:
-        if str(name) == str(an_ai.name):
-            return an_ai
-    return AspectIntensity.NONE
-
-
-class AspectIntensity(Enum):
-    CONJ = 5
-    SEXTILE = 7
-    SQUARE = -5
-    TRINE = 8
-    OPPOSITION = -10
-    SEMISEXTILE = 3
-    QUINCUNX = -2
-    SEMISQUARE = -3
-    BIQUINTILE = 2
-    QUINTILE = 1
-    SESUISQUARE = -1
-    NONE = 0
-
-
-def determine_aspect_intensity(name):
-    ai = get_aspect_intensity(name)
-    #self.intensity_nature = ai.value
-    if ai == AspectIntensity.NONE:
-        print("............Couldn't find AspectIntensity for:", name)
-    return ai.value
+from src.chart_objects.enums import AspectIntensity
 
 
 class AspectScore:
@@ -41,7 +12,7 @@ class AspectScore:
 
     def __init__(self, *args):
         if len(args) > 0:
-            self.intensity_nature = determine_aspect_intensity(args[0])
+            self.intensity_nature = AspectIntensity.determine_aspect_intensity(args[0])
             self.deg_from_exact = args[1]
             self.collective_planet_speed = self.determine_coll_planet_speed(args[2])
 

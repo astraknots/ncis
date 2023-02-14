@@ -10,6 +10,17 @@ deg_idx = 1
 sun_idx = 0
 
 
+def find_planet_dignity_scores(planet_list, sign):
+    planet_dignities = {}
+    sign_dignity = {}
+    for planet in planet_list:
+        dignity = dignities.get_planet_dignity(planet.upper(), sign.upper())
+        dscore = dignities.get_planet_dignity_score(planet.upper(), dignity, sign.upper())
+        planet_dignities[planet] = {sign: (dignity, dscore)}
+
+    return planet_dignities
+
+
 class AstraChart:
     # Raw chart info
     chartname = ""
@@ -34,7 +45,6 @@ class AstraChart:
         return self.get_str_rep()
 
 
-
     # Older methods for initial version of chartWriter
     def find_planets_at_sign_and_degree(self, sign_name, sign_deg, cap):
         '''Return list of planets found or empty list. By sign and degree (Alt: 360 degree)'''
@@ -53,16 +63,6 @@ class AstraChart:
                     found_planets.append(planet)
 
         return found_planets
-
-    def find_planet_dignity_scores(self, planet_list, sign):
-        planet_dignities = {}
-        sign_dignity = {}
-        for planet in planet_list:
-            dignity = dignities.get_planet_dignity(planet.upper(), sign.upper())
-            dscore = dignities.get_planet_dignity_score(planet.upper(), dignity, sign.upper())
-            planet_dignities[planet] = {sign: (dignity, dscore)}
-
-        return planet_dignities
 
     def find_aspect_center_at_360_degree(self, orbs_by_planet, deg, cap):
         '''Return a list of planet aspects on the 360 degree chart (Alt: by sign and degree)'''

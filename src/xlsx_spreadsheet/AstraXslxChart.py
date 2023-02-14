@@ -1,10 +1,7 @@
 #!/usr/bin/python
-import logging
-
-import xlsxwriter
 
 import constants
-from XslxChart import XlsxChart
+from src.xlsx_spreadsheet.XslxChart import XlsxChart
 
 
 class AstraXslxChart(XlsxChart):

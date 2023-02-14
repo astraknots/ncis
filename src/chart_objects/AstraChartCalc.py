@@ -1,4 +1,4 @@
-from AstraChart import AstraChart
+from src.chart_objects.AstraChart import AstraChart
 
 
 class AstraChartCalc(AstraChart):

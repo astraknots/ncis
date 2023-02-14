@@ -1,32 +1,7 @@
 from enum import Enum
 
-
-class BigThree(Enum):
-    SUN = True
-    MOON = True
-    ASC = True
-    MERCURY = False
-    VENUS = False
-    MARS = False
-    SATURN = False
-    JUPITER = False
-    URANUS = False
-    NEPTUNE = False
-    PLUTO = False
-
-
-class PlanetName(Enum):
-    SUN = 'SUN'
-    MOON = 'MOON'
-    ASC = 'ASC'
-    MERCURY = 'MERCURY'
-    VENUS = 'VENUS'
-    MARS = 'MARS'
-    SATURN = 'SATURN'
-    JUPITER = 'JUPITER'
-    URANUS = 'URANUS'
-    NEPTUNE = 'NEPTUNE'
-    PLUTO = 'PLUTO'
+from src.chart_objects.enums.BigThree import BigThree
+from src.chart_objects.enums.PlanetName import PlanetName
 
 
 class Planet:

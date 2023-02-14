@@ -1,26 +1,8 @@
 from enum import Enum
 
 import constants
-
-
-class AspectDirection(Enum):
-    SEPARATING = -1
-    APPLYING = 1
-    EXACT = 0
-
-
-class AspectName(Enum):
-    CONJ = 'CONJ'
-    SEMISEXTILE = 'SEMISEXTILE'
-    SEXTILE = 'SEXTILE'
-    SEMISQUARE = 'SEMISQUARE'
-    SQUARE = 'SQUARE'
-    TRINE = 'TRINE'
-    QUINCUNX = 'QUINCUNX'
-    OPPOSITION = 'OPPOSITION'
-    BIQUINTILE = 'BIQUINTILE'
-    QUINTILE = 'QUINTILE'
-    SESQUISQUARE = 'SESQUISQUARE'
+from src.chart_objects.enums.AspectDirection import AspectDirection
+from src.chart_objects.enums.AspectName import AspectName
 
 
 class AspectType:

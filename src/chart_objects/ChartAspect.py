@@ -1,5 +1,4 @@
-from AspectScore import AspectScore
-from AspectType import AspectName, AspectDirection
+from src.chart_objects.AspectScore import AspectScore
 
 
 class ChartAspect:

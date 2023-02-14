@@ -12,10 +12,9 @@ import scarf
 import xlsxwriter
 import logging
 
-import translate
 import util as putil
-from AstraChart import AstraChart
-from AstraXslxChart import AstraXslxChart
+from src.chart_objects.AstraChart import AstraChart
+from src.xlsx_spreadsheet.AstraXslxChart import AstraXslxChart
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
