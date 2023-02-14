@@ -5,7 +5,7 @@ from AspectType import AspectName, AspectDirection
 class ChartAspect:
     name = None      #AspectName
     direction = None #AspectDirection
-    calc_chart_diff = None  # int, positive or negative
+    deg_from_exact = None  # int, positive or negative, degrees_from_exact
     planets_in_aspect = []  # list 2 of Planet objects
     score = None
 
@@ -14,14 +14,14 @@ class ChartAspect:
         if len(args) > 1:
             self.direction = args[1]
             if len(args) > 2:
-                self.calc_chart_diff = args[2]
+                self.deg_from_exact = args[2]
                 if len(args) > 3:
                     self.planets_in_aspect = args[3]
 
     def get_aspect_score(self):
-        if self.name is not None and self.direction is not None and self.calc_chart_diff is not None:
+        if self.name is not None and self.direction is not None and self.deg_from_exact is not None:
             score = AspectScore()
-            AspectScore.determine_aspect_exactness(score, self, self.calc_chart_diff)
+            AspectScore.determine_aspect_exactness(score, self, self.deg_from_exact)
             AspectScore.determine_aspect_intensity(score, self.name)
             self.score = score
             return True
@@ -35,9 +35,9 @@ class ChartAspect:
                 planets_str = self.planets_in_aspect[0].name + ", " + self.planets_in_aspect[1].name
             score_str = ""
             if self.score is not None:
-                return f"{self.direction.name} {self.name} ({self.calc_chart_diff}, {planets_str}) : Score={self.score}"
+                return f"{self.direction.name} {self.name} ({self.deg_from_exact}, {planets_str}) : Score={self.score}"
             else:
-                return f"{self.direction.name} {self.name} ({self.calc_chart_diff}, {planets_str})"
+                return f"{self.direction.name} {self.name} ({self.deg_from_exact}, {planets_str})"
 
     def __str__(self):
         return self.get_str_rep()

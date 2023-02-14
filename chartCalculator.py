@@ -9,6 +9,7 @@ from ChartAspect import ChartAspect
 from AstraChart import AstraChart
 from AstraChartCalc import AstraChartCalc
 from ChartDegree import ChartDegree
+from ChartPlanet import ChartPlanet
 from Garment import Garment, GarmentType
 from AspectType import AspectDirection, AspectName
 import Sign
@@ -91,14 +92,13 @@ def calc_planet_aspects(chart_dict, aspect_orbs):
         chart_sign_deg = chart_dict[planet] # The planet's sign & degree in a list
 
         planet_chart_deg = chart_sign_deg[1].degree_360 # The planet's 360 degree degree
-        print("chart_deg:", planet_chart_deg)
+        logging.info("Calculating aspects for planet at chart_deg:" + str(planet_chart_deg))
 
         planet_aspects = aspect_orbs[planet]
 
         for asp_planet in chart_dict:
             # Loop over the chart planets looking for aspects to other planets
             if asp_planet.name != planet_name:  # don't look for aspects to self
-                asp_planet_speed = asp_planet.speed
                 asp_planet_chart_deg = chart_dict[asp_planet][1].degree_360
                 deg_diff = get_faster_planet_difference(planet, asp_planet, planet_chart_deg, asp_planet_chart_deg)
 
@@ -106,8 +106,6 @@ def calc_planet_aspects(chart_dict, aspect_orbs):
                 for aspect in planet_aspects:
                     aspect_start_range = aspect.degree + aspect.orb
                     aspect_end_range = aspect.degree - aspect.orb
-
-                    #print(aspect_start_range, " - ", aspect_end_range)
 
                     # Calculate the diff and direction of the aspect if found, add to list
                     p_aspect = None
@@ -127,7 +125,6 @@ def calc_planet_aspects(chart_dict, aspect_orbs):
                         if planet not in aspects_by_planet:
                             aspects_by_planet[planet] = []
                         aspects_by_planet[planet].append(p_aspect)
-                        print(aspects_by_planet[planet])
 
     return aspects_by_planet
 
@@ -139,10 +136,11 @@ def calc_garment_dict(garment, astra_calc_chart):
         p_sign_deg = astra_calc_chart.planet_sign_degrees[planet]
         p_deg = p_sign_deg[1]
         p_aspect = astra_calc_chart.planet_aspects[planet]
-        print(planet, " ", p_deg.degree_360, " ", p_aspect)
+        logging.info(str(planet) + " " + str(p_deg.degree_360) + " " + str(p_aspect))
         for g_deg in garment.garment_dict:
             if g_deg <= p_deg.degree_360 <= g_deg+deg_inc:
-                planet_aspect_dict = {planet: p_aspect}
+                chart_planet = ChartPlanet(planet, p_sign_deg)  #TODO, add in calculated planet dignities?
+                planet_aspect_dict = {chart_planet: p_aspect}
                 garment.garment_dict[g_deg].append(planet_aspect_dict)
 
 
