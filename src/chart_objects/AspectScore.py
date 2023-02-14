@@ -1,7 +1,4 @@
-from AspectType import AspectName, AspectDirection
-from enum import Enum
-
-from Planet import Planet
+from src.chart_objects.Planet import Planet
 from src.chart_objects.enums import AspectIntensity
 
 

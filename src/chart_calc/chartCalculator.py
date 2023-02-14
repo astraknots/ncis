@@ -9,8 +9,8 @@ from src.chart_objects.AstraChart import AstraChart
 from src.chart_objects.AstraChartCalc import AstraChartCalc
 from src.chart_objects.ChartDegree import ChartDegree
 from src.chart_objects.ChartPlanet import ChartPlanet
-from src.pattern.Garment import Garment, GarmentType
 from src.chart_objects.AspectType import AspectDirection
+from src.pattern.enums.GarmentType import GarmentType
 
 
 def create_chart_planet_deg_dict(raw_chart_data):
@@ -37,13 +37,13 @@ def create_chart_planet_deg_dict(raw_chart_data):
     return chart_sign_degrees_by_planet
 
 
-def calc_aspect_orbs(chart_dict):
+def calc_aspect_orbs(chart_sign_degrees_by_planet):
     orbs_by_planet = {}
     # {Planet = {Aspect : [Deg,Deg], Aspect : [Deg, Deg]}}
 
-    print("chart_dict:", chart_dict)
-    for planet in chart_dict:
-        sign_degree_data = chart_dict[planet]
+    #print("chart_sign_degrees_by_planet:", chart_sign_degrees_by_planet)
+    for planet in chart_sign_degrees_by_planet:
+        sign_degree_data = chart_sign_degrees_by_planet[planet]
         chart_degree = sign_degree_data[1]
         for aspect in AspectType.AspectTypes:
             asp_orb = aspect.orb
@@ -129,29 +129,6 @@ def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
 
     return aspects_by_planet
 
-
-def calc_garment_dict(garment, astra_calc_chart):
-    '''Put planets (and aspect start-end ranges) into a dict for the garment organized by garment degree incs'''
-    deg_inc = garment.garment_type.value
-    for planet in astra_calc_chart.chart_sign_degrees_by_planet:
-        p_sign_deg = astra_calc_chart.chart_sign_degrees_by_planet[planet]
-        p_deg = p_sign_deg[1]
-        p_aspect = astra_calc_chart.chart_aspects_by_planet[planet]
-        logging.info(str(planet) + " " + str(p_deg.degree_360) + " " + str(p_aspect))
-        for g_deg in garment.garment_dict:
-            if g_deg <= p_deg.degree_360 < g_deg+deg_inc:
-                chart_planet = ChartPlanet(planet, p_sign_deg, get_planet_sign_dignity_for_planet(astra_calc_chart, planet))
-                planet_aspect_dict = {chart_planet: p_aspect}
-                garment.garment_dict[g_deg].append(planet_aspect_dict)
-
-
-def get_planet_sign_dignity_for_planet(astra_calc_chart, planet):
-    p_dig_list = astra_calc_chart.chart_dignities_by_planet[planet]
-    planet_sign_dignity = None
-    if len(p_dig_list) > 0:
-        planet_sign_dignity = p_dig_list[0]
-    return planet_sign_dignity
-
 def calc_planet_dignities(chart_sign_degrees_by_planet):
     chart_dignities_by_planet = {}
 
@@ -171,7 +148,7 @@ def calc_planet_dignities(chart_sign_degrees_by_planet):
     return chart_dignities_by_planet
 
 
-def calc_chart_info(a_chart, garment_type):
+def calc_chart_info(a_chart):
     '''Calculate all of the chart data that we'll want to use for patterns and printing'''
     # Start by taking in the chart data, and putting the Planet and Sign objects in
 
@@ -190,12 +167,6 @@ def calc_chart_info(a_chart, garment_type):
     # Create our calc chart object to store this in
     astra_calc_chart = AstraChartCalc(a_chart, chart_sign_degrees_by_planet, aspect_orbs_by_planet,
                                       chart_aspects_by_planet, chart_dignities_by_planet)
-
-    # Create the ordered dict by garment inc degrees
-    # this contains a dict of the chart's degrees by deg increments for garment
-    garment = Garment(garment_type)
-    calc_garment_dict(garment, astra_calc_chart)
-    print(garment)
 
     return astra_calc_chart
 
@@ -222,7 +193,7 @@ def calc_chart(argv):
     if chartname == '':
         logging.info("Creating blank astra chart")
         blank_chart = AstraChart("Blank Chart", 'None', None)
-        calc_chart_info(blank_chart, GarmentType.HAT)
+        calc_chart_info(blank_chart)
         # write_any_astra_chart_to_xcel("blank chart", 'HAT', "blank", None)
     else:
         logging.info("Chart argument given:" + chartname)
@@ -244,15 +215,13 @@ def calc_chart(argv):
                 usechart = AstraChart(chartname, chartData.get_chart_person(chartname), findchart)
 
         logging.info(usechart)
-        try:
-            garment = GarmentType[pattname]
-        except KeyError:
-            garment = GarmentType.HAT
+        astra_calc_chart = calc_chart_info(usechart)
 
-        chart_info = calc_chart_info(usechart, garment)
         print()
-        #print(" Here's the calculated chart info: ")
-        #print(chart_info)
+        print(" Here's the calculated chart info: ")
+        print(astra_calc_chart)
+
+
         # write_any_astra_chart_to_xcel(chartname, pattname, usechart.person, usechart)
 
 

@@ -1,6 +1,3 @@
-import enum
-
-from Sign import Sign
 from enums import SignDegreeBase
 
 

@@ -23,17 +23,25 @@ class AstraChartCalc(AstraChart):
                     self.chart_dignities_by_planet = args[3]
 
     def get_str_rep(self):
-        str_rep = "PLANET : [SIGN, DEGREE]\n"
-        #for planet in self.planet_sign_degrees:
-        #    str_rep = str_rep + "   " + str(planet) + " : " + str(self.planet_sign_degrees[planet]) + "\n"
-        str_rep = str_rep + "  ASPECT [ORB-DEGREE-RANGE]\n"
-        #str_rep = str_rep + str(self.aspect_orbs)
+        str_rep = "***PLANET : [SIGN, DEGREE]\n"
+        for planet in self.chart_sign_degrees_by_planet:
+            str_rep = str_rep + "   " + str(planet) + " : " + str(self.chart_sign_degrees_by_planet[planet]) + "\n"
+
+        str_rep = str_rep + "***ASPECT [ORB-DEGREE-RANGE]\n"
+        str_rep = str_rep + str(self.aspect_orbs_by_planet)
         for planet in self.aspect_orbs_by_planet:
             str_rep = str_rep + str(planet) + " : " + str(self.chart_sign_degrees_by_planet[planet]) + "\n"
             planet_dict = self.aspect_orbs_by_planet[planet]
             for aspect in planet_dict:
                 degree = planet_dict[aspect]
                 str_rep = str_rep + "   " + str(aspect) + " : " + str(degree) + "\n"
+
+        str_rep = str_rep + "***Aspects By PLANET [DIRECTION ASPECT (P1, P2) Score, Exactness, Collective Speed]***\n"
+        for planet in self.chart_aspects_by_planet:
+            str_rep = str_rep + str(planet) + " : " + "\n"
+            for aspect in self.chart_aspects_by_planet[planet]:
+                str_rep = str_rep + "   " + str(aspect) + "\n"
+
         return str_rep
 
     def __str__(self):
