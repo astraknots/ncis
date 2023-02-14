@@ -26,19 +26,27 @@ class AspectIntensity(Enum):
     NONE = 0
 
 
+def determine_aspect_intensity(name):
+    ai = get_aspect_intensity(name)
+    #self.intensity_nature = ai.value
+    if ai == AspectIntensity.NONE:
+        print("............Couldn't find AspectIntensity for:", name)
+    return ai.value
+
+
 class AspectScore:
-    intensity = 0
-    exactness = 0
+    intensity_nature = 0
+    deg_from_exact = None  # The exactness of the aspect:  int, positive or negative, degrees_from_exact
     collective_planet_speed = 0
 
     def __init__(self, *args):
         if len(args) > 0:
-            self.intensity = args[0]
-            self.exactness = args[1]
-            self.collective_planet_speed = args[2]
+            self.intensity_nature = determine_aspect_intensity(args[0])
+            self.deg_from_exact = args[1]
+            self.collective_planet_speed = self.determine_coll_planet_speed(args[2])
 
     def get_str_rep(self):
-        return f"Intensity: {self.intensity}, Exactness:{self.exactness}, Collective Planet Speed:{self.collective_planet_speed}"
+        return f"Intensity: {self.intensity_nature}, Exactness:{self.deg_from_exact}, Collective Planet Speed:{self.collective_planet_speed}"
 
     def __str__(self):
         return self.get_str_rep()
@@ -46,28 +54,13 @@ class AspectScore:
     def __repr__(self):
         return self.get_str_rep()
 
-    def determine_aspect_intensity(self, name):
-        ai = get_aspect_intensity(name)
-        self.intensity = ai.value
-        if ai == AspectIntensity.NONE:
-            print("............Couldn't find AspectIntensity for:", name)
-        return ai.value
-
-    def determine_aspect_exactness(self, aspect, calc_chart_diff):
-        if calc_chart_diff == 0:
-            exactness = 1
-        else:
-            exactness = 1 / calc_chart_diff
-        if aspect.direction == AspectDirection.APPLYING:
-            exactness = exactness + 8
-        elif aspect.direction == AspectDirection.SEPARATING:
-            exactness = exactness + 5
-        elif aspect.direction == AspectDirection.EXACT:
-            exactness = exactness + 10
-        self.exactness = exactness
-        return exactness
-
-    def determine_coll_planet_speed(self, p1, p2):
-        if isinstance(p1, Planet) and isinstance(p2, Planet):
-            self.collective_planet_speed = p1.speed + p2.speed
+    def determine_coll_planet_speed(self, *args):
+        if isinstance(args[0], list):
+            c_speed = 0
+            for p in args[0]: # assuming it's a list of Planet
+                if isinstance(p, Planet):
+                    c_speed = c_speed + p.speed
+                elif isinstance(p, int):
+                    c_speed = c_speed + p
+            self.collective_planet_speed = c_speed
         return self.collective_planet_speed

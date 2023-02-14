@@ -1,11 +1,12 @@
 
 
 class ChartPlanet:
-    planet = None
-    sign_degree = None
+    planet = None  # the Planet so we can connect to speed and other basics
+    sign_degree = None  # a ChartDegree object where the planet falls in sign & degree of the chart
     planet_name = None  # PlanetName.name of the planet in the chart this is for
-    sign_dignities = {} # a dict by sign of the dignities for this planet
-    dignity_score = 0   # calculated score for the dignity = planet_sign_dignity_score + planet_bonus_dignity + planet_speed + house_dignity
+    sign_dignity = None # a PlanetDignity object
+    #house_dignities = {} # Future
+   # dignity_score = 0   # calculated score for the dignity = planet_sign_dignity_score + planet_bonus_dignity + planet_speed + house_dignity
 
     def __init__(self, *args):
         self.planet = args[0]
@@ -13,12 +14,15 @@ class ChartPlanet:
         if len(args) > 1:
             self.sign_degree = args[1]
             if len(args) > 2:
-                self.sign_dignities = args[2]
-                if len(args) > 3:
-                    self.dignity_score = args[3]
+                self.sign_dignity = args[2]
+              #  if len(args) > 3:
+                #    self.dignity_score = args[3]
 
     def get_str_rep(self):
-        return f"Chart Planet: {str(self.planet)} "
+        s_dig = "No Dignity"
+        if self.sign_dignity is not None:
+            s_dig = str(self.sign_dignity)
+        return f"Chart Planet: {str(self.planet)} in {self.sign_degree} \n ({s_dig})"
 
     def __str__(self):
         return self.get_str_rep()

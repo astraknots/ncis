@@ -11,19 +11,21 @@ sun_idx = 0
 
 
 class AstraChart:
-    chart_degrees = None
+    # Raw chart info
     chartname = ""
     person = ""
-    chart_data = {}
+    raw_chart_data = {}
+    # Calculated & organized chart data --> see subclass AstraChartCalc
+    chart_degrees = None  # Legacy: used for chartWriter
 
-    def __init__(self, chartname, person, chart_data):
+    def __init__(self, chartname, person, raw_chart_data):
         self.chart_degrees = None
         self.chartname = chartname
         self.person = person
-        self.chart_data = chart_data  # Currently the chart data is a dict, see chartData.py
+        self.raw_chart_data = raw_chart_data  # Currently the chart data is a dict, see chartData.py
 
     def get_str_rep(self):
-        return f"Chart Info: {self.chartname} for {self.person} \n Chart Data: {self.chart_data}"
+        return f"Chart Info: {self.chartname} for {self.person} \n Raw Chart Data: {self.raw_chart_data}"
 
     def __str__(self):
         return self.get_str_rep()
@@ -31,14 +33,9 @@ class AstraChart:
     def __repr__(self):
         return self.get_str_rep()
 
-    def sun_sign(self):
-        sun_planet = constants.PLANETS[sun_idx]
-        return self.chart_data[sun_planet][sign_idx]
 
-    def sun_sign_degree(self):
-        sun_planet = constants.PLANETS[sun_idx]
-        return self.chart_data[sun_planet][deg_idx]
 
+    # Older methods for initial version of chartWriter
     def find_planets_at_sign_and_degree(self, sign_name, sign_deg, cap):
         '''Return list of planets found or empty list. By sign and degree (Alt: 360 degree)'''
         # logging.info("Looking for planets at " + str(sign_deg) + ' ' + sign_name)
@@ -46,8 +43,8 @@ class AstraChart:
         found_planets = []
 
         for planet in constants.PLANETS:
-            chart_sign = self.chart_data[planet][0]
-            chart_deg = self.chart_data[planet][1]
+            chart_sign = self.raw_chart_data[planet][0]
+            chart_deg = self.raw_chart_data[planet][1]
             if chart_sign == sign_name and str(chart_deg) == str(sign_deg):
                 # logging.info("Found Planet " + planet + " at " + str(chart_deg) + " of " + chart_sign)
                 if cap:
@@ -88,7 +85,7 @@ class AstraChart:
 
     def translate_chart_to_degrees_for_planets(self):
         '''Return the chart with the 360 degree version'''
-        chart_degrees = translate.translateChartToDegreesForPlanets(self.chart_data)
+        chart_degrees = translate.translateChartToDegreesForPlanets(self.raw_chart_data)
         self.chart_degrees = chart_degrees
         return chart_degrees
 

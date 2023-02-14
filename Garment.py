@@ -21,7 +21,21 @@ class Garment:
         self.garment_dict = self.get_garment_degree_dict()
 
     def get_str_rep(self):
-        return f"{self.garment_type.name} (degrees/st = {self.garment_type.value})"
+        garment_dict_str = ""
+        for g in self.garment_dict:
+
+            #print("X", self.garment_dict[g])
+            aspect_str = ""
+            for planet_dict in self.garment_dict[g]:
+                for p_entry in planet_dict:
+                    #print("Y", p_entry)
+                    aspect_str = aspect_str + str(p_entry) + "\n"
+                    for aspect in planet_dict[p_entry]:
+                        #print("Z", aspect)
+                        aspect_str = aspect_str + "     " + str(aspect) + "\n"
+            garment_dict_str = garment_dict_str + str(g) + " : " + aspect_str + "\n"
+
+        return f"{self.garment_type.name} (degrees/st = {self.garment_type.value}) \n {garment_dict_str}"
 
     def __str__(self):
         return self.get_str_rep()

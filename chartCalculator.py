@@ -13,15 +13,19 @@ from ChartPlanet import ChartPlanet
 from Garment import Garment, GarmentType
 from AspectType import AspectDirection, AspectName
 import Sign
+import PlanetDignity
 
 
-def create_chart_dict(raw_chart_data):
+def create_chart_planet_deg_dict(raw_chart_data):
     '''Take in the raw chart data in strings, translate to our objects, return a dict'''
-    chart_dict = {}
+    # TODO: Generalize this to build off an existing AstraChartCalc
+    chart_sign_degrees_by_planet = {}
     for entry in raw_chart_data:
         logging.debug(str(entry) + " " + str(raw_chart_data[entry]))
 
         planet = Planet.get_planet_by_name(entry)
+        logging.debug(str(planet))
+
         sign_degree_raw = raw_chart_data[entry]
         sign = Sign.get_sign_by_name(sign_degree_raw[0])
 
@@ -32,8 +36,8 @@ def create_chart_dict(raw_chart_data):
 
         logging.debug(str(chart_degree))
 
-        chart_dict[planet] = [sign, chart_degree]
-    return chart_dict
+        chart_sign_degrees_by_planet[planet] = [sign, chart_degree]
+    return chart_sign_degrees_by_planet
 
 
 def calc_aspect_orbs(chart_dict):
@@ -81,25 +85,25 @@ def determine_aspect_direction(deg_diff, calc_chart_diff):
         return AspectDirection.EXACT
 
 
-def calc_planet_aspects(chart_dict, aspect_orbs):
+def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
     aspects_by_planet = {}
 
     #Loop over the planets in the chart, then loop over every other planet and capture aspects and details
 
-    for planet in chart_dict:
+    for planet in chart_sign_degrees_by_planet:
         planet_name = planet.name
         planet_speed = planet.speed
-        chart_sign_deg = chart_dict[planet] # The planet's sign & degree in a list
+        chart_sign_deg = chart_sign_degrees_by_planet[planet] # The planet's sign & degree in a list
 
         planet_chart_deg = chart_sign_deg[1].degree_360 # The planet's 360 degree degree
         logging.info("Calculating aspects for planet at chart_deg:" + str(planet_chart_deg))
 
         planet_aspects = aspect_orbs[planet]
 
-        for asp_planet in chart_dict:
+        for asp_planet in chart_sign_degrees_by_planet:
             # Loop over the chart planets looking for aspects to other planets
             if asp_planet.name != planet_name:  # don't look for aspects to self
-                asp_planet_chart_deg = chart_dict[asp_planet][1].degree_360
+                asp_planet_chart_deg = chart_sign_degrees_by_planet[asp_planet][1].degree_360
                 deg_diff = get_faster_planet_difference(planet, asp_planet, planet_chart_deg, asp_planet_chart_deg)
 
                 # Loop over and calculate aspects
@@ -112,15 +116,15 @@ def calc_planet_aspects(chart_dict, aspect_orbs):
                     calc_chart_diff = abs(deg_diff) - aspect.degree
                     if aspect_end_range <= deg_diff <= aspect_start_range: # There is an aspect here
                         if deg_diff == aspect.degree:  # the aspect is exact
-                            p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, calc_chart_diff, [planet, asp_planet])
+                            p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, [planet, asp_planet])
                         else:
                             a_direction = determine_aspect_direction(deg_diff, calc_chart_diff)
-                            p_aspect = ChartAspect(aspect.name, a_direction, calc_chart_diff, [planet, asp_planet])
+                            p_aspect = ChartAspect(aspect.name, a_direction, [planet, asp_planet])
 
                         # attempt to set the aspect score
-                        is_scored = p_aspect.get_aspect_score()
-                        # set the collective planet speed score
-                        p_aspect.score.determine_coll_planet_speed(planet, asp_planet)
+                        is_scored = p_aspect.set_aspect_score(calc_chart_diff)
+                        if not is_scored:
+                            print("Unable to set the aspect score.")
 
                         if planet not in aspects_by_planet:
                             aspects_by_planet[planet] = []
@@ -132,49 +136,71 @@ def calc_planet_aspects(chart_dict, aspect_orbs):
 def calc_garment_dict(garment, astra_calc_chart):
     '''Put planets (and aspect start-end ranges) into a dict for the garment organized by garment degree incs'''
     deg_inc = garment.garment_type.value
-    for planet in astra_calc_chart.planet_sign_degrees:
-        p_sign_deg = astra_calc_chart.planet_sign_degrees[planet]
+    for planet in astra_calc_chart.chart_sign_degrees_by_planet:
+        p_sign_deg = astra_calc_chart.chart_sign_degrees_by_planet[planet]
         p_deg = p_sign_deg[1]
-        p_aspect = astra_calc_chart.planet_aspects[planet]
+        p_aspect = astra_calc_chart.chart_aspects_by_planet[planet]
         logging.info(str(planet) + " " + str(p_deg.degree_360) + " " + str(p_aspect))
         for g_deg in garment.garment_dict:
-            if g_deg <= p_deg.degree_360 <= g_deg+deg_inc:
-                chart_planet = ChartPlanet(planet, p_sign_deg)  #TODO, add in calculated planet dignities?
+            if g_deg <= p_deg.degree_360 < g_deg+deg_inc:
+                chart_planet = ChartPlanet(planet, p_sign_deg, get_planet_sign_dignity_for_planet(astra_calc_chart, planet))
                 planet_aspect_dict = {chart_planet: p_aspect}
                 garment.garment_dict[g_deg].append(planet_aspect_dict)
+
+
+def get_planet_sign_dignity_for_planet(astra_calc_chart, planet):
+    p_dig_list = astra_calc_chart.chart_dignities_by_planet[planet]
+    planet_sign_dignity = None
+    if len(p_dig_list) > 0:
+        planet_sign_dignity = p_dig_list[0]
+    return planet_sign_dignity
+
+def calc_planet_dignities(chart_sign_degrees_by_planet):
+    chart_dignities_by_planet = {}
+
+    # Loop over the planets in the chart, capturing the appropriate PlanetDignity objects
+    for planet in chart_sign_degrees_by_planet:
+        chart_sign = chart_sign_degrees_by_planet[planet][0]
+        full_planet_dignity_list = PlanetDignity.get_pdignity_by_planet(planet)
+        this_planet_sign_dignity_list = []
+        for p_dig in full_planet_dignity_list:
+            if p_dig.sign == chart_sign:
+                this_planet_sign_dignity_list.append(p_dig)
+
+        chart_dignities_by_planet[planet] = this_planet_sign_dignity_list
+
+    # TODO: Add House Dignity
+
+    return chart_dignities_by_planet
 
 
 def calc_chart_info(a_chart, garment_type):
     '''Calculate all of the chart data that we'll want to use for patterns and printing'''
     # Start by taking in the chart data, and putting the Planet and Sign objects in
-    raw_chart_data = a_chart.chart_data  # May look like:  { 'SUN' : ['VIRGO',8], 'MOON' : ['SCORPIO', 2], ....
-    astra_calc_chart = AstraChartCalc(raw_chart_data)  # we'll populate with our converted output
 
-    chart_dict = create_chart_dict(raw_chart_data)
-    astra_calc_chart.planet_sign_degrees = chart_dict
+    # Calculate the Planet, Sign, Chart Degrees & Planet Dignity
+    chart_sign_degrees_by_planet = create_chart_planet_deg_dict(a_chart.raw_chart_data)
 
     # Calculate the Aspect orbs and store that
-    aspect_orbs = calc_aspect_orbs(chart_dict)
-    astra_calc_chart.aspect_orbs = aspect_orbs
+    aspect_orbs_by_planet = calc_aspect_orbs(chart_sign_degrees_by_planet)
 
     # Calculate the actual aspects of the chart
-    planet_aspects = calc_planet_aspects(chart_dict, aspect_orbs)
-    astra_calc_chart.planet_aspects = planet_aspects
-    print(astra_calc_chart.planet_aspects)
+    chart_aspects_by_planet = calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs_by_planet)
+
+    # Create our dict for the dignities
+    chart_dignities_by_planet = calc_planet_dignities(chart_sign_degrees_by_planet)
+
+    # Create our calc chart object to store this in
+    astra_calc_chart = AstraChartCalc(a_chart, chart_sign_degrees_by_planet, aspect_orbs_by_planet,
+                                      chart_aspects_by_planet, chart_dignities_by_planet)
+
     # Create the ordered dict by garment inc degrees
     # this contains a dict of the chart's degrees by deg increments for garment
     garment = Garment(garment_type)
-    #TODO calc the garment dict organized
     calc_garment_dict(garment, astra_calc_chart)
-    print(garment.garment_dict)
+    print(garment)
 
     return astra_calc_chart
-
-
-def create_astra_chart(chart_name, person_name, raw_astra_data):
-    '''Create an instance of the AstraChart class with basic info'''
-    a_chart = AstraChart(chart_name, person_name, raw_astra_data)
-    return a_chart
 
 
 def calc_chart(argv):
@@ -198,27 +224,27 @@ def calc_chart(argv):
 
     if chartname == '':
         logging.info("Creating blank astra chart")
-        blank_chart = create_astra_chart("Blank Chart", 'None', None)
+        blank_chart = AstraChart("Blank Chart", 'None', None)
         calc_chart_info(blank_chart, GarmentType.HAT)
         # write_any_astra_chart_to_xcel("blank chart", 'HAT', "blank", None)
     else:
         logging.info("Chart argument given:" + chartname)
 
         if chartname == 'gchart':
-            usechart = create_astra_chart(chartname, 'Genevieve', chartData.gchart)
+            usechart = AstraChart(chartname, 'Genevieve', chartData.gchart)
         elif chartname == 'bchart':
-            usechart = create_astra_chart(chartname, 'Brian', chartData.bchart)
+            usechart = AstraChart(chartname, 'Brian', chartData.bchart)
         elif chartname == 'jchart':
-            usechart = create_astra_chart(chartname, 'Jacob', chartData.jchart)
+            usechart = AstraChart(chartname, 'Jacob', chartData.jchart)
         elif chartname == 'rchart':
-            usechart = create_astra_chart(chartname, 'Rebecca', chartData.rchart)
+            usechart = AstraChart(chartname, 'Rebecca', chartData.rchart)
         else:
             findchart = chartData.get_chart(chartname)
             if findchart is None:
                 print('Couldn\'t find the chart you are looking for..')
                 return
             else:
-                usechart = create_astra_chart(chartname, chartData.get_chart_person(chartname), findchart)
+                usechart = AstraChart(chartname, chartData.get_chart_person(chartname), findchart)
 
         logging.info(usechart)
         try:

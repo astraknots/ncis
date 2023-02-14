@@ -69,8 +69,15 @@ Pisces = Sign(SignName.PISCES, 330, Element.WATER, Mode.MUTABLE, 12)
 Signs = [Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces]
 
 
-def get_sign_by_name(sign_name):
+def get_sign_by_name(sign_name_str):
     for s in Signs:
-        if s.name == sign_name:
+        if s.name == sign_name_str:
             return s
-    print("No sign found by name: ", sign_name)
+    print("No sign found by name: ", sign_name_str)
+
+
+def get_sign_by_sign_name(sign_name):
+    for s in Signs:
+        if s.name == sign_name.name:
+            return s
+    print("No sign found by sign name: ", sign_name)
