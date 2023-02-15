@@ -10,6 +10,7 @@ from src.chart.chart_objects.AstraChart import AstraChart
 from src.chart.chart_objects.AstraChartCalc import AstraChartCalc
 from src.chart.chart_objects.ChartDegree import ChartDegree
 from src.chart.chart_objects.AspectType import AspectDirection
+from src.chart.chart_objects.ChartPlanet import ChartPlanet
 from src.pattern import patternCalculator
 from src.xlsx_spreadsheet import xslx_writer
 
@@ -85,7 +86,7 @@ def determine_aspect_direction(deg_diff, calc_chart_diff):
         print("Unable to determine aspect direction for deg_diff = ", deg_diff, " and calc_chart_diff=", calc_chart_diff)
 
 
-def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
+def calc_planet_aspects(chart_sign_degrees_by_planet, chart_dignities_by_planet, aspect_orbs):
     aspects_by_planet = {}
 
     #Loop over the planets in the chart, then loop over every other planet and capture aspects and details
@@ -115,11 +116,13 @@ def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
                     #p_aspect = None
                     calc_chart_diff = abs(deg_diff) - aspect.degree
                     if aspect_end_range <= abs(deg_diff) <= aspect_start_range: # There is an aspect here
+                        c_planet = ChartPlanet(planet, chart_sign_degrees_by_planet[planet], chart_dignities_by_planet[planet])
+                        c_asp_planet = ChartPlanet(asp_planet, chart_sign_degrees_by_planet[asp_planet], chart_dignities_by_planet[asp_planet])
                         if abs(deg_diff) == aspect.degree:  # the aspect is exact
-                            p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, [planet, asp_planet])
+                            p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, [c_planet, c_asp_planet])
                         else:
                             a_direction = determine_aspect_direction(deg_diff, calc_chart_diff)
-                            p_aspect = ChartAspect(aspect.name, a_direction, [planet, asp_planet])
+                            p_aspect = ChartAspect(aspect.name, a_direction, [c_planet, c_asp_planet])
 
                             # attempt to set the aspect score
                             is_scored = p_aspect.set_aspect_score(calc_chart_diff)
@@ -132,6 +135,7 @@ def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
 
     return aspects_by_planet
 
+
 def calc_planet_dignities(chart_sign_degrees_by_planet):
     chart_dignities_by_planet = {}
 
@@ -139,13 +143,14 @@ def calc_planet_dignities(chart_sign_degrees_by_planet):
     for planet in chart_sign_degrees_by_planet:
         chart_sign = chart_sign_degrees_by_planet[planet][0]
         full_planet_dignity_list = PlanetDignity.get_pdignity_by_planet(planet)
-        this_planet_sign_dignity_list = []
+        this_planet_sign_dignity = None
         for p_dig in full_planet_dignity_list:
             if p_dig.sign == chart_sign:
-                this_planet_sign_dignity_list.append(p_dig)
+                this_planet_sign_dignity = p_dig # this_planet_sign_dignity_list.append(p_dig)
 
-        chart_dignities_by_planet[planet] = this_planet_sign_dignity_list
-
+        chart_dignities_by_planet[planet] = this_planet_sign_dignity
+       # if len(this_planet_sign_dignity_list) > 1:
+       #     print("  THIS PLANET GOT MULTIPLE DIGNITIES: ", this_planet_sign_dignity_list)
     # TODO: Add House Dignity
 
     return chart_dignities_by_planet
@@ -158,14 +163,14 @@ def calc_chart_info(a_chart):
     # Calculate the Planet, Sign, Chart Degrees & Planet Dignity
     chart_sign_degrees_by_planet = create_chart_planet_deg_dict(a_chart.raw_chart_data)
 
+    # Create our dict for the dignities
+    chart_dignities_by_planet = calc_planet_dignities(chart_sign_degrees_by_planet)
+
     # Calculate the Aspect orbs and store that
     aspect_orbs_by_planet = calc_aspect_orbs(chart_sign_degrees_by_planet)
 
     # Calculate the actual aspects of the chart
-    chart_aspects_by_planet = calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs_by_planet)
-
-    # Create our dict for the dignities
-    chart_dignities_by_planet = calc_planet_dignities(chart_sign_degrees_by_planet)
+    chart_aspects_by_planet = calc_planet_aspects(chart_sign_degrees_by_planet, chart_dignities_by_planet, aspect_orbs_by_planet)
 
     # Create our calc chart object to store this in
     astra_calc_chart = AstraChartCalc(a_chart, chart_sign_degrees_by_planet, aspect_orbs_by_planet,

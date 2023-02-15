@@ -39,7 +39,7 @@ def calc_scored_planet_aspect_dict(garment, astra_calc_chart):
 
             for g_deg in garment.planet_aspect_scored_dict:
                 if g_deg <= p_deg.degree_360 < g_deg+deg_inc:
-                    chart_planet = ChartPlanet(planet, p_sign_deg, get_planet_sign_dignity_for_planet(astra_calc_chart, planet))
+                    chart_planet = ChartPlanet(planet, p_sign_deg, astra_calc_chart.chart_dignities_by_planet[planet])
                     planet_aspect_dict = {chart_planet: p_aspect}
                     garment.planet_aspect_scored_dict[g_deg].append(planet_aspect_dict)
 

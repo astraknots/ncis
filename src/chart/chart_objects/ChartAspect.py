@@ -4,7 +4,7 @@ from src.chart.chart_objects.AspectScore import AspectScore
 class ChartAspect:
     name = None      #AspectName
     direction = None #AspectDirection, either Applying or Separating (or Exact)
-    planets_in_aspect = []  # list 2 of Planet objects
+    planets_in_aspect = []  # list 2 of ChartPlanet objects
     aspect_score = None  # an AspectScore which gives the intensity and exactness of the aspect, and collective planet speed
 
     def __init__(self, *args):
@@ -28,7 +28,7 @@ class ChartAspect:
         if self.name is not None and self.direction is not None:
             planets_str = ""
             if len(self.planets_in_aspect) == 2:
-                planets_str = self.planets_in_aspect[0].name + ", " + self.planets_in_aspect[1].name
+                planets_str = self.planets_in_aspect[0].planet_name + ", " + self.planets_in_aspect[1].planet_name
             score_str = ""
             if self.aspect_score is not None:
                 return f"{self.direction.name} {self.name} ({planets_str}) : Score={self.aspect_score}"

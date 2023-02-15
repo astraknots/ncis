@@ -171,7 +171,7 @@ def write_chart_and_pattern(garment, astra_chart):
 
                 for an_aspect in chart_aspects:
                     asp_str = f"{an_aspect.aspect_score.deg_from_exact} {an_aspect.direction.name} {an_aspect.name} to " \
-                              f"{an_aspect.planets_in_aspect[1].name}"
+                              f"{an_aspect.planets_in_aspect[1].planet_name}"
 
                     aspects_at_deg.append(asp_str)
 
@@ -190,11 +190,17 @@ def write_chart_and_pattern(garment, astra_chart):
 
         # write in the pattern stuff
         if len(pattern_info) > 0:  # it's a list
+            aspect_pattern_str = ""
+            aspect_pattern_sts = []
+
             for stitchd in pattern_info:
                 print("_________stitchd_______")
                 print(stitchd)
-                wchart.write_to_sheet(wchart.row_cnt, PATTERN_COL, str(stitchd))
+                aspect_pattern_sts.append(str(stitchd))
 
+            aspect_pattern_str += f"{chart_sign_deg[1].degree_360}: [{'; '.join(aspect_pattern_sts)}]"
+
+            wchart.write_to_sheet(wchart.row_cnt, PATTERN_COL, aspect_pattern_str)
         ## End section for writing knitting pattern
 
         row_cnt += 1

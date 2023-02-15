@@ -1,3 +1,4 @@
+from src.chart.chart_objects.ChartPlanet import ChartPlanet
 from src.chart.chart_objects.Planet import Planet
 from src.chart.chart_objects.enums.AspectDirection import AspectDirection
 from src.chart.chart_objects.enums.AspectIntensity import AspectIntensity
@@ -25,6 +26,8 @@ class StitchDeterminer:
     collective_planet_speed = 0 # AspectScore.collective_planet_speed
     planet1_direction = PlanetDirection.DIRECT
     planet2_direction = PlanetDirection.DIRECT
+    planet1_dignity_score = 0 #PlanetDignity.sign_dignity_score
+    planet2_dignity_score = 0
 
     # Stored output from calcs
     shape_suggestion = ""   # determine from aspect intensity
@@ -42,17 +45,22 @@ class StitchDeterminer:
 
             if len(self.chart_aspect.planets_in_aspect) >= 2:
                 p1 = self.chart_aspect.planets_in_aspect[0]
-                if isinstance(p1, Planet):
-                    self.planet1_speed = p1.speed
-                    self.planet1_direction = p1.direction
-                    self.determine_kp_direction_from_planet(1, p1)
-                    self.determine_sw_from_planet_speed(1, p1)
+                if isinstance(p1, ChartPlanet):
+                    self.planet1_speed = p1.planet.speed
+                    self.planet1_direction = p1.planet.direction
+                    self.determine_kp_direction_from_planet(1, p1.planet)
+                    self.determine_sw_from_planet_speed(1, p1.planet)
+                    if p1.sign_dignity is not None:
+                        self.planet1_dignity_score = p1.sign_dignity.sign_dignity_score
+
                 p2 = self.chart_aspect.planets_in_aspect[1]
-                if isinstance(p2, Planet):
-                    self.planet2_speed = p2.speed
-                    self.planet2_direction = p2.direction
-                    self.determine_kp_direction_from_planet(2, p2)
-                    self.determine_sw_from_planet_speed(2, p2)
+                if isinstance(p2, ChartPlanet):
+                    self.planet2_speed = p2.planet.speed
+                    self.planet2_direction = p2.planet.direction
+                    self.determine_kp_direction_from_planet(2, p2.planet)
+                    self.determine_sw_from_planet_speed(2, p2.planet)
+                    if p2.sign_dignity is not None:
+                        self.planet2_dignity_score = p2.sign_dignity.sign_dignity_score
 
             if self.aspect_score is not None:
                 self.aspect_intensity = self.aspect_score.aspect_intensity
@@ -62,9 +70,11 @@ class StitchDeterminer:
                 self.collective_planet_speed = self.aspect_score.collective_planet_speed
 
     def get_str_rep(self):
+        total_dignity_score = self.planet1_dignity_score + self.planet2_dignity_score
         return f"{self.shape_suggestion} \n Exactness Stitch Width: {self.stitch_width_exactness} \n " \
                f"Aspect K/P:{self.aspect_base_kp} \n " \
-               f"Planets K/P: {self.planet_base_kp} Speed Stitch Width: {self.stitch_width_pspeed}"
+               f"Planets K/P: {self.planet_base_kp} Speed Stitch Width: {self.stitch_width_pspeed} \n " \
+               f"Tot Dig Score: {total_dignity_score}"
 
     def __str__(self):
         return self.get_str_rep()
