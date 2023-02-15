@@ -1,15 +1,15 @@
-from enum import Enum
-
-from src.chart_objects.enums.BigThree import BigThree
-from src.chart_objects.enums.PlanetName import PlanetName
+from src.chart.chart_objects.enums.BigThree import BigThree
+from src.chart.chart_objects.enums.PlanetDirection import PlanetDirection
+from src.chart.chart_objects.enums.PlanetName import PlanetName
 
 
 class Planet:
     name = None
     color = None
     speed = None
+    direction = PlanetDirection.DIRECT
 
-    def __init__(self, *args):  # name, color, speed, dignities):
+    def __init__(self, *args):  # name, color, speed, direction):
         self.name = args[0].name
         self.color = args[1]
         self.speed = args[2]

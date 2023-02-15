@@ -13,7 +13,7 @@ import xlsxwriter
 import logging
 
 import util as putil
-from src.chart_objects.AstraChart import AstraChart
+from src.chart.chart_objects import AstraChart
 from src.xlsx_spreadsheet.AstraXslxChart import AstraXslxChart
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')

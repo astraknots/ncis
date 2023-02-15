@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import constants
+from src.pattern.pattern_objects.enums.GarmentType import GarmentType
 from src.xlsx_spreadsheet.XslxChart import XlsxChart
 
 
@@ -13,7 +14,10 @@ class AstraXslxChart(XlsxChart):
         self.garment = garment
 
     def degree_inc(self):
-        return constants.GARMENT_ST_TO_DEGREES[self.garment]
+        if isinstance(self.garment, GarmentType):
+            return self.garment.value
+        else:
+            return constants.GARMENT_ST_TO_DEGREES[self.garment]
 
     def get_cell_color_format(self, color_name):
         cell_format = self.workbook.add_format()

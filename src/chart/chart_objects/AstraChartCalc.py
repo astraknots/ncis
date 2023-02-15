@@ -1,4 +1,4 @@
-from src.chart_objects.AstraChart import AstraChart
+from src.chart.chart_objects.AstraChart import AstraChart
 
 
 class AstraChartCalc(AstraChart):
@@ -39,8 +39,9 @@ class AstraChartCalc(AstraChart):
         str_rep = str_rep + "***Aspects By PLANET [DIRECTION ASPECT (P1, P2) Score, Exactness, Collective Speed]***\n"
         for planet in self.chart_aspects_by_planet:
             str_rep = str_rep + str(planet) + " : " + "\n"
-            for aspect in self.chart_aspects_by_planet[planet]:
-                str_rep = str_rep + "   " + str(aspect) + "\n"
+            if len(self.chart_aspects_by_planet[planet]) > 0:
+                for aspect in self.chart_aspects_by_planet[planet]:
+                    str_rep = str_rep + "   " + str(aspect) + "\n"
 
         return str_rep
 

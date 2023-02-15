@@ -1,6 +1,6 @@
-from src.chart_objects.enums.Element import Element
-from src.chart_objects.enums.Mode import Mode
-from src.chart_objects.enums.SignName import SignName
+from src.chart.chart_objects.enums.Element import Element
+from src.chart.chart_objects.enums.Mode import Mode
+from src.chart.chart_objects.enums.SignName import SignName
 
 
 class Sign:

@@ -3,14 +3,15 @@ import logging
 import sys
 
 import chartData
-from src.chart_objects import AspectType, Planet, PlanetDignity, Sign
-from src.chart_objects.ChartAspect import ChartAspect
-from src.chart_objects.AstraChart import AstraChart
-from src.chart_objects.AstraChartCalc import AstraChartCalc
-from src.chart_objects.ChartDegree import ChartDegree
-from src.chart_objects.ChartPlanet import ChartPlanet
-from src.chart_objects.AspectType import AspectDirection
-from src.pattern.enums.GarmentType import GarmentType
+from src.chart.chart_objects import PlanetDignity
+from src.chart.chart_objects import AspectType, Sign, Planet
+from src.chart.chart_objects.ChartAspect import ChartAspect
+from src.chart.chart_objects.AstraChart import AstraChart
+from src.chart.chart_objects.AstraChartCalc import AstraChartCalc
+from src.chart.chart_objects.ChartDegree import ChartDegree
+from src.chart.chart_objects.AspectType import AspectDirection
+from src.pattern import patternCalculator
+from src.xlsx_spreadsheet import xslx_writer
 
 
 def create_chart_planet_deg_dict(raw_chart_data):
@@ -80,6 +81,8 @@ def determine_aspect_direction(deg_diff, calc_chart_diff):
         return AspectDirection.SEPARATING
     elif deg_diff == 0:
         return AspectDirection.EXACT
+    else:
+        print("Unable to determine aspect direction for deg_diff = ", deg_diff, " and calc_chart_diff=", calc_chart_diff)
 
 
 def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
@@ -109,23 +112,23 @@ def calc_planet_aspects(chart_sign_degrees_by_planet, aspect_orbs):
                     aspect_end_range = aspect.degree - aspect.orb
 
                     # Calculate the diff and direction of the aspect if found, add to list
-                    p_aspect = None
+                    #p_aspect = None
                     calc_chart_diff = abs(deg_diff) - aspect.degree
-                    if aspect_end_range <= deg_diff <= aspect_start_range: # There is an aspect here
-                        if deg_diff == aspect.degree:  # the aspect is exact
+                    if aspect_end_range <= abs(deg_diff) <= aspect_start_range: # There is an aspect here
+                        if abs(deg_diff) == aspect.degree:  # the aspect is exact
                             p_aspect = ChartAspect(aspect.name, AspectDirection.EXACT, [planet, asp_planet])
                         else:
                             a_direction = determine_aspect_direction(deg_diff, calc_chart_diff)
                             p_aspect = ChartAspect(aspect.name, a_direction, [planet, asp_planet])
 
-                        # attempt to set the aspect score
-                        is_scored = p_aspect.set_aspect_score(calc_chart_diff)
-                        if not is_scored:
-                            print("Unable to set the aspect score.")
+                            # attempt to set the aspect score
+                            is_scored = p_aspect.set_aspect_score(calc_chart_diff)
+                            if not is_scored:
+                                print("Unable to set the aspect score for ", p_aspect)
 
-                        if planet not in aspects_by_planet:
-                            aspects_by_planet[planet] = []
-                        aspects_by_planet[planet].append(p_aspect)
+                            if planet not in aspects_by_planet:
+                                aspects_by_planet[planet] = []
+                            aspects_by_planet[planet].append(p_aspect)
 
     return aspects_by_planet
 
@@ -221,7 +224,8 @@ def calc_chart(argv):
         print(" Here's the calculated chart info: ")
         print(astra_calc_chart)
 
-
+        garment = patternCalculator.calc_pattern(astra_calc_chart, pattname)
+        xslx_writer.write_chart_and_pattern(garment, astra_calc_chart)
         # write_any_astra_chart_to_xcel(chartname, pattname, usechart.person, usechart)
 
 

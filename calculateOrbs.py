@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from src.chart_objects import Planet
+from src.chart.chart_objects import Planet
 import aspects
 #import xlsxwriter
 import constants

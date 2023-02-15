@@ -1,8 +1,6 @@
-from enum import Enum
-
 import constants
-from src.chart_objects.enums.AspectDirection import AspectDirection
-from src.chart_objects.enums.AspectName import AspectName
+from src.chart.chart_objects.enums.AspectDirection import AspectDirection
+from src.chart.chart_objects.enums.AspectName import AspectName
 
 
 class AspectType:

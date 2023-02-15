@@ -1,4 +1,4 @@
-from src.chart_objects.AspectScore import AspectScore
+from src.chart.chart_objects.AspectScore import AspectScore
 
 
 class ChartAspect:

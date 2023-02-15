@@ -1,8 +1,6 @@
-from enum import Enum
-
-from src.chart_objects import Sign
-from src.chart_objects.enums.DignityType import DignityType
-from src.chart_objects.enums.PlanetName import PlanetName
+from src.chart.chart_objects import Sign
+from src.chart.chart_objects.enums.DignityType import DignityType
+from src.chart.chart_objects.enums.PlanetName import PlanetName
 
 
 class PlanetDignity:
