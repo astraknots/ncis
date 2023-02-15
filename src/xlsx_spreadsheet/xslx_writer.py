@@ -194,8 +194,8 @@ def write_chart_and_pattern(garment, astra_chart):
             aspect_pattern_sts = []
 
             for stitchd in pattern_info:
-                print("_________stitchd_______")
-                print(stitchd)
+                #print("_________stitchd_______")
+                #print(stitchd)
                 aspect_pattern_sts.append(str(stitchd))
 
             aspect_pattern_str += f"{chart_sign_deg[1].degree_360}: [{'; '.join(aspect_pattern_sts)}]"

@@ -1,6 +1,7 @@
 import logging
 
 from src.chart.chart_objects.ChartPlanet import ChartPlanet
+from src.pattern.pattern_objects import StitchAction
 from src.pattern.pattern_objects.Garment import Garment
 from src.pattern.pattern_objects.StitchDeterminer import StitchDeterminer
 from src.pattern.pattern_objects.enums import GarmentType
@@ -65,6 +66,12 @@ def calc_pattern_from_scores(garment, astra_calc_chart):
             #get_width_x()
 
 
+def make_up_pattern():
+    '''GIven some params, choose a stitch pattern'''
+    for a_st in StitchAction.StitchActions:
+        print(a_st)
+
+
 def calc_pattern(astra_calc_chart, garment_name):
     # Create the ordered dict by garment inc degrees
     # this contains a dict of the chart's degrees by deg increments for garment
@@ -77,4 +84,7 @@ def calc_pattern(astra_calc_chart, garment_name):
     # Then start building patterns based on that data
     calc_pattern_from_scores(garment, astra_calc_chart)
     print(garment)
+
+    make_up_pattern()
+
     return garment
