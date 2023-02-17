@@ -31,7 +31,7 @@ class ChartAspect:
                 planets_str = self.planets_in_aspect[0].planet_name + ", " + self.planets_in_aspect[1].planet_name
             score_str = ""
             if self.aspect_score is not None:
-                return f"{self.direction.name} {self.name} ({planets_str}) : Score={self.aspect_score}"
+                return f"{self.direction.name} {self.name} ({planets_str}) [Score:{self.aspect_score}]"
             else:
                 return f"{self.direction.name} {self.name} ({planets_str})"
 

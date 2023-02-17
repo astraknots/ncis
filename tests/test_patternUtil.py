@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-import patternUtil as pu
+from patterns import patternUtil as pu
+
 
 class TestPatternUtil(TestCase):
     def test_getRowNumFromInstr(self):

@@ -3,7 +3,7 @@ import sys
 
 import aspects
 import calculateOrbs
-import chartData
+from src.chart import chartData
 import constants
 import re
 

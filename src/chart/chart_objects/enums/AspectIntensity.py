@@ -9,6 +9,20 @@ def get_aspect_intensity(name):
 
 
 class AspectIntensity(Enum):
+    CONJ = 10
+    SEXTILE = 7
+    SQUARE = 6
+    TRINE = 8
+    OPPOSITION = 9
+    SEMISEXTILE = 5
+    QUINCUNX = 4
+    SEMISQUARE = 3
+    BIQUINTILE = 1.5
+    QUINTILE = 2
+    SESUISQUARE = 1
+    NONE = 0
+
+''' Some previous scores   
     CONJ = 5
     SEXTILE = 7
     SQUARE = -5
@@ -21,7 +35,7 @@ class AspectIntensity(Enum):
     QUINTILE = 1
     SESUISQUARE = -1
     NONE = 0
-
+    '''
 
 def determine_aspect_intensity(name):
     ai = get_aspect_intensity(name)

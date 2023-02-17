@@ -1,7 +1,9 @@
+from src.chart.chart_objects.enums.PlanetDirection import PlanetDirection
 
 
 class ChartPlanet:
     planet = None  # the Planet so we can connect to speed and other basics
+    direction = PlanetDirection.DIRECT
     sign_degree = None  # a ChartDegree object where the planet falls in sign & degree of the chart
     planet_name = None  # PlanetName.name of the planet in the chart this is for
     sign_dignity = None # a PlanetDignity object
@@ -22,7 +24,7 @@ class ChartPlanet:
         s_dig = "No Dignity"
         if self.sign_dignity is not None:
             s_dig = str(self.sign_dignity)
-        return f"Chart Planet: {str(self.planet)} in {self.sign_degree} \n ({s_dig})"
+        return f"Chart Planet: {str(self.planet)} {self.direction} in {self.sign_degree} \n ({s_dig})"
 
     def __str__(self):
         return self.get_str_rep()

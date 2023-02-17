@@ -47,16 +47,16 @@ class StitchDeterminer:
                 p1 = self.chart_aspect.planets_in_aspect[0]
                 if isinstance(p1, ChartPlanet):
                     self.planet1_speed = p1.planet.speed
-                    self.planet1_direction = p1.planet.direction
-                    self.determine_kp_direction_from_planet(1, p1.planet)
-                    self.determine_sw_from_planet_speed(1, p1.planet)
+                    self.planet1_direction = p1.direction
+                    self.determine_kp_direction_from_planet(1, p1)
+                    self.determine_sw_from_planet_speed(1, p1)
                     if p1.sign_dignity is not None:
                         self.planet1_dignity_score = p1.sign_dignity.sign_dignity_score
 
                 p2 = self.chart_aspect.planets_in_aspect[1]
                 if isinstance(p2, ChartPlanet):
                     self.planet2_speed = p2.planet.speed
-                    self.planet2_direction = p2.planet.direction
+                    self.planet2_direction = p2.direction
                     self.determine_kp_direction_from_planet(2, p2.planet)
                     self.determine_sw_from_planet_speed(2, p2.planet)
                     if p2.sign_dignity is not None:
@@ -71,7 +71,8 @@ class StitchDeterminer:
 
     def get_str_rep(self):
         total_dignity_score = self.planet1_dignity_score + self.planet2_dignity_score
-        return f"{self.shape_suggestion} \n Exactness Stitch Width: {self.stitch_width_exactness} \n " \
+        return f"STITCH DETERMINER FOR: {self.chart_aspect} \n" \
+                f"{self.shape_suggestion} \n Exactness Stitch Width: {self.stitch_width_exactness} \n " \
                f"Aspect K/P:{self.aspect_base_kp} \n " \
                f"Planets K/P: {self.planet_base_kp} Speed Stitch Width: {self.stitch_width_pspeed} \n " \
                f"Tot Dig Score: {total_dignity_score}"
@@ -91,14 +92,14 @@ class StitchDeterminer:
         else:
             self.aspect_base_kp = PatternStitchBase.PURL
 
-    def determine_kp_direction_from_planet(self, planet_num, planet):
-        if planet.direction.value > 0:
+    def determine_kp_direction_from_planet(self, planet_num, chart_planet):
+        if chart_planet.direction.value > 0:
             self.planet_base_kp[planet_num - 1] = PatternStitchBase.KNIT
         else:
             self.planet_base_kp[planet_num - 1] = PatternStitchBase.PURL
 
-    def determine_sw_from_planet_speed(self, planet_num, planet):
-        self.stitch_width_pspeed[planet_num - 1] = planet.speed
+    def determine_sw_from_planet_speed(self, planet_num, chart_planet):
+        self.stitch_width_pspeed[planet_num - 1] = chart_planet.planet.speed
 
 
 def suggest_shape(aspect_intensity):

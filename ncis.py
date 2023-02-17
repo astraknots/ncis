@@ -6,7 +6,7 @@ import re
 import sys
 
 import calculateOrbs
-import chartData
+from src.chart import chartData
 import chartWriter
 import scarf
 import translate

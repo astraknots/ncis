@@ -8,7 +8,6 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
-
 def read_pattern_from_text(txtfilename):
     '''Util fcn to '''
     patfile = open(txtfilename, 'r')
@@ -46,6 +45,7 @@ def process_metadata(pattname, line):
     meta[pattname] = metadata
     return meta
 
+
 def covert_rnds_to_instr_dict(patlines):
     '''Take lines read in from file and store each in a dict by Rnd num, Rnd 0 is the name of the pattern. Doesn't include subtitle metadata about pattern'''
     rnds = {}
@@ -55,7 +55,7 @@ def covert_rnds_to_instr_dict(patlines):
     for line in patlines:
         logging.debug("line:" + line)
         if cntr == 1 and check_line_for_metadata(line) > 0:
-            #skip_lines += 1
+            # skip_lines += 1
             # process metadata here
             meta = process_metadata(rnds[0], line)
             continue
@@ -81,7 +81,7 @@ def covert_rnds_to_instr_dict(patlines):
                                 start = int(rndNum)
                             else:
                                 end = int(rndNum)
-                        for rndCnt in range(start, end+1):
+                        for rndCnt in range(start, end + 1):
                             rnds[rndCnt] = instr_stripped
                             innerCnt += 1
                     elif rndNums[0] == str(cntr):
@@ -93,6 +93,7 @@ def covert_rnds_to_instr_dict(patlines):
                 cntr += 1
         logging.debug(rnds)
     return meta, rnds
+
 
 def covert_rnds_to_dict(patlines):
     '''Take lines read in from file and store each in a dict by Rnd num, Rnd 0 is the name of the pattern'''
@@ -120,6 +121,7 @@ def covert_rnds_to_dict(patlines):
         logging.debug(rnds)
     return rnds
 
+
 def get_rnd_nums_from_instruction(rndinstr):
     '''Return the rnd nums in this instruction. If only 1 list is length 1, else length 0 or more than 1'''
     rndNums = []
@@ -132,6 +134,7 @@ def get_rnd_nums_from_instruction(rndinstr):
         rndNums = get_num_from_next_word_after_term(rndinstr, "Rounds")
 
     return rndNums
+
 
 def get_rnd_num_from_instruction(rndinstr):
     '''Return the rnd num in this instruction, or if mult are listed, the first one; i.e. Rnds 2,4,6 would return 2; if not found returns -1'''
@@ -152,7 +155,7 @@ def convertPatternFromWeb(txtfilename):
     patfile = open(txtfilename, 'r')
     patlines = patfile.readlines()
     rows = storeRowsInDict(patlines)
-    #print(rows)
+    # print(rows)
 
     # Loop over the rows of the pattern, replacing dict items with repeats; i.e. "Rep Row x" - should prolly do this first
     for rownum, rowinstr in rows.items():
@@ -165,9 +168,7 @@ def convertPatternFromWeb(txtfilename):
             logging.debug(rows[int(rowRep)])
             rows[rownum] = replaceRepRow(rowinstr, rows[int(rowRep)])
 
-
-    #Look for instr that repeat like 'Rows 3 and 4:'
-
+    # Look for instr that repeat like 'Rows 3 and 4:'
 
     # Loop over the rows and add in details for any missing rows; i.e. "and all other odd rows"
     try:
@@ -192,17 +193,15 @@ def convertPatternFromWeb(txtfilename):
 
     # Loop over the rows and add in any missing rows that are specified; i.e. "Rows 2,4,6:"
 
-
-
     # Print out the transformed pattern as a dict list
-    pat = {}  #Create dict format
-    patrows = rows.values() # Get each of the rows into list format
+    pat = {}  # Create dict format
+    patrows = rows.values()  # Get each of the rows into list format
     logging.debug(patrows)
     pat[rows[0]] = patrows[1:]  # make the name of the pattern the key to the dict and the list of rows the value
     # Print
     logging.info(pat)
 
-    #Write the new pat back to a file
+    # Write the new pat back to a file
     txtfilenamenew = str(txtfilename).replace('.txt', 'new.txt')
     newpatfile = open(txtfilenamenew, 'w')
     newpatfile.writelines(str(pat))
@@ -214,7 +213,7 @@ def convertPatternFromWeb(txtfilename):
 def replaceRowWithNumInstr(rowNum, rowInstr):
     '''Return the new row instru to contain the rowNum given'''
     rowIdx = rowInstr.index(':')
-    endNewRowInstr = rowInstr[rowIdx+1:]
+    endNewRowInstr = rowInstr[rowIdx + 1:]
     logging.debug(endNewRowInstr)
     return "Row " + str(rowNum) + ":" + endNewRowInstr
 
@@ -227,6 +226,7 @@ def firstRowRepeatsOdd(rowOneInstr):
         return True
     return False
 
+
 def secondRowRepeatsEven(rowTwoInstr):
     '''Returns True if the first row instruction contains the word even'''
     if "even" in rowTwoInstr:
@@ -235,6 +235,7 @@ def secondRowRepeatsEven(rowTwoInstr):
         return True
     return False
 
+
 def rowMissingInstr(row):
     '''Returns True if the only instr is the Row number'''
     rowpieces = row.split(' ')
@@ -242,7 +243,6 @@ def rowMissingInstr(row):
         logging.info("Missing instr for " + row)
         return True
     return False
-
 
 
 def replaceRepRow(rowinstr, replaceWithRowInstr):
@@ -268,7 +268,7 @@ def rowRepeatingAnotherRow(rowinstr):
     if "Rep Row" in rowinstr:
         rowWords = rowinstr.split(' ')
         repIdx = rowWords.index("Rep")
-        rowToRep = rowWords[repIdx+2]  # Adding 2 'cause it should be 'Rep', 'Row', '<row num we want>'
+        rowToRep = rowWords[repIdx + 2]  # Adding 2 'cause it should be 'Rep', 'Row', '<row num we want>'
         logging.debug(rowToRep)
         return rowToRep
 
@@ -317,6 +317,7 @@ def get_num_from_next_word_after_term(sentence, searchTerm):
         return get_numbers_from_str(next_word)
     return -1
 
+
 def getNumFromNextWordAfterTerm(sentence, searchTerm):
     '''Get a number in the sentence following the word searchTerm; else return -1'''
     nextWord = getNextWordAfterTerm(sentence, searchTerm, " ")
@@ -327,13 +328,14 @@ def getNumFromNextWordAfterTerm(sentence, searchTerm):
 
 def search_word_in_line(sentence, searchTerm):
     ''' returns index of searchTerm in sentence; else returns empty string '''
-    #wordList = sentence.split(splitter)
+    # wordList = sentence.split(splitter)
     try:
         searchTermIdx = sentence.index(searchTerm)
     except ValueError:
         logging.warning("searchTerm:" + searchTerm + " was not found in sentence:" + sentence)
         return 0
     return searchTermIdx
+
 
 def getNextWordAfterTerm(sentence, searchTerm, splitter):
     '''Splits sentence on splitter, then gives you the word after the searchTerm; returns empty string '''
@@ -355,11 +357,13 @@ def getJustNumber(wordStrWNumber):
     '''Searches the wordStr for a number and strips out anything non-numeric; returns number as a string, or empty string if no number found'''
     return str(re.sub("[^0-9]", "", wordStrWNumber))
 
+
 def get_numbers_from_str(word_str_w_numbers):
     '''Returns a list of numbers in the string'''
     repl_non_num_w_space = re.sub("[^0-9\-]", "", word_str_w_numbers.strip())
     nums = repl_non_num_w_space.split("-")
     return nums
+
 
 def patt_writer(argv):
     filename = ''

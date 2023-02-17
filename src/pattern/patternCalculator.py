@@ -50,17 +50,23 @@ def calc_pattern_from_scores(garment, astra_calc_chart):
     #print("__________-")
     for patt_deg in garment.planet_aspect_scored_dict:
         if len(garment.planet_aspect_scored_dict[patt_deg]) > 0: # It's a list of what is at this place in the pattern
-            #print("Patt degree:", patt_deg)
+
             if len(garment.planet_aspect_scored_dict[patt_deg]) > 0:
                 #print("...", garment.planet_aspect_scored_dict[patt_deg])
                 planet_aspect_info_dict = garment.planet_aspect_scored_dict[patt_deg][0]
+
                 for p_info in planet_aspect_info_dict:
                     aspect_list = planet_aspect_info_dict[p_info]
                     #print("....", p_info, " contains:")
                     for an_aspect in aspect_list:
-                        #print("...a Chart Aspect:", an_aspect)
-                        sd = StitchDeterminer(an_aspect)
-                        garment.garment_dict[patt_deg].append(sd)
+
+                        # Only determine pattern info for the planets involved in this garment
+                        aspected_planets = an_aspect.planets_in_aspect
+                        if GarmentType.is_planet_for_garment_type(garment.garment_type, aspected_planets[0]) and \
+                            GarmentType.is_planet_for_garment_type(garment.garment_type, aspected_planets[1]):
+                            #print("Provide pattern info for:", an_aspect)
+                            sd = StitchDeterminer(an_aspect)
+                            garment.garment_dict[patt_deg].append(sd)
             #suggest_shape()
             #get_base_x()
             #get_width_x()

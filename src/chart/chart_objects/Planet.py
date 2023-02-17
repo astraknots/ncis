@@ -7,7 +7,6 @@ class Planet:
     name = None
     color = None
     speed = None
-    direction = PlanetDirection.DIRECT
 
     def __init__(self, *args):  # name, color, speed, direction):
         self.name = args[0].name
@@ -27,9 +26,10 @@ class Planet:
         return self.get_str_rep()
 
     def is_big_three(self):
-        for big in BigThree:
+        for big in [PlanetName.SUN, PlanetName.MOON, PlanetName.ASC]:
             if big.name == self.name:
-                return big.value
+                return True
+        return False
 
 
 Sun = Planet(PlanetName.SUN, 'yellow', 7)
