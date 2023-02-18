@@ -1,6 +1,9 @@
 import logging
 
 import constants
+from src.chart.chart_objects import Planet
+from src.chart.chart_objects.enums import AspectIntensity
+from src.pattern.pattern_objects.enums import GarmentType
 from src.xlsx_spreadsheet.AstraXslxChart import AstraXslxChart
 
 
@@ -19,30 +22,81 @@ def write_orb_range_to_fsheet(orb_range_start, orb_range_end, header_row_cnt, p_
     # xchart.write_to_sheet(orb_row, p_cnt+len(constants.PLANETS), aspect_score)
 
 
-def write_orb_colors_to_sheet(achart, xchart, h_row_cnt):
+def write_orb_colors_to_sheet(achart, h_row_cnt, xchart, garment_planets):
     '''Color in the orb sections of the chart'''
 
     # Loop over the orbs by planet and color in
     p_cnt = constants.SHEET_PLANET_COLOR_COL_START
-    for planet in achart.aspect_orbs_by_planet:
+    for planet in garment_planets:  # achart.aspect_orbs_by_planet:
         aspect_range = achart.aspect_orbs_by_planet[planet]
-        for aspect in aspect_range:
-            orb_range_start = aspect_range[aspect][0]
-            orb_range_end = aspect_range[aspect][1]
+        for aspect_type in aspect_range:
+            orb_range_start = aspect_range[aspect_type][0]
+            orb_range_end = aspect_range[aspect_type][1]
             logging.debug("orb range:[" + str(orb_range_start) + " to " + str(orb_range_end) + "]")
             if orb_range_end < orb_range_start:  # then it's like [349 to 1] and loops over the end of Pisces to Aries
                 # so break it into two
 
                 write_orb_range_to_fsheet(orb_range_start, constants.MAX_CHART_DEGREES, h_row_cnt, p_cnt, planet,
-                                          aspect,
+                                          aspect_type,
                                           xchart)
                 write_orb_range_to_fsheet(constants.MIN_CHART_DEGREES, orb_range_end, h_row_cnt, p_cnt, planet,
-                                          aspect,
+                                          aspect_type,
                                           xchart)
             else:
                 write_orb_range_to_fsheet(orb_range_start, orb_range_end, h_row_cnt, p_cnt, planet,
-                                          aspect,
+                                          aspect_type,
                                           xchart)
+        p_cnt += 1
+
+
+def write_aspect_total_score_to_fsheet(orb_range_start, orb_range_end, header_row_cnt, p_cnt, planet, total_score,
+                                       xchart, planet_list_offset):
+    '''Write aspect total score for planets to the sheet'''
+    degree_inc = xchart.degree_inc()  # the degree increment we're charting per row (i.e. COWL = 2)
+
+    # aspect_score = aspects.get_aspect_score(aspect)
+    for orb_color_range in range(orb_range_start, orb_range_end):
+        orb_color_row = int(orb_color_range / degree_inc)
+        orb_row = orb_color_row + header_row_cnt
+        # logging.debug(
+        #    "Orb row:" + str(orb_row) + " p_cnt_col:" + str(p_cnt) + " for planet:" + planet + " and aspect:" + aspect)
+        xchart.write_to_sheet(orb_row, p_cnt + planet_list_offset, total_score)
+
+
+def write_aspect_scores_to_sheet(achart, h_row_cnt, xchart, garment_planets):
+    '''Write in the aspect scores for each planet'''
+
+    # Loop over the orbs by planet and color in
+    p_cnt = constants.SHEET_PLANET_COLOR_COL_START
+    planet_list_offset = len(garment_planets)
+
+    for planet in garment_planets:
+        planet_aspects = achart.chart_aspects_by_planet[planet]
+        total_planet_score = 0
+        for chart_aspect in planet_aspects:
+            total_planet_score += chart_aspect.aspect_score.get_calculated_aspect_score()
+
+        logging.debug("Calculated Aspect Score for Planet:[" + str(planet) + ": " + str(total_planet_score) + "]")
+
+        aspect_range = achart.aspect_orbs_by_planet[planet]
+        for aspect_type in aspect_range:
+            # Loop over the planet's aspects and if we're on this one, grab the score
+            aspect_intensity = AspectIntensity.get_aspect_intensity(aspect_type.name)
+            planet_aspect_intensity_score = aspect_intensity.value #+ planet.speed
+
+            orb_range_start = aspect_range[aspect_type][0]
+            orb_range_end = aspect_range[aspect_type][1]
+
+            if orb_range_end < orb_range_start:  # then it's like [349 to 1] and loops over the end of Pisces to Aries
+                # so break it into two
+
+                write_aspect_total_score_to_fsheet(orb_range_start, constants.MAX_CHART_DEGREES, h_row_cnt, p_cnt,
+                                                   planet, planet_aspect_intensity_score, xchart, planet_list_offset)
+                write_aspect_total_score_to_fsheet(constants.MIN_CHART_DEGREES, orb_range_end, h_row_cnt, p_cnt, planet,
+                                                   planet_aspect_intensity_score, xchart, planet_list_offset)
+            else:
+                write_aspect_total_score_to_fsheet(orb_range_start, orb_range_end, h_row_cnt, p_cnt, planet,
+                                                   planet_aspect_intensity_score, xchart, planet_list_offset)
         p_cnt += 1
 
 
@@ -57,6 +111,16 @@ def inc_cnt_to_next_sign(deg, deg_inc):
         # print("deg=", deg, " deg % 30=", deg % thirty, " dec inc:", deg_inc)
         cnt_to_next_sign += 1
     return cnt_to_next_sign
+
+
+def get_planets_for_garment(garment_type):
+    '''Return a list of Planet objects assocaited w this garment type'''
+    garment_planets = []
+    for planet in Planet.Planets:  # constants.PLANETS:
+        # Only write in the score for planets for this garment
+        if GarmentType.is_planet_for_garment_type(garment_type, planet):
+            garment_planets.append(planet)
+    return garment_planets
 
 
 def write_chart_and_pattern(garment, astra_chart):
@@ -86,13 +150,18 @@ def write_chart_and_pattern(garment, astra_chart):
     wchart.write_to_sheet_format(row_cnt, constants.SHEET_DEGREE_SIGN_COL, "Degree Sign", wchart.get_bold_format())
     wchart.write_to_sheet_format(row_cnt, constants.SHEET_DEGREE_COL, "Degree range start", wchart.get_bold_format())
     p_cnt = constants.SHEET_PLANET_COLOR_COL_START
-    for planet in constants.PLANETS:
-        wchart.write_to_sheet_format(row_cnt, p_cnt, planet.capitalize(), wchart.get_bold_format())
+
+    # Only write in the score for planets for this garment
+    garment_planets = get_planets_for_garment(garment.garment_type)
+
+    for planet in garment_planets:
+        wchart.write_to_sheet_format(row_cnt, p_cnt, planet.name.capitalize(), wchart.get_bold_format())
         p_cnt += 1
 
     # For planet aspect score
-    for planet in constants.PLANETS:
-        wchart.write_to_sheet_format(row_cnt, p_cnt, planet.capitalize() + " Aspect Score", wchart.get_bold_format())
+    for planet in garment_planets:
+        wchart.write_to_sheet_format(row_cnt, p_cnt, planet.name.capitalize() + " Aspect Intensity",
+                                     wchart.get_bold_format())
         p_cnt += 1
 
     # Knitting pattern column setup
@@ -101,7 +170,8 @@ def write_chart_and_pattern(garment, astra_chart):
     # AF: Pattern
     # AG: Stitches
     # AH: Rounds:
-    wchart.write_to_sheet_format(row_cnt, p_cnt, "Personal Total".capitalize(), wchart.get_bold_format())
+    wchart.write_to_sheet_format(row_cnt, p_cnt, "Aspect Intensity Total".capitalize(), wchart.get_bold_format())
+    AI_TOTAL_COL = p_cnt
     p_cnt += 3
 
     wchart.write_to_sheet_format(row_cnt, p_cnt, "Pattern", wchart.get_bold_format())
@@ -114,7 +184,6 @@ def write_chart_and_pattern(garment, astra_chart):
     st_cnt = 1
 
     wchart.write_to_sheet_format(row_cnt, p_cnt, "Rounds:", wchart.get_bold_format())
-    p_cnt += 1
     # write round numbers going to the right
     for rnd_cnt in range(1, 17):  # TODO: replace 17 with something dynamic, perhaps later
         wchart.write_to_sheet_format(row_cnt, p_cnt + rnd_cnt, str(rnd_cnt), wchart.get_bold_format())
@@ -125,7 +194,9 @@ def write_chart_and_pattern(garment, astra_chart):
     ## End section for top of sheet headers ##
 
     ## Section to prepare chart data ##
-    write_orb_colors_to_sheet(astra_chart, wchart, row_cnt)
+    write_orb_colors_to_sheet(astra_chart, row_cnt, wchart, garment_planets)
+    write_aspect_scores_to_sheet(astra_chart, row_cnt, wchart, garment_planets)
+
     ## End section to prepare chart data
 
     # Loop over the 360 chart
@@ -145,9 +216,13 @@ def write_chart_and_pattern(garment, astra_chart):
         # Add row of ex: '0 Aries" etc
         wchart.write_to_sheet(row_cnt, constants.SHEET_DEGREE_SIGN_COL, sign_deg + ' ' + sign_name.capitalize())
 
+        # Add the formula to calc total aspect intensity score
+        wchart.write_to_sheet(row_cnt, AI_TOTAL_COL, f"=SUM(J{row_cnt}:L{row_cnt})")  #TODO: FIX this is hardcoded for the BIG 3 HAT Charts
+
         wchart.set_row_cnt(row_cnt)
         # print("Row cnt: ", row_cnt)
         ## Section for writing specifics of a chart out ##
+
         if len(chart_info) > 0:  # since it's a list
             chart_dict = chart_info[0]
             user_chart_planets = ""
@@ -182,6 +257,8 @@ def write_chart_and_pattern(garment, astra_chart):
             wchart.write_to_sheet(wchart.row_cnt, constants.USER_CHART_DIGNITY_COL, user_chart_dignities)
             wchart.write_to_sheet(wchart.row_cnt, constants.USER_CHART_ASPECT_COL, user_chart_planet_aspects)
 
+
+
         ## End section for writing chart specifics
 
         ## Section for writing knitting pattern
@@ -194,8 +271,8 @@ def write_chart_and_pattern(garment, astra_chart):
             aspect_pattern_sts = []
 
             for stitchd in pattern_info:
-                #print("_________stitchd_______")
-                #print(stitchd)
+                # print("_________stitchd_______")
+                # print(stitchd)
                 aspect_pattern_sts.append(str(stitchd))
 
             aspect_pattern_str += f"{chart_sign_deg[1].degree_360}: [{'; '.join(aspect_pattern_sts)}]"
@@ -207,4 +284,3 @@ def write_chart_and_pattern(garment, astra_chart):
 
     # Close the workbook
     wchart.close_book()
-

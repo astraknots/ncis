@@ -42,7 +42,9 @@ class Garment:
         garment_dict_str = self.get_str_garment_rep()
         scored_aspect_dict_str = self.get_str_planet_aspect_rep()
 
-        return f"{self.garment_type.name} (degrees/st = {self.garment_type.value}) \n {garment_dict_str} \n {scored_aspect_dict_str}"
+        return f"{self.garment_type.name} (degrees/st = {self.garment_type.value}) \n Scored Aspects: \n " \
+               f"{scored_aspect_dict_str} Garment Guidance for {self.garment_type.name} ({self.garment_type.value} " \
+               f"degrees/stitch): \n {garment_dict_str} \n "
 
     def __str__(self):
         return self.get_str_rep()

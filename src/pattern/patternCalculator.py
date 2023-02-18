@@ -34,15 +34,15 @@ def calc_scored_planet_aspect_dict(garment, astra_calc_chart):
         p_sign_deg = astra_calc_chart.chart_sign_degrees_by_planet[planet]
         p_deg = p_sign_deg[1]
         if planet in astra_calc_chart.chart_aspects_by_planet:
-            p_aspect = astra_calc_chart.chart_aspects_by_planet[planet]
+            p_chart_aspect = astra_calc_chart.chart_aspects_by_planet[planet]
 
-            logging.info(str(planet) + " " + str(p_deg.degree_360) + " " + str(p_aspect))
+            logging.info(str(planet) + " " + str(p_deg.degree_360) + " " + str(p_chart_aspect))
 
             for g_deg in garment.planet_aspect_scored_dict:
                 if g_deg <= p_deg.degree_360 < g_deg+deg_inc:
                     chart_planet = ChartPlanet(planet, p_sign_deg, astra_calc_chart.chart_dignities_by_planet[planet])
-                    planet_aspect_dict = {chart_planet: p_aspect}
-                    garment.planet_aspect_scored_dict[g_deg].append(planet_aspect_dict)
+                    chart_planet_aspect_dict = {chart_planet: p_chart_aspect}
+                    garment.planet_aspect_scored_dict[g_deg].append(chart_planet_aspect_dict)
 
 
 def calc_pattern_from_scores(garment, astra_calc_chart):
@@ -62,8 +62,8 @@ def calc_pattern_from_scores(garment, astra_calc_chart):
 
                         # Only determine pattern info for the planets involved in this garment
                         aspected_planets = an_aspect.planets_in_aspect
-                        if GarmentType.is_planet_for_garment_type(garment.garment_type, aspected_planets[0]) and \
-                            GarmentType.is_planet_for_garment_type(garment.garment_type, aspected_planets[1]):
+                        if GarmentType.is_chart_planet_for_garment_type(garment.garment_type, aspected_planets[0]) and \
+                            GarmentType.is_chart_planet_for_garment_type(garment.garment_type, aspected_planets[1]):
                             #print("Provide pattern info for:", an_aspect)
                             sd = StitchDeterminer(an_aspect)
                             garment.garment_dict[patt_deg].append(sd)
@@ -91,6 +91,6 @@ def calc_pattern(astra_calc_chart, garment_name):
     calc_pattern_from_scores(garment, astra_calc_chart)
     print(garment)
 
-    make_up_pattern()
+    # TODO: make_up_pattern()
 
     return garment

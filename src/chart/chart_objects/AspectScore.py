@@ -15,7 +15,7 @@ class AspectScore:
             self.collective_planet_speed = self.determine_coll_planet_speed(args[2])
 
     def get_str_rep(self):
-        calc_score = self.aspect_intensity.value - abs(self.deg_from_exact)
+        calc_score = self.get_calculated_aspect_score()
         return f"Intensity: {self.aspect_intensity.name}:{self.aspect_intensity.value} - Exactness:{self.deg_from_exact}, " \
                f"Calc Score:{calc_score}"
 
@@ -24,6 +24,9 @@ class AspectScore:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def get_calculated_aspect_score(self):
+        return self.aspect_intensity.value - abs(self.deg_from_exact)
 
     def determine_coll_planet_speed(self, *args):
         if isinstance(args[0], list):
