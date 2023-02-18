@@ -26,8 +26,8 @@ class StitchDeterminer:
     collective_planet_speed = 0 # AspectScore.collective_planet_speed
     planet1_direction = PlanetDirection.DIRECT
     planet2_direction = PlanetDirection.DIRECT
-    planet1_dignity_score = 0 #PlanetDignity.sign_dignity_score
-    planet2_dignity_score = 0
+    planet1_calc_score = 0 #ChartPlanet.dignity_score
+    planet2_calc_score = 0
 
     # Stored output from calcs
     shape_suggestion = ""   # determine from aspect intensity
@@ -49,33 +49,34 @@ class StitchDeterminer:
                     self.planet1_speed = p1.planet.speed
                     self.planet1_direction = p1.direction
                     self.determine_kp_direction_from_planet(1, p1)
-                    self.determine_sw_from_planet_speed(1, p1)
+                    #self.determine_sw_from_planet_speed(1, p1)
                     if p1.sign_dignity is not None:
-                        self.planet1_dignity_score = p1.sign_dignity.sign_dignity_score
+                        self.planet1_calc_score = p1.get_calc_dignity_score()
 
                 p2 = self.chart_aspect.planets_in_aspect[1]
                 if isinstance(p2, ChartPlanet):
                     self.planet2_speed = p2.planet.speed
                     self.planet2_direction = p2.direction
-                    self.determine_kp_direction_from_planet(2, p2.planet)
-                    self.determine_sw_from_planet_speed(2, p2.planet)
+                    self.determine_kp_direction_from_planet(2, p2)
+                    #self.determine_sw_from_planet_speed(2, p2)
                     if p2.sign_dignity is not None:
-                        self.planet2_dignity_score = p2.sign_dignity.sign_dignity_score
+                        self.planet2_calc_score = p2.get_calc_dignity_score()
 
             if self.aspect_score is not None:
                 self.aspect_intensity = self.aspect_score.aspect_intensity
                 self.shape_suggestion = suggest_shape(self.aspect_intensity)
                 self.deg_from_exact = self.aspect_score.deg_from_exact
                 self.get_st_width_from_exact()
-                self.collective_planet_speed = self.aspect_score.collective_planet_speed
+                #self.collective_planet_speed = self.aspect_score.collective_planet_speed
 
     def get_str_rep(self):
-        total_dignity_score = self.planet1_dignity_score + self.planet2_dignity_score
+        # Exactness Stitch Width: {self.stitch_width_exactness}
+
         return f"STITCH DETERMINER FOR: {self.chart_aspect} \n" \
-                f"{self.shape_suggestion} \n Exactness Stitch Width: {self.stitch_width_exactness} \n " \
+               f"{self.shape_suggestion} \n " \
                f"Aspect K/P:{self.aspect_base_kp} \n " \
-               f"Planets K/P: {self.planet_base_kp} Speed Stitch Width: {self.stitch_width_pspeed} \n " \
-               f"Tot Dig Score: {total_dignity_score}"
+               f"Planets K/P: {self.planet_base_kp} Planet Scores: {self.planet1_calc_score}, {self.planet2_calc_score} \n " \
+               f"Orb Width: {self.chart_aspect.get_aspect_orb()}"
 
     def __str__(self):
         return self.get_str_rep()

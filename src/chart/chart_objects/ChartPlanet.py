@@ -8,7 +8,8 @@ class ChartPlanet:
     planet_name = None  # PlanetName.name of the planet in the chart this is for
     sign_dignity = None # a PlanetDignity object
     #house_dignities = {} # Future
-   # dignity_score = 0   # calculated score for the dignity = planet_sign_dignity_score + planet_bonus_dignity + planet_speed + house_dignity
+    dignity_score = 0   # calculated score for the dignity = planet_speed +/- (based on direction)
+    # sign_dignity (planet_sign_dignity_score + planet_bonus_dignity) + house_dignity
 
     def __init__(self, *args):
         self.planet = args[0]
@@ -31,3 +32,10 @@ class ChartPlanet:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def get_calc_dignity_score(self):
+        if self.direction.value > 0:
+            self.dignity_score = self.planet.speed + self.sign_dignity.sign_dignity_score
+        else:  #Retrograde or Station
+            self.dignity_score = self.planet.speed - self.sign_dignity.sign_dignity_score
+        return self.dignity_score

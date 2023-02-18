@@ -58,7 +58,7 @@ AspectTypes = [Conjunction, Semisextile, Sextile, Semisquare, Quintile, Square, 
                Square_Sep, Sextile_Sep, Semisextile_Sep]
 
 
-def get_aspect_by_name(aspect_name):
+def get_aspect_type_by_name(aspect_name):
     for a in AspectTypes:
         if a.name == aspect_name:
             return a

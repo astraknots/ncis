@@ -24,7 +24,7 @@ def get_garment_type_by_name(gname):
 def is_planet_for_garment_type(gtype, chart_planet):
     '''Return true if this ChartPlanet is included in this garment type, false otherwise'''
     if gtype in [GarmentType.HAT, GarmentType.SLOUCH_HAT]:
-        print("Hats are big three planets...")
+        #print("Hats are big three planets...")
         return chart_planet.planet.is_big_three()
     elif gtype in [GarmentType.SCARF, GarmentType.COWL]:
         print("All planets included for garment type:", gtype)

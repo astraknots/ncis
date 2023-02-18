@@ -1,3 +1,4 @@
+from src.chart.chart_objects import AspectType
 from src.chart.chart_objects.AspectScore import AspectScore
 
 
@@ -40,3 +41,9 @@ class ChartAspect:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def get_aspect_orb(self):
+        asp_type = AspectType.get_aspect_type_by_name(self.name)
+        return asp_type.orb
+
+
