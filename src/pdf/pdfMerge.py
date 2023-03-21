@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfMerger
 
 #Create an instance of PdfFileMerger() class
-merger = PdfFileMerger()
+merger = PdfMerger()
 
 #Create a list with the file paths
-pdf_files = ['pdf_files/Astraknots CO Mtn Sunset Hat.pdf', 'pdf_files/CO Flag Mtn Sun w Legend.pdf']
+pdf_files = ['pdf_files/Astraknots Alli\'s Ribbon Hat Pattern Written Instructions.pdf', 'pdf_files/Alli\'s-Ribbon-hat_with_legend_final.pdf']
 
 #Iterate over the list of the file paths
 for pdf_file in pdf_files:
@@ -14,5 +14,5 @@ for pdf_file in pdf_files:
     merger.append(pdf_file)
 
 #Write out the merged PDF file
-merger.write("pdf_files/Astraknots_CO_Mtn_Sunset_hat_w_chart.pdf")
+merger.write("pdf_files/Astraknots_Alli's Ribbon Hat Pattern Chart and Written Instructions Full.pdf")
 merger.close()
