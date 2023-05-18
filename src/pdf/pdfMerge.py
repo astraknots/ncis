@@ -6,7 +6,7 @@ from PyPDF2 import PdfMerger
 merger = PdfMerger()
 
 #Create a list with the file paths
-pdf_files = ['pdf_files/Astraknots Alli\'s Ribbon Hat Pattern Written Instructions.pdf', 'pdf_files/Alli\'s-Ribbon-hat_with_legend_final.pdf']
+pdf_files = ['pdf_files/Astraknots Alli\'s Ribbon Hat Pattern Written Instructions.pdf', 'pdf_files/Alli\'s-Ribbon-hat_chart_with_legend_final.pdf']
 
 #Iterate over the list of the file paths
 for pdf_file in pdf_files:
