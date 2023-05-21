@@ -1,0 +1,5 @@
+{
+"stitch-name": "LC",
+"instr": "sl 1 st to cable needle and hold in front, k2, k1 from cable needle",
+"stitch-count": 3
+}
