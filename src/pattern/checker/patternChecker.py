@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import getopt
 import logging
 import sys
@@ -26,8 +28,9 @@ def determine_rep_reps(rep_patt_instr_str):
             if rep_word.isnumeric():
                 return int(rep_word)
             else:
-                if rep_word in REPEAT_WORDS:
-                    return REPEAT_WORDS[rep_word]
+                rep_word_u = rep_word.upper()
+                if rep_word_u in REPEAT_WORDS:
+                    return REPEAT_WORDS[rep_word_u]
 
     return 1
 
@@ -50,8 +53,15 @@ def parse_patt_str(patt_str, skip_repeat=False):
             rep_instrs = parse_patt_str(rem_patt_str[0:rep_end_idx], True)
             # get index of the end of repeat
             end_rep_instru_idx = rem_patt_str.find(SEPARATORS[0], rep_end_idx)
+
+            # capture the remaining patt str to parse
+            remain_patt_str = ''
             # determine how many times this should repeat
-            rep_reps = determine_rep_reps(rem_patt_str[rep_end_idx + 1:end_rep_instru_idx])
+            if end_rep_instru_idx == -1: # we've just hit end of str
+                rep_reps = determine_rep_reps(rem_patt_str[rep_end_idx + 1:])
+            else:
+                rep_reps = determine_rep_reps(rem_patt_str[rep_end_idx + 1:end_rep_instru_idx])
+                remain_patt_str = rem_patt_str[end_rep_instru_idx + 1:]
             # Add the instrs repeated out as individual instructions
             added = 0
             while (added < rep_reps):
@@ -59,7 +69,8 @@ def parse_patt_str(patt_str, skip_repeat=False):
                 added += 1
 
             # recursively call this on the rem_patt_str after this repeat, and extend the result
-            instrs.extend(parse_patt_str(rem_patt_str[end_rep_instru_idx + 1:]))
+            if len(remain_patt_str) > 0:
+                instrs.extend(parse_patt_str(remain_patt_str))
             break
 
         elif char in SEPARATORS:
@@ -109,8 +120,10 @@ def count_instr_sts(instr):
     return cnt
 
 
-def count_sts(patt_instr_list, specials=[]):
+def count_sts(patt_instr_list, specials=None):
     '''Count the number of sts this list of instrs involves - gives the count AFTER executing the sts'''
+    if specials is None:
+        specials = []
     total_cnt = 0
 
     for patt_instr in patt_instr_list:
@@ -214,6 +227,7 @@ def check_pattern(argv):
 
     if filename == '':
         logging.info("No filename of pattern given")
+        specials = []
     else:
         logging.info("Filename of pattern given:" + filename)
         specials = parse_special_patt_instrs(filename)
