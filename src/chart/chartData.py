@@ -40,6 +40,13 @@ rbchart = { 'SUN' : ['AQUARIUS',0], 'MOON' : ['GEMINI', 4], 'ASC' : ['LEO', 11],
 #Natalie Montoya's chart
 nmchart = { 'SUN' : ['AQUARIUS',10], 'MOON' : ['VIRGO', 4], 'ASC' : ['PISCES', 20], 'MERCURY' : ['CAPRICORN', 17], 'VENUS' : ['PISCES', 1], 'MARS' : ['PISCES', 10], 'JUPITER' : ['SAGITTARIUS', 6], 'SATURN' : ['SCORPIO', 4], 'URANUS' : ['SAGITTARIUS', 8], 'NEPTUNE' : ['SAGITTARIUS', 28], 'PLUTO' : ['LIBRA', 29]}
 
+#Marie V's chart
+mvchart = { 'SUN' : ['VIRGO',3], 'MOON' : ['PISCES', 12], 'ASC' : ['SAGITTARIUS', 13], 'MERCURY' : ['VIRGO', 14], 'VENUS' : ['CANCER', 26], 'MARS' : ['LIBRA', 6], 'JUPITER' : ['CAPRICORN', 28], 'SATURN' : ['CAPRICORN', 24], 'URANUS' : ['LEO', 26], 'NEPTUNE' : ['SCORPIO', 8], 'PLUTO' : ['VIRGO', 7]}
+mvchart_r = { 'SUN' : ['VIRGO',3], 'MOON' : ['PISCES', 12], 'ASC' : ['SAGITTARIUS', 2], 'MERCURY' : ['VIRGO', 14], 'VENUS' : ['CANCER', 26], 'MARS' : ['LIBRA', 6], 'JUPITER' : ['CAPRICORN', 28], 'SATURN' : ['CAPRICORN', 24], 'URANUS' : ['LEO', 26], 'NEPTUNE' : ['SCORPIO', 8], 'PLUTO' : ['VIRGO', 7]}
+
+#CALLIA Stylianou's chart
+cschart = { 'SUN' : ['AQUARIUS',26], 'MOON' : ['AQUARIUS', 20], 'ASC' : ['GEMINI', 14], 'MERCURY' : ['PISCES', 5], 'VENUS' : ['PISCES', 22], 'MARS' : ['SCORPIO', 7], 'JUPITER' : ['ARIES', 0], 'SATURN' : ['ARIES', 28], 'URANUS' : ['AQUARIUS', 13], 'NEPTUNE' : ['AQUARIUS', 2], 'PLUTO' : ['SAGITTARIUS', 10]}
+
 
 def get_chart_person(chartname):
     '''Mapping of names to chart data is in this method'''
@@ -67,6 +74,10 @@ def get_chart_person(chartname):
         return 'Rebecca Barnard'
     elif chartname == 'nmchart':
         return 'Natalie Montoya'
+    elif chartname == 'mvchart' or chartname == 'mvchart_r':
+        return 'Marie V'
+    elif chartname == 'cschart':
+        return 'Callia Stylianou'
     else:
         return 'Other User'
 

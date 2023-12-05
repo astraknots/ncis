@@ -139,10 +139,13 @@ def calc_planet_aspects(chart_sign_degrees_by_planet, chart_dignities_by_planet,
 def calc_planet_dignities(chart_sign_degrees_by_planet):
     chart_dignities_by_planet = {}
 
+    #build up the objects dynamically
+    #PlanetDignity.build_all_dignities()
+
     # Loop over the planets in the chart, capturing the appropriate PlanetDignity objects
     for planet in chart_sign_degrees_by_planet:
         chart_sign = chart_sign_degrees_by_planet[planet][0]
-        full_planet_dignity_list = PlanetDignity.get_pdignity_by_planet(planet)
+        full_planet_dignity_list = PlanetDignity.get_planetdignity_by_planet(planet)
         this_planet_sign_dignity = None
         for p_dig in full_planet_dignity_list:
             if p_dig.sign == chart_sign:

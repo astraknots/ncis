@@ -1,10 +1,10 @@
 {
-"stitch-name": "LC TWICE",
+"stitch-name": "LC",
 "instr": "(sl 1 st to cable needle and hold in front, k2, k1 from cable needle) twice",
 "stitch-count": 6
 }
 {
-"stitch-name": "RC TWICE",
+"stitch-name": "RC",
 "instr": "(sl 2 sts to cable needle and hold at back, k1, k2 from cable needle) twice",
 "stitch-count": 6
 }
