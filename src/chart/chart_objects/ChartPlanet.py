@@ -4,6 +4,7 @@ from src.chart.chart_objects.enums.PlanetDirection import PlanetDirection
 class ChartPlanet:
     planet = None  # the Planet so we can connect to speed and other basics
     direction = PlanetDirection.DIRECT
+    element = None # a Sign.Element that this planet is in in the chart
     sign_degree = None  # a ChartDegree object where the planet falls in sign & degree of the chart
     planet_name = None  # PlanetName.name of the planet in the chart this is for
     sign_dignity = None # a PlanetDignity object
@@ -16,6 +17,7 @@ class ChartPlanet:
         self.planet_name = args[0].name
         if len(args) > 1:
             self.sign_degree = args[1]
+            self.set_planet_element()
             if len(args) > 2:
                 self.sign_dignity = args[2]
               #  if len(args) > 3:
@@ -39,3 +41,6 @@ class ChartPlanet:
         else:  #Retrograde or Station
             self.dignity_score = self.planet.speed - self.sign_dignity.sign_dignity_score
         return self.dignity_score
+
+    def set_planet_element(self):
+        self.element = self.sign_degree[0].element

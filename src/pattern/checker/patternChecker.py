@@ -113,6 +113,10 @@ def count_instr_sts(instr):
         cnt += 1
     elif instr in ['SSK']:
         cnt += 1
+    elif instr in ['K2TOG']:
+        cnt += 1
+    elif instr in ['K', 'P']:
+        cnt += 1
     else:
         cnt += get_num_from_str(instr)
 
