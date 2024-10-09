@@ -102,3 +102,6 @@ ENV/
 
 # pycharm
 .idea/
+
+# my stuff - charts
+charts_xlsx
