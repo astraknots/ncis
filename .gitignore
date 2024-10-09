@@ -104,4 +104,5 @@ ENV/
 .idea/
 
 # my stuff - charts
-./charts_xlsx
+charts_xlsx/
+pdf_files/
