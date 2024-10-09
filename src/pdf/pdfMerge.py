@@ -6,7 +6,7 @@ from PyPDF2 import PdfMerger
 merger = PdfMerger()
 
 #Create a list with the file paths
-pdf_files = ['pdf_files/Astraknots Alli\'s Ribbon Hat Pattern Written Instructions.pdf', 'pdf_files/Alli\'s-Ribbon-hat_chart_with_legend_final.pdf']
+pdf_files = ['pdf_files/Astraknots It\'s Just A Phase Moon Phase Headband.pdf', 'pdf_files/Moon-Phase-Headband Chart.pdf']
 
 #Iterate over the list of the file paths
 for pdf_file in pdf_files:
@@ -14,5 +14,5 @@ for pdf_file in pdf_files:
     merger.append(pdf_file)
 
 #Write out the merged PDF file
-merger.write("pdf_files/Astraknots_Alli's Ribbon Hat Pattern Chart and Written Instructions Full.pdf")
+merger.write("pdf_files/Astraknots It's Just A Phase Moon Phase Headband Chart and Written Instructions Full.pdf")
 merger.close()
