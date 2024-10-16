@@ -1,0 +1,596 @@
+/*                  Version 240910, js                      */
+/* ============================================================ */
+/*     DARK MODE STYLES, MUST BE ADDED TO THE DEFAULT CSS       */
+/* ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+
+/* DARK MODE BACKGROUND COLORS */
+/* =========================== */
+
+/* GENERAL BORDER COLOR, DARK GRAY */
+#cos, #cosplace , #coscol, .bg-light, .asrcol, .card, .awdfield, .hlight, .sdefield, .smallborder, table .sdefield, #msg, .hkchart .tlist, .drag, .shop .list-group-item  {border: 1px solid #666;}
+
+/* GRAY BACKGROUND */
+body, .hkbg.bg-white, #cos, #cosplace, .elwarnmsg, #coscol, .drag, table.aq, .asrcol, .footer, .awdf2, .grau, .olive, #prod .awdinfo, .awdinfo, .hk .asrcol .awdinfo, .hk .awdinfo, .sde .awdinfo, .smallborder tr, .smallborder td, #msg_message, .drag1, .bugrepcontainer, .genchart iframe, .myadelinfo, .hkchart .tlist, #timeline li{
+    background: #2e353e !important;
+}
+.bg-light, .dsmessage, .card, .card-header.p-1.clearfix.mt-4, tr.grey:nth-child(2n), .goadtop, .container.astroadv, #forumtable tr:nth-child(2n), .vip tr:nth-child(2n+1), #msg, .elbest, thead tr.month, .awdsort, .shop .list-group-item {
+    background-color: #2e3b48 !important;
+}
+.adbvipteas .card {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+@media only screen and (max-width:576px) {
+    .transitinfo {
+    background-color: #2e3b48 !important;
+}
+}
+.gencol1 .btn-outline-secondary, .gencol2 .btn-outline-secondary, .gencol3 .btn-outline-secondary, .plafoot{
+    background-color: #364e59 !important;
+}
+#id_atxinfo .asrcol {
+    border: 1px solid #666;;
+    padding: .25rem;
+    margin-top:10px;
+}
+.dropdown-menu, .msgtit, li.zr-bg {
+  background-color: #7d7d7d;
+}
+#pla, #pla table, .scarthead   {
+    background-color: #2e3b48;
+}
+.astrodrop .card-body {
+    background-color: #303a47;
+}
+.nsfld, .nsfld.warn, .form-control, .form-control[name="smap"], main.genchart .gencsday input, main.genchart input[type="number"], main.genchart input[type="text"], main.genchart select, main.genchart textarea, #astlist, pre {
+    background: #d9d9d9;
+}
+.shop.sde select.form-control{background: #fff;}
+.btn-sample, .zr-container li:hover {
+    background: #666;
+}
+.genchart .btn-group.bg-white.btn-section {
+    background-color: #484848 !important;
+}
+main.genchart .gencsub1.sticky1 {
+    background: rgba(83, 83, 83, 0.86);
+}
+
+/* TRANSPARENT AND UNSET BACKGROUND  */
+.bg-white, .plahead, .repem, #cossub, .pl, .addtoggle, .myabord, .ovi .myabord, .atxpb, .msgtxt, .msgtxt tr, .msgfoot, #bugrep, .acmbut, .zr-control, .helpclosebutast{
+  background-color: transparent !important;
+}
+.cc-pointer label:hover {
+  background: transparent;
+  color: #ffcb00;
+}
+.msgtit{
+  background: transparent;
+}
+.btn.hkgen, .btn.hklov, .btn.hkmun, .ephlist ul, .ephlist ul li, .awdfield.awdf3, .delwarn, ul.fancytree-container, .sdefield tr:first-of-type, .sdefield.cartcont tr, .awdf1, .gelb, #eltopnbest, .atxgeninfo {
+    background: unset !important;
+}
+.axhead.atx_bg, .axhead.apx_bg, .axhead.acx_bg, .axhead.alx_bg, .axhead.akx_bg{
+    background-color: transparent;
+}
+td[background="/im/acmpopheader.jpg"] {
+    background: none;
+}
+/* DARK BLUE BACKGROUND */ 
+.mtit, .nmo {
+    background: #325675;
+}
+/* VARIOUS STYLES */
+.card-bg-img.bg-cover{filter: brightness(.9) ;}
+.hkadtx1 {
+    background: rgba(66, 75, 87, 0.67);
+}
+.hkad1:hover .hkadtx1, .atxad1:hover .hkadtx1 {
+    background: rgba(63, 87, 102, 0.9);
+}
+.nat22, .nat17 {
+    border: 1px solid #666;
+    background-color: #334353;
+}
+.btn.nat22np, .btn.nat22cp, #msgpop a {
+    background: #4896ca;
+    color: #fff;
+}
+.genchbg {
+    border: 1px solid #8e8e8e;
+    background-color: transparent !important;
+}
+.hkgen.active {
+    background: #3076a5 !important;
+}
+.hklov.active {
+    background: #cb5a59  !important;
+}
+.hkmun.active {
+    background: #b1a277 !important;
+}
+td.myatb {
+    background: transparent;
+    border-left: 1px solid #666;
+}
+.table-stripped td, .table-stripped th {
+    border-top: 1px solid #797979;
+}
+.sidenav .highlighted-item {
+  background-color: #3a6377;
+}
+.sidenav .accordion .toggle:hover, .sidenav li a:hover {
+  background: #223b62;
+}
+.genchart .awdinfo, body.help, #extended.dyn, .list-group-item, #setdefault .helpicont, #tonaterr .helpicont, #tonatok .helpicont {
+background: #373737!important;
+}
+.picker {background: rgba(56, 56, 56, 0.39);}
+.datepicker thead {background: #4b4b4b;}
+.datepicker-dropdown {background-color: rgb(61, 61, 61) !important;}
+.datepicker table tr td span.focused, .datepicker table tr td span:hover, .datepicker .datepicker-switch:hover, .datepicker .next:hover, .datepicker .prev:hover, .datepicker tfoot tr th:hover, .datepicker table tr td.day:hover, .datepicker table tr td.focused  {background: #8e8888 !important;}
+
+.sign .whor:hover {
+  background: #444;
+}
+#map_labels {
+    background: #d8d8db;
+}
+.genchart .btn-group.bg-white.btn-section {
+    border-radius: .25rem;
+}
+.coscolor {
+    box-shadow: none;
+}
+.cosout img {
+    border: 1px solid #ccc;
+    border-radius: .5rem;
+}
+#ehkmad {background: rgba(193, 193, 193, 0.2) !important;}
+.fbbut .btn-outline-order {
+    background: #4e6482;
+}
+.fbbut .btn-outline-order:hover {
+    background: #609ec4;
+}
+.btn-outline-danger {
+    background: #802929;
+    color: #fff;
+}
+.card{border-radius: .25rem;}
+
+#counter.asrcol {
+    background: unset !important;
+}
+
+.vtit8.countertxt a {
+    color: #e30101 !important;
+}
+
+.scroller-horizontal .scroller-bar{
+    filter: invert(73%);
+}
+.rubcontsm li:hover #rub1,.rubcontsm li:hover #rub2,.rubcontsm li:hover #rub3,.rubcontsm li:hover #rub4,.rubcontsm li:hover #rub5,.rubcontsm li:hover #rub6{;background: #4385b0; color: #fff !important; border-radius: .125rem;}
+/* Sound horoscope */
+#pm_wrapper {
+    background: #fff;
+    color: #000;
+}
+img.showgif, img.bigimg {
+    background: #fff;
+}
+
+.repai {
+    height: 12px;
+    background-image: url(/im/rep_ai_dark.svg);
+    background-repeat: no-repeat;
+    background-position: center 0;
+    background-size: cover;
+}
+
+/* ADB SEARCH */
+.card-header.active {background-color: #aca8a8 !important;}
+span.fancytree-title, #results{color: #fff !important;}
+#search-summary {color: #ddd !important;;}
+#count-warning{ color: #f44 !important;}
+span.fancytree-selected span.fancytree-title, span.fancytree-active span.fancytree-title {
+    background-color: #939292 !important;
+}
+
+/* DARK MODE FONT COLORS  */
+/* ====================== */
+
+/* WHITE */
+body, .table, .faq .vtit8, .plstd ul li a, h5.genctit a, .gencbg h2, .arblock a, .arsubtit, .ahor h1, .whor, .sign .rephead2, li.sidenavuser ul a, .sidenavuser li.hello, .quot1, .awd pre, .atxgenhead, a.myalink, .ephlist h4 a, .acc_bg h5, .ack_bg h5, .acl_bg h5, .acm_bg h5, .als_bg h5, .axhead h1, .axhead h5, #hkspez1 .card-body, #hkspez2 .card-body, #hkspez3 .card-body, nav a, .infoteas a, .usrnav li.hello, .display-1, .display-4.anbg a, #hayana.awdinfo h2, #help h4, .help h4, .helpicont h4, .hkbg, .row.hkbg, .hk21 .hktext h1, .teaser a, .asrcol .verd8p, .asrcol a, .sidenav li > a, .sidenav ul li a.toggle.up::after, .sidenav ul li a.toggle::after, li.sidenavuser a, .dropdown-menu, .hkad1 a:hover h3, .hkad1:hover .hkadtx1, .atxad1:hover .hkadtx1, .btn-sample, .hkgen.active, .hklov.active, .hkmun.active, .awdf2, .grau, .olive, #prod .awdinfo, .awdinfo, .hk .asrcol .awdinfo, .hk .awdinfo, .sde .awdinfo, .smallborder tr, .smallborder td, .gencol1 .btn-outline-secondary, .gencol2 .btn-outline-secondary, .gencol3 .btn-outline-secondary, .fbbut .btn-outline-order, .dtpic h5, .msgtxt tr font, .btn-group.bg-white.btn-section a, .faqleftnav h2, .faqleftnav h3, .awdsort tr, .shop .list-group-item-action, .atxad1 a, #tae .aeplasym i, h5 a.hk_collapse, .sitemapcol a{
+    color: #fff !important;}
+input#hom_cb[type="checkbox"]:checked + label {
+    color: #fff;
+}
+/* ELEC TIMELINE */
+.timeline g text {
+    fill: white !important;
+}
+
+.timeline .fill {
+    fill: #3d3d3d;
+}
+
+label i.fa-mars-double, label i.fa-venus-double{color: #fff;}
+/* YELLOW */
+.dropdown-item.logout, .panel .logout::before, .usrnav .logout::before, li.sidenavuser ul a.logout, .usrnav .dropdown-item strong {
+    color: #ffcb00 !important;
+}
+/* GREEN */
+font[color="green"]{
+    color: #daf4ce;
+}
+/* RED */
+font[color="red"] {
+    /*color: #ffbfab;*/
+    color: #ff7145;
+}
+/* BLACK  */
+#hkspez1 p, .close.text-black-50, .awd .txt6p, .cf_bg h1, .cf_bg h5, .hk21 .card-title.text-danger, #hkspez4 .card-body, .xtdt_bg h5, .xtdt_bg h1, .xtvt_bg h5, .xtvt_bg h1, .xhzt_bg h5, .xhzt_bg h1, .xtpt_bg h5, .xtpt_bg h1, .xtkt_bg h5, .xtkt_bg h1, .acm_bg h5, .acm_bg h1, .als_bg h5, .als_bg h1, .modal-content, .wh_bg h1, .wh_bg h5, #astlist a, #astlist {
+    color: #000 !important;
+}
+/* GRAY */
+a, .home a, #bthday a, .addconthk a, .whor a, .usrnav a, .zodtx, .navbar-dark .navbar-nav .nav-link, .dtpic h5, .dtpic i.fa, .plahead a, .plafoot a, .lve .dtpic i.fa, #short_term a:not([href]), font[color="#666666"], .hkchart .tlist a, .hkchart.imlink a.marked, .atxgeninfo a{ /* lighter */
+        color: #ddd;
+    } 
+a.a-modal{color: #ddd !important;}
+#short_term a:not([href]) {
+    text-decoration: none;
+    color: #ddd;
+    cursor: unset;
+}
+.alert-danger a{color: #b70606; font-weight: 600; }
+a:hover,  #navmessage { /* darker */
+    color: #b5b4b4 !important;
+} 
+.gencopt {
+    color: #c1c1c1;
+}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a, .adecont a.dyn, .adefooter div, #cf .sign1 a  {
+    color: #ccc;}
+.hkad1 a {  /* bright */
+    color: #fffbfb;
+}
+.text-muted {
+    color: #9d9d9d !important;
+}
+/* LIGHT RED */
+.zodexp1, .zodexp3, .zodexp4, #costxleast font[color="#CC0000"], .text-danger {
+    color: #f44 !important;
+}
+/* RED */
+.aforl a {color: #ff3e5b;}
+
+/* LIGHT BLUE */
+.prodmore, h3.prodmore, .addconthk .hk_collapse, .sitemapcol h3 a {
+    color: #aed5ec;
+}
+
+/* HK COLORS  */
+.lve h1, .lve h5 {
+    /*color: #ee6b6a;*/
+     color: #fff;
+}
+.mnd h1, .mnd h5 {
+    /*color: #c4ac68;*/
+     color: #fff;
+}
+.hkgen {
+    color: #6abeff;
+}
+.hklov {
+    color: #ff514f;
+}
+.hkmun {
+  color: #d7b555;
+}
+/* MORE COLOR STYLES  */
+.sharico2 .fb i, .sharico2 .ml i, .sharico2 .tw i {
+    text-shadow: none;
+}
+.acc_bg h1, .ack_bg h1, .acl_bg h1, .acm_bg h1, .als_bg h1, .cf_bg h1, .xhzt_bg h1, .xtkt_bg h1, .xtpt_bg h1 {
+    text-shadow: none;
+    color: #fff;
+}
+.atxadorderlink a {
+    color: #000 !important;
+    background: #ccc;
+}
+main.prod .fa-file-text-o::before, main.samples .fa-file-text-o::before {
+    color: #74b0d5;
+}
+main.prod .fa-file-pdf-o::before, main.samples .fa-file-pdf-o::before {
+    color: #fb5757;
+}
+input[name=asp]:checked+.asp,input[name=mainasp]:checked+.mainasp,input[name=sevenpl]:checked+.sevenpl,input[name=pfday]:checked+.pfday,input[name=aspqui]:checked+.aspqui,input[name=aspoct]:checked+.aspoct{display:inline;color:#fc6a28}
+.housetable dd:last-of-type::before {color: #ff784b;}
+.help font[color="#003399"] {
+    color: #fff;
+}
+.searchmobile input {
+  background-color: #555;}
+
+#priv_popup a {
+    text-decoration: underline;
+}
+
+.sidenav .greenico::before, .usrnav .greenico::before {
+    color: #51cc6d !important;
+    text-shadow: none;
+}
+
+.btn-outline-secondary {
+    color: #ddd;
+    border-color: #aaa;
+}
+
+.ha2_top::after {color: #a29553;}
+
+/* IMAGES AND BACKGROUND IMAGES */
+/* CHART IMAGES, INVERTED  */
+/*
+.bigimg, .dragimgdiv img, input[name="AstroClick"], .showgif, .vip a img {
+    filter: invert(.9) hue-rotate(192deg) contrast(125%);}
+    */
+
+.kabo {
+    background: #204e6d url(/im/kanthabopha14_2.png) no-repeat top right !important;
+    padding-top: 3px !important;
+}
+
+.asheaderbg{
+    background:#2b3034 url('/im/blueheader20_dark_mobV2.svg') no-repeat center top !important;
+    background-size:cover !important;
+    height: 94px;}
+
+.hkimg {
+    filter: invert(14%);
+    border-radius: .25rem;
+    border-left: 5px solid #fffbfb;
+}
+td.plafoot2 {
+    background: #2e3b48 url(/im/hormom100.png) no-repeat left 2px center;
+    background-size: auto;
+    background-size: 50px 50px;
+    height: 60px;
+}
+.acx_bg .ornam::after, .akx_bg .ornam::after, .alx_bg .ornam::after, .apx_bg .ornam::after, .atx_bg .ornam::after, .cf_bg .ornam::after {
+    content: url(/im/ornamstar.svg);
+    display: inline-block;
+    width: 50px;
+    height: auto;
+    margin-left: 8px;
+    filter: invert(100%);
+}
+.acx_bg .ornam::before, .akx_bg .ornam::before, .alx_bg .ornam::before, .apx_bg .ornam::before, .atx_bg .ornam::before, .cf_bg .ornam::before {
+    content: url(/im/ornamstar.svg);
+    display: inline-block;
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+    filter: invert(100%);
+}
+.acl_bg {
+    background: #3b556f;
+    border-radius: 5px;
+    border-bottom: none;
+}
+.acc_bg{
+    background: #3b556f url(/im/accbg_dark.jpg) no-repeat center left;
+}
+.ack_bg{
+    background: #3b556f url(/im/bgrep_ack20dark.jpg) no-repeat center left;
+}
+
+.te_bg {
+    background: #334353 url(/im/el_head21dark.png) no-repeat -40px 0;
+    /* background: #4e5c7d url(/im/el_head21.png) no-repeat -40px 0;
+    border-radius: .25rem;*/
+    border-top: 1px solid #939393;
+}
+/*.te_bg {
+    background: #334353 url(/im/el_head21.png) no-repeat -58px 8px;
+    background-size: cover;
+    color: #fff;
+    border-top: 1px solid #939393;
+}*/
+.axhead.cf_bg {
+    filter:invert(90%) brightness(2) ;
+}
+.infobut::before, .infobutr::before {
+    content: "\f05a";
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 1rem;
+}
+.sidenav {
+    background:#3076a5 url(/im/sidenavbg3dark.svg) no-repeat top right;
+    background-size:cover;}
+
+.footnavbar{background: #2c4861 url(/im/blueheader20_100darkV2.svg) no-repeat center bottom; 
+    background-size: 1320px 100px;
+    color: #fff;}
+
+.rboff{filter:invert(1);}
+
+/* dark mode switch in my astro foldout */
+a.dropdown-item.darkmode{display: inline-block !important;}
+.panel .darkmode::before, .usrnav .darkmode::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    background: url(/im/dm_icon_gray.svg) no-repeat;
+    background-size: cover;
+    margin-right: 15px;
+    position: relative;
+    top: 3px;
+    transform: rotate(-35deg);
+    left: 3px;
+}
+.usrnav .darkmode::before{filter: brightness(1.5);left: 0}
+
+/* HIGHLIGHT PREFERENCES DARK MODE */
+.alert-darkmode {
+    position: relative;
+    padding: .5rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* dark mode switch in fb line */
+.darkmodetop{
+  display: inline-block !important;
+  font-size: .85rem;
+  position: relative;
+  top: -3px;
+}
+.darkmodetop span{color: #9ab7ca; display: inline-block;}
+.darkmodetop::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: url('/im/dm_icon.svg') no-repeat;
+  background-size: cover;
+  margin-right: 4px;
+  position: relative;
+  top: 3px;
+  transform: rotate(-35deg);
+}
+
+/*HTM REPORTS*/
+.repbg {
+    background-color: #2e353e !important;
+    padding-top: 0;
+}
+.repspace {
+    background: #2f2f2f;
+}
+.repspace a {
+    color: #e6e6e6;
+}
+
+.repcontr {
+    background: #46505e;
+    border-radius: .25rem;
+}
+
+/* COLOR ORACLE BUTTONS AND FOLDOUT */
+#cf .sign1 a::before {
+  color: #fff;}
+#cf .sign1 a{color: #fff;}
+#cf .sign1 .dyn1.open{background-color: #333;}
+#cf .sign1 a:hover{background-color: unset;}
+
+/* MSG24 */
+.msgteas {
+  color: #fff;
+  background-color: #525252;}
+
+#msg_message1 .row.msgteas .col:hover {
+  color: #f7d4af !important;
+}
+
+}
+
+
+@media (prefers-color-scheme: dark) {
+main.ovi h6 a {
+  color: #fff !important;
+}
+main.ovi h6 a:hover {
+  color: #7eceff !important;
+}
+main.ovi .container.bg-white, .bg-sde, .shop .container.bg-white, .shop .row.bg-white{background-color: transparent !important;}
+hr {border-top: 1px solid rgba(191, 191, 191, 0.1);
+}
+.subscr-info {background-color: #d2d2d2  !important;}
+.shop .nat22 {
+    border: 1px solid #666;
+    background-color: #334353;
+  }
+.btn-outline-shop {
+    color: #a1b9cc;
+    border-color: #5493c4;
+}
+.shop .form-control[name="msg"] {
+    background: #2e3b48;
+    color: #fff;
+}
+.alert-warning {
+    color: #cacaca;
+    background-color: #2e3b48;
+    border-color: #f03838;
+}
+
+/* ADVVIP, js 22-05-24  */
+.infobox.toccolours table, 
+.infobox.toccolours td, 
+.infobox.toccolours tr, 
+.catlinks{background: transparent !important; border-radius: .25rem;}
+img[alt='s_ac.18.svg'],
+img[alt='s_ch.18.svg'],
+img[alt='s_me.18.svg'],
+img[alt='s_su.18.svg'],
+img[alt='s_ve.18.svg'],
+img[alt='s_dc.18.svg'],
+img[alt='s_li.18.svg'],
+img[alt='s_mn.18.svg'],
+img[alt='s_pl.18.svg'],
+img[alt='s_mo.18.svg'],
+img[alt='s_sa.18.svg'],
+img[alt='s_tn.18.svg'],
+img[alt='s_ic.18.svg'],
+img[alt='s_ma.18.svg'],
+img[alt='s_ne.18.svg'],
+img[alt='s_ue.18.svg'],
+img[alt='s_ju.18.svg'],
+img[alt='s_mc.18.svg'],
+img[alt='s_pe.18.svg'],
+img[alt='s_ur.18.svg']
+{filter: invert(100%);}
+
+}
+
+/* MAKE SPACE FOR DARKMODE LINK */
+@media (max-width: 576px){
+.col.sharetop{
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;}
+.sharetop {
+    text-align: left;
+    -ms-flex-order: 1;
+    order: 1;
+    padding-top: 0;
+    min-width: 50%;
+}
+.nxpage{
+    min-width: 6rem;}
+}
+/* END */
+
+
+/* SPECIAL MEDIA QUERY FOR LARGER DEVICES WITH DARK MODE ENABLED */
+@media (min-width: 576px) and (prefers-color-scheme: dark) {
+.asheaderbg {
+    background: #2b3034 url(/im/blueheader_dark_largeV2.svg) no-repeat center bottom !important;
+    background-size: 3000px 130px  !important;
+    height: 124px;
+    border-top: 1px solid #dbd0a7;
+    margin-top: -1px;
+}
+}
+/* END DARK MODE */
