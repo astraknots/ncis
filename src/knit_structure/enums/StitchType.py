@@ -5,6 +5,5 @@ class StitchType(Enum):
     K = 'knit'
     P = 'purl'
     YO = 'yarn over'
-    Sl = 'slip'
+    Sl = 'slip stitch'
     DS = 'duplicate stitch'
-    WRAP = 'wrap'
