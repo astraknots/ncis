@@ -1,3 +1,5 @@
+import json
+
 from src.knit_structure.IntoStitch import IntoStitch
 from src.knit_structure.NeedleInstruction import NeedleInstruction
 from src.knit_structure.RowRndInstruction import RowRndInstruction
@@ -15,20 +17,20 @@ from src.knit_structure.enums.StitchLeg import StitchLeg
 from src.knit_structure.enums.StitchAction import StitchAction
 from src.knit_structure.enums.WrapDirection import WrapDirection
 
-knit = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG,
+knit = StitchInstruction(_name="knit", _stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG,
                                                                             _num_worked_into=1))
 alt_knit = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG,
                                                                                 _num_worked_into=1,
                                                                                 _needle_instr=NeedleInstruction(_needle_direction=NeedleDirection.KNIT_DIRECTION)),
                              _working_yarn=WorkingYarn(_to_side=Side.BACK, _yarn_action=YarnAction.HELD,
                                                        _wrap_direction=WrapDirection.NORMAL, _num_wraps=1))
-kbtl = StitchInstruction(_stitch_action=StitchAction.K,
+ktbl = StitchInstruction(_name="ktbl", _stitch_action=StitchAction.K,
                          _into_st=IntoStitch(_into_st_leg=StitchLeg.BACK_LEG, _num_worked_into=1))
-purl = StitchInstruction(_stitch_action=StitchAction.P, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG,
+purl = StitchInstruction(_name="purl", _stitch_action=StitchAction.P, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG,
                                                                             _num_worked_into=1))
-k2tog = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG, _num_worked_into=2))
-p2tog = StitchInstruction(_stitch_action=StitchAction.P, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG, _num_worked_into=2))
-sl1_knitwise_to_rhn = StitchInstruction(_stitch_action=StitchAction.SLIP,
+k2tog = StitchInstruction(_name="k2tog", _stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG, _num_worked_into=2))
+p2tog = StitchInstruction(_name="p2tog", _stitch_action=StitchAction.P, _into_st=IntoStitch(_into_st_leg=StitchLeg.FRONT_LEG, _num_worked_into=2))
+sl1_knitwise_to_rhn = StitchInstruction(_name="sl1 knitwise", _stitch_action=StitchAction.SLIP,
                                         _into_st=IntoStitch(_needle_instr=NeedleInstruction(_from_needle=Needle.LHN, _to_needle=Needle.RHN, _needle_direction=NeedleDirection.KNIT_DIRECTION)))
 sl1_knitwise_to_rhn_no_working = StitchInstruction(_stitch_action=StitchAction.SLIP,
                                                    _working_yarn=WorkingYarn(WrapDirection.NONE),
@@ -37,17 +39,30 @@ sl1_knitwise_to_rhn_no_working = StitchInstruction(_stitch_action=StitchAction.S
                                                                        _needle_instr=NeedleInstruction(_needle_direction=NeedleDirection.KNIT_DIRECTION)))
 sl1_purlwise_to_lhn = StitchInstruction(_stitch_action=StitchAction.SLIP,
                                         _into_st=IntoStitch(_needle_instr=NeedleInstruction(_from_needle=Needle.RHN, _to_needle=Needle.LHN, _needle_direction=NeedleDirection.PURL_DIRECTION)))
-finish_ssk = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.BACK_LEG,
+finish_ssk = StitchInstruction(_name="K2tog tbl", _stitch_action=StitchAction.K, _into_st=IntoStitch(_into_st_leg=StitchLeg.BACK_LEG,
                                                                                   _num_worked_into=2))
+
+print(json.dumps(knit.to_dict()))
+print(json.dumps(ktbl.to_dict()))
+print(json.dumps(k2tog.to_dict()))
+print(json.dumps(p2tog.to_dict()))
+
+
+print(json.dumps(sl1_knitwise_to_rhn.to_dict()))
+print(json.dumps(sl1_purlwise_to_lhn.to_dict()))
+print(json.dumps(finish_ssk.to_dict()))
 
 knit_st = StitchPattern(name='knit', _ordered_sts=[knit])
 purl_st = StitchPattern(name='purl', _ordered_sts=[purl])
-kbtl_st = StitchPattern(name='kbtl', _ordered_sts=[kbtl])
+kbtl_st = StitchPattern(name='kbtl', _ordered_sts=[ktbl])
 k2tog_st = StitchPattern(name='k2tog', _ordered_sts=[k2tog], _inc_or_dec=IncOrDec.DECREASE, _width=2, _min_width=MinPattWidth.EVEN)
 p2tog_st = StitchPattern(name='p2tog', _ordered_sts=[p2tog], _inc_or_dec=IncOrDec.DECREASE, _width=2, _min_width=MinPattWidth.EVEN)
 
 ssk_st = StitchPattern(name='ssk', _ordered_sts=[sl1_knitwise_to_rhn, sl1_knitwise_to_rhn, sl1_purlwise_to_lhn,
                                   sl1_purlwise_to_lhn, finish_ssk], _height=1, _width=2, _inc_or_dec=IncOrDec.DECREASE)
+
+print(json.dumps(ssk_st.to_dict()))
+
 
 
 sl1_purlwise_to_cn = StitchInstruction(_stitch_action=StitchAction.SLIP,
@@ -59,6 +74,8 @@ knit_from_cn = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoSti
 
 c4b_st = StitchPattern(name='C4B', _ordered_sts=[sl1_purlwise_to_cn, sl1_purlwise_to_cn, hold_back, knit_st_from_lhn, knit_st_from_lhn, knit_from_cn, knit_from_cn],
                        _width=4, _height=1, _rows_or_rnds=RowsOrRounds.ROWS, _has_cross=True)
+
+
 
 
 print(knit_st, "\n")
@@ -87,3 +104,8 @@ linen_st = StitchPattern(name='linen st', _ordered_sts=[linen_rnd_1, sl1_wyif, l
                          _height=2, _rows_or_rnds=RowsOrRounds.ROUNDS)
 
 print(linen_st)
+
+'''
+with open("./stitch_patterns/linen_st.json", mode="w", encoding="utf-8") as write_file:
+    json.dump(linen_st.to_dict(), write_file)
+'''

@@ -1,0 +1,12 @@
+{
+  "StitchInstruction": {
+    "name": "p2tog",
+    "stitch_action": "purl",
+    "into": {
+      "IntoStitch": {
+        "into_st_leg": "front leg",
+        "num_worked_into": 2
+      }
+    }
+  }
+}

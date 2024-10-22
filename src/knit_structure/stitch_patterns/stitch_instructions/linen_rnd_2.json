@@ -1,0 +1,1 @@
+{"StitchInstruction": {"name": "", "stitch_action": "slip", "working_yarn": {"WorkingYarn": {"num_wraps": 1, "yarn_action": "held", "to_side": "front"}}, "into": {"IntoStitch": {"into_st_leg": "", "num_worked_into": 1}}, "row_instr": {"RowRndInstruction": {"row_or_rnd": "Rnd", "row_instr_num": 2}}}}

@@ -1,0 +1,19 @@
+{
+  "StitchInstruction": {
+    "name": "",
+    "stitch_action": "slip",
+    "into": {
+      "IntoStitch": {
+        "into_st_leg": "",
+        "num_worked_into": 1,
+        "needle_instr": {
+          "NeedleInstruction": {
+            "from_needle": "right-hand needle",
+            "to_needle": "left-hand needle",
+            "needle_direction": "as if to purl"
+          }
+        }
+      }
+    }
+  }
+}

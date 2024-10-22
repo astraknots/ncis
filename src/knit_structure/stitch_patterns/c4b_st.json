@@ -1,0 +1,137 @@
+{
+  "StitchPattern": {
+    "name": "C4B",
+    "width": 4,
+    "height": 1,
+    "min_width": "num",
+    "has_cross": true,
+    "inc_or_dec": "",
+    "rows_or_rnds": "rows",
+    "ordered_sts": [
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "slip",
+          "needle_instr": {
+            "NeedleInstruction": {
+              "to_needle": "cable needle"
+            }
+          },
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "needle_direction": "as if to purl"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "slip",
+          "needle_instr": {
+            "NeedleInstruction": {
+              "to_needle": "cable needle"
+            }
+          },
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "needle_direction": "as if to purl"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "hold",
+          "needle_instr": {
+            "NeedleInstruction": {
+              "needle": "cable needle"
+            }
+          },
+          "st_side": "back"
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "knit",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "left-hand needle"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "knit",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "left-hand needle"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "knit",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "cable needle"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "knit",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "cable needle"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

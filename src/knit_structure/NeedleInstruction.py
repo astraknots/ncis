@@ -32,3 +32,19 @@ class NeedleInstruction:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def to_dict(self):
+        dict_instr = {}
+        n_instr = {}
+        if self.from_needle:
+            n_instr["from_needle"] = self.from_needle.value
+        if self.to_needle:
+            n_instr["to_needle"] = self.to_needle.value
+        if self.needle:
+            n_instr["needle"] = self.needle.value
+        if self.needle_direction:
+            n_instr["needle_direction"] = self.needle_direction.value
+        if self.needle_action:
+            n_instr["needle_action"] = self.needle_action.value
+        dict_instr["NeedleInstruction"] = n_instr
+        return dict_instr

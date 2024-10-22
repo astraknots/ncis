@@ -60,3 +60,27 @@ class StitchPattern:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def to_dict(self):
+        dict_instr = {}
+        st_instr = {}
+        st_instr["name"] = self.name
+        if self.width:
+            st_instr["width"] = self.width
+        if self.height:
+            st_instr["height"] = self.height
+        if self.min_width:
+            st_instr["min_width"] = self.min_width.value
+        if self.has_cross:
+            st_instr["has_cross"] = self.has_cross
+        if self.inc_or_dec:
+            st_instr["inc_or_dec"] = self.inc_or_dec.value
+        if self.rows_or_rnds:
+            st_instr["rows_or_rnds"] = self.rows_or_rnds.value
+        if len(self.ordered_sts) > 0:
+            or_sts = []
+            for a_st in self.ordered_sts:
+                or_sts.append(a_st.to_dict())
+            st_instr["ordered_sts"] = or_sts
+        dict_instr["StitchPattern"] = st_instr
+        return dict_instr

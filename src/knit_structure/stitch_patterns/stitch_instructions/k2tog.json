@@ -1,0 +1,12 @@
+{
+  "StitchInstruction": {
+    "name": "k2tog",
+    "stitch_action": "knit",
+    "into": {
+      "IntoStitch": {
+        "into_st_leg": "front leg",
+        "num_worked_into": 2
+      }
+    }
+  }
+}

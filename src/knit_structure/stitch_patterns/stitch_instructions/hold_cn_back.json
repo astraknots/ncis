@@ -1,0 +1,12 @@
+{
+  "StitchInstruction": {
+    "name": "",
+    "stitch_action": "hold",
+    "needle_instr": {
+      "NeedleInstruction": {
+        "needle": "cable needle"
+      }
+    },
+    "st_side": "back"
+  }
+}

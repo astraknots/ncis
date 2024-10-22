@@ -35,3 +35,17 @@ class WorkingYarn:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def to_dict(self):
+        dict_instr = {}
+        st_instr = {}
+        if self.num_wraps:
+            st_instr["num_wraps"] = self.num_wraps
+        if self.wrap_direction:
+            st_instr["wrap_direction"] = self.wrap_direction.value
+        if self.yarn_action:
+            st_instr["yarn_action"] = self.yarn_action.value
+        if self.to_side:
+            st_instr["to_side"] = self.to_side.value
+        dict_instr["WorkingYarn"] = st_instr
+        return dict_instr

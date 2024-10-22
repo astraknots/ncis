@@ -1,0 +1,100 @@
+{
+  "StitchPattern": {
+    "name": "ssk",
+    "width": 2,
+    "height": 1,
+    "min_width": "num",
+    "inc_or_dec": "dec",
+    "rows_or_rnds": "",
+    "ordered_sts": [
+      {
+        "StitchInstruction": {
+          "name": "sl1 knitwise",
+          "stitch_action": "slip",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "left-hand needle",
+                  "to_needle": "right-hand needle",
+                  "needle_direction": "as if to knit"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "sl1 knitwise",
+          "stitch_action": "slip",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "left-hand needle",
+                  "to_needle": "right-hand needle",
+                  "needle_direction": "as if to knit"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "slip",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "right-hand needle",
+                  "to_needle": "left-hand needle",
+                  "needle_direction": "as if to purl"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "",
+          "stitch_action": "slip",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "",
+              "num_worked_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "right-hand needle",
+                  "to_needle": "left-hand needle",
+                  "needle_direction": "as if to purl"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "StitchInstruction": {
+          "name": "K2tog tbl",
+          "stitch_action": "knit",
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "back leg",
+              "num_worked_into": 2
+            }
+          }
+        }
+      }
+    ]
+  }
+}

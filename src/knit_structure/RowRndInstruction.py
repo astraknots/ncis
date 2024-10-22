@@ -22,3 +22,13 @@ class RowRndInstruction:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def to_dict(self):
+        dict_instr = {}
+        st_instr = {}
+        if self.row_or_rnd:
+            st_instr["row_or_rnd"] = self.row_or_rnd.value
+        if self.row_instr_num:
+            st_instr["row_instr_num"] = self.row_instr_num
+        dict_instr["RowRndInstruction"] = st_instr
+        return dict_instr

@@ -61,3 +61,19 @@ class IntoStitch:
 
     def __repr__(self):
         return self.get_str_rep()
+
+    def to_dict(self):
+        dict_instr = {}
+        st_instr = {}
+        if self.into_st_leg:
+            st_instr["into_st_leg"] = self.into_st_leg.value
+        if self.into_st_part:
+            st_instr["into_st_part"] = self.into_st_part.value
+        if self.into_side:
+            st_instr["into_side"] = self.into_side.value
+        if self.num_worked_into:
+            st_instr["num_worked_into"] = self.num_worked_into
+        if self.needle_instr:
+            st_instr["needle_instr"] = self.needle_instr.to_dict()
+        dict_instr["IntoStitch"] = st_instr
+        return dict_instr
