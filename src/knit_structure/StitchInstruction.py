@@ -1,27 +1,34 @@
-from src.knit_structure.IntoStitch import IntoStitch
-from src.knit_structure.NeedleInstruction import NeedleInstruction
-from src.knit_structure.WorkingYarn import WorkingYarn
-from src.knit_structure.enums.Needle import Needle
 from src.knit_structure.enums.StitchAction import StitchAction
-from src.knit_structure.enums.StitchType import StitchType
 
 
 class StitchInstruction:
-    stitch_action = None  # StitchAction.HOLD
-    stitch_type = StitchType.K # StitchType: K, P, YO, WRAP, Sl, DS
-    needle = NeedleInstruction() #
-    worked = WorkingYarn()
-    into = IntoStitch()
+    stitch_action = StitchAction.NONE  # StitchAction: K, P, SLIP, HOLD
+    needle_instr = None # NeedleInstruction() #TODO: Rework the needle instruction to take needle and direction and action
+    worked = None # WorkingYarn()
+    into = None # IntoStitch()
+    st_side = None   # Side: FRONT, BACK
 
-    def __init__(self, stitch_action=None, stitch_type=StitchType.K, needle=NeedleInstruction(), worked=WorkingYarn(), into=IntoStitch()):
-        self.stitch_type = stitch_type
-        self.worked = worked
-        self.into = into
-        self.needle = needle
-        self.stitch_action = stitch_action
+    def __init__(self, _stitch_action=StitchAction.NONE, _needle_instr=None, _working_yarn=None, _into_st=None, _st_side=None):
+        self.worked = _working_yarn
+        self.into = _into_st
+        self.needle_instr = _needle_instr
+        self.stitch_action = _stitch_action
+        self.st_side = _st_side
 
     def get_str_rep(self):
-        str_rep = f"{self.stitch_action} {self.stitch_type} {self.needle} {self.worked} {self.into}"
+        str_rep = ""
+        if self.stitch_action != StitchAction.NONE:
+            str_rep += f"{self.stitch_action.value} "
+
+        if self.needle_instr:
+            str_rep += f" {self.needle_instr} "
+        if self.worked:
+            str_rep += f" {self.worked} "
+        if self.into:
+            str_rep += f" {self.into} "
+        if self.st_side:
+            str_rep += f" {self.st_side.value} "
+
         '''if self.resulting_stitch_action in [StitchAction.HOLD]:
             str_rep = f"{self.resulting_stitch_action} {self.into.into_st.value}"
         if self.resulting_stitch_type in [StitchType.Sl]:

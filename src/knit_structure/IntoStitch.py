@@ -6,47 +6,57 @@ from src.knit_structure.enums.StitchPart import StitchPart
 
 class IntoStitch:
     # work into the next stitch leg
-    into_st_leg = StitchLeg.FRONT_LEG # StitchLeg: FRONT_LEG, BACK_LEG
+    into_st_leg = StitchLeg.NONE # StitchLeg: FRONT_LEG, BACK_LEG
     # OR into a different part near the stitch
     into_st_part = None # StitchParts: BAR, BELOW_L, BELOW_R
-    num_rows_below = 0  # valid range: [0-4];  max = 4?
 
-    # AND/OR indicate a Side working into, or holding to
-    into_side = None  # valid options: Side: FRONT, BACK; could also be for an action, like 'hold front'
+    # AND/OR indicate a Side working into, or holding to, or inserting needle
+    into_side = None  # valid options: Side: FRONT, BACK;
 
     # How many sts are worked into or at the same time (i.e. k2tog = 2 together): NOT for repeats
     num_worked_into = 1  # valid range: [0-4];  max = 4?
 
     needle_direction = None # NeedleDirection: KNIT_DIRECTION (as if to knit), or PURL_DIRECTION (as if to purl)
+    num_rows_below = 0  # valid range: [0-4];  max = 4?
 
-    def __init__(self, into_st=None, num_worked_into=1, num_rows_below=0, needle_dir=None):
-        self.into_st_part = into_st
-        self.num_worked_into = num_worked_into
-        self.num_rows_below = num_rows_below
-        self.needle_direction = needle_dir
+    needle_action = None  # NeedleAction: INSERT
+
+    def __init__(self, _into_st_leg=StitchLeg.NONE, _into_st_part=None, _num_worked_into=1, _needle_dir=None, _num_rows_below=0):
+        self.into_st_leg = _into_st_leg
+        self.into_st_part = _into_st_part
+        self.num_worked_into = _num_worked_into
+        self.needle_direction = _needle_dir
+        self.num_rows_below = _num_rows_below
+
+
+    def worked_into_sts(self):
+        if self.num_worked_into > 1:
+            return f"es "
+        else:
+            return f""
 
     def get_str_rep(self):
-        str_rep = f" into {self.into_st.value} of {self.num_worked_into} stitch(es)"
+        str_rep = ""
+        if self.into_st_leg != StitchLeg.NONE:
+            str_rep += f"into {self.into_st_leg.value}"
+            if self.num_worked_into > 1:
+                str_rep += "s "
+            else:
+                str_rep += " "
+            if self.num_worked_into > 0:
+                str_rep += f"of {self.num_worked_into} stitch" + self.worked_into_sts()
+        elif self.into_st_part:
+            str_rep += f"into the "
+            if self.into_st_part == StitchPart.BAR:
+                str_rep += f" {self.into_st_part} "
+            else:
+                str_rep += f"stitch" + self.worked_into_sts()
+                str_rep += f" {self.num_worked_into} "
+        elif self.num_worked_into > 0:
+            str_rep += f" {self.num_worked_into} stitch" + self.worked_into_sts()
+        if self.needle_direction:
+            str_rep += f" {self.needle_direction.value} "
         return str_rep
-        '''str_rep = ""
-        if self.num_worked_into > 0:
-            str_rep += f" {self.into_st.value}"
-            if self.into_st != StitchPart.BAR:
-                if self.into_st in (StitchPart.BELOW_L, StitchPart.BELOW_R) and self.num_rows_below > 0:
-                    if self.num_worked_into > 1:
-                        str_rep += f" of {self.num_worked_into} stitches {self.num_rows_below} rows below"
-                    elif self.num_worked_into == 1:
-                        str_rep += f" of stitch {self.num_rows_below} rows below"
-                elif self.num_worked_into > 1:
-                    str_rep += f" of {self.num_worked_into} stitches (together)"
-                else:
-                    str_rep += f" of {self.num_worked_into} stitch"
-            if self.needle_direction:
-                str_rep += f" {self.needle_direction.value}"
-            return str_rep
-        else:
-            return ""
-            '''
 
     def __str__(self):
         return self.get_str_rep()

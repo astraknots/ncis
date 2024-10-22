@@ -2,6 +2,11 @@ from enum import Enum
 
 
 class StitchAction(Enum):
+    K = 'knit'
+    P = 'purl'
     HOLD = 'hold'
-    MOVE = 'move' # used for like a wrap and turn where you just move the working yarn?
+    SLIP = 'slip'
+    NONE = ''
 
+    # YO = 'yarn over'
+    # DS = 'duplicate stitch'

@@ -1,33 +1,33 @@
+from src.knit_structure.enums.Side import Side
 from src.knit_structure.enums.WrapDirection import WrapDirection
+from src.knit_structure.enums.YarnAction import YarnAction
 
 
+# with working yarn {yarn_action}:HELD to {to_side}
+# with working yarn {yarn_action}:WRAPPED in a {wrap_direction} direction
+# {num_wraps} times
 class WorkingYarn:
-    wrap_direction = WrapDirection.NORMAL  # valid values: WrapDirection: NORMAL, TWISTED, NONE
     num_wraps = 1  # If wrap_direction = NONE, this must be 0; valid values: 0-?
-    wy_held = None  # valid values: None, Side.BACK, Side.FRONT
+    yarn_action = YarnAction.NONE  # valid values: YarnActions: HOLD, HELD, WRAP, WRAPPED
+    wrap_direction = WrapDirection.NONE  # valid values: WrapDirection: NORMAL, TWISTED, NONE
+    to_side = Side.NONE # valid values: Side.NONE, Side.BACK, Side.FRONT
 
-    def __init__(self, wrap_direction=WrapDirection.NORMAL, num_wraps=1, wy_held=None):
-        self.wrap_direction = wrap_direction
-        if self.wrap_direction == WrapDirection.NONE:
-            self.num_wraps = 0  # maybe i should throw an error if invalid args are passed
-            # self.wy_held = Side.BACK  # for now, defaulting yarn held back
-        else:
-            self.num_wraps = num_wraps
-        self.wy_held = wy_held  # for now i'll let this get overridden
+    def __init__(self, _wrap_direction=WrapDirection.NONE, _num_wraps=1, _yarn_action=YarnAction.NONE, _to_side=Side.NONE):
+        self.wrap_direction = _wrap_direction
+        self.num_wraps = _num_wraps
+        self.yarn_action = _yarn_action
+        self.to_side = _to_side
 
     def get_str_rep(self):
         str_rep = ""
-        if self.wy_held:
-            str_rep += f"with working yarn held in {self.wy_held.value}"
-        else:
-            if self.wrap_direction == WrapDirection.TWISTED:
-                str_rep += f"wrapping yarn "
-                str_rep += f"in a {self.wrap_direction.value} direction"
-
-            if self.num_wraps > 1:
-                str_rep += f"wrapping yarn "
-                str_rep += f"{self.num_wraps} times"
-
+        if self.yarn_action:
+            str_rep += f"with working yarn {self.yarn_action.value} "
+            if self.to_side:
+                str_rep += f"to {self.to_side.value} "
+            if self.wrap_direction:
+                str_rep += f"in a {self.wrap_direction.value} direction, "
+        if self.num_wraps > 1:
+            str_rep += f" {self.num_wraps} times "
         return str_rep
 
     def __str__(self):

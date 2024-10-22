@@ -1,7 +1,7 @@
 from src.knit_structure.enums.Needle import Needle
 
 
-class NeedleInstruction():
+class NeedleInstruction:
     from_needle = Needle.LHN
     to_needle = Needle.RHN
 
@@ -12,9 +12,9 @@ class NeedleInstruction():
     def get_str_rep(self):
         str_rep = ""
         if self.from_needle:
-            str_rep = f" from {self.from_needle.value}"
+            str_rep = f"from {self.from_needle.value} "
         if self.to_needle:
-            str_rep += f" to {self.to_needle.value}"
+            str_rep += f"to {self.to_needle.value} "
         return str_rep
 
     def __str__(self):
