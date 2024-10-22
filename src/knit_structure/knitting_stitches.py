@@ -1,4 +1,5 @@
 import json
+from types import SimpleNamespace
 
 from src.knit_structure.IntoStitch import IntoStitch
 from src.knit_structure.NeedleInstruction import NeedleInstruction
@@ -109,3 +110,23 @@ print(linen_st)
 with open("./stitch_patterns/linen_st.json", mode="w", encoding="utf-8") as write_file:
     json.dump(linen_st.to_dict(), write_file)
 '''
+
+with open("./stitch_patterns/stitch_instructions/knit.json", mode="r", encoding="utf-8") as read_file:
+    knit_data = json.load(read_file) #, object_hook = lambda d : StitchInstruction(**d))
+
+print(knit_data)
+print(type(knit_data))
+
+def getStitchInstructionFromJSON(json_data):
+    st_instr = None
+
+    for akey in json_data:
+        print(akey, " ", json_data[akey])
+        st_instr = StitchInstruction.st_instr_from_dict(json_data["StitchInstruction"])
+
+        return st_instr
+
+kds = getStitchInstructionFromJSON(knit_data)
+print("......")
+print(kds)
+

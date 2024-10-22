@@ -20,12 +20,13 @@ class IntoStitch:
 
     num_rows_below = 0  # valid range: [0-4];  max = 4?
 
-    def __init__(self, _into_st_leg=StitchLeg.NONE, _into_st_part=None, _num_worked_into=1, _needle_instr=None, _num_rows_below=0):
+    def __init__(self, _into_st_leg=StitchLeg.NONE, _into_st_part=None, _num_worked_into=1, _needle_instr=None, _num_rows_below=0, _into_side=None):
         self.into_st_leg = _into_st_leg
         self.into_st_part = _into_st_part
         self.num_worked_into = _num_worked_into
         self.needle_instr = _needle_instr
         self.num_rows_below = _num_rows_below
+        self.into_side = _into_side
 
     def worked_into_sts(self):
         if self.num_worked_into > 1:
@@ -77,3 +78,24 @@ class IntoStitch:
             st_instr["needle_instr"] = self.needle_instr.to_dict()
         dict_instr["IntoStitch"] = st_instr
         return dict_instr
+
+
+    @staticmethod
+    def into_st_from_dict(into_instr_dict):
+        needle_instr = None
+
+        for bkey in into_instr_dict:
+            print(bkey, " ", into_instr_dict[bkey])
+            match bkey:
+                case "needle_instr":
+                    needle_instr = into_instr_dict[bkey]["NeedleInstruction"]
+                    for ckey in needle_instr:
+                        print(ckey, " ", needle_instr[ckey])
+
+        into_st_leg = StitchLeg.from_str(into_instr_dict.get("into_st_leg") or None)
+        into_st_part = StitchPart.from_str(into_instr_dict.get("into_st_part") or None)
+        into_side = Side.from_str(into_instr_dict.get("into_side") or None)
+        into_stitch = IntoStitch(_into_st_leg=into_st_leg, _into_st_part=into_st_part, _into_side=into_side,
+                                 _num_worked_into=into_instr_dict.get("num_worked_into") or 1,
+                                 _needle_instr=needle_instr)
+        return into_stitch
