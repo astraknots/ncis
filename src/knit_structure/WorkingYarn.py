@@ -8,11 +8,11 @@ from src.knit_structure.enums.YarnAction import YarnAction
 # {num_wraps} times
 class WorkingYarn:
     num_wraps = 1  # If wrap_direction = NONE, this must be 0; valid values: 0-?
-    yarn_action = YarnAction.NONE  # valid values: YarnActions: HOLD, HELD, WRAP, WRAPPED
-    wrap_direction = WrapDirection.NONE  # valid values: WrapDirection: NORMAL, TWISTED, NONE
-    to_side = Side.NONE # valid values: Side.NONE, Side.BACK, Side.FRONT
+    yarn_action = None  # valid values: YarnActions: HOLD, HELD, WRAP, WRAPPED
+    wrap_direction = None  # valid values: WrapDirection: NORMAL, TWISTED, NONE
+    to_side = None # valid values: Side.NONE, Side.BACK, Side.FRONT
 
-    def __init__(self, _wrap_direction=WrapDirection.NONE, _num_wraps=1, _yarn_action=YarnAction.NONE, _to_side=Side.NONE):
+    def __init__(self, _wrap_direction=None, _num_wraps=1, _yarn_action=None, _to_side=None):
         self.wrap_direction = _wrap_direction
         self.num_wraps = _num_wraps
         self.yarn_action = _yarn_action

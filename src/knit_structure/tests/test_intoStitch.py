@@ -105,11 +105,11 @@ class TestIntoStitch(TestCase):
         into_st = IntoStitch(StitchPart.BAR, _num_rows_below=0, _num_worked_into=1)
         self.assertEqual(into_st.get_str_rep(), "into the bar between stitches on the needle")
 
-        into_st = IntoStitch(StitchPart.FRONT, _num_rows_below=0, _num_worked_into=1, _needle_dir=NeedleDirection.KNIT_DIRECTION)
+        into_st = IntoStitch(StitchPart.FRONT, _num_rows_below=0, _num_worked_into=1, _needle_instr=NeedleDirection.KNIT_DIRECTION)
         self.assertEqual(into_st.get_str_rep(), "into front of 1 stitch as if to knit")
 
-        into_st = IntoStitch(StitchPart.FRONT, _num_rows_below=0, _num_worked_into=1, _needle_dir=NeedleDirection.RIGHT_DIRECTION)
+        into_st = IntoStitch(StitchPart.FRONT, _num_rows_below=0, _num_worked_into=1, _needle_instr=NeedleDirection.RIGHT_DIRECTION)
         self.assertEqual(into_st.get_str_rep(), "into front of 1 stitch from left to right")
 
-        into_st = IntoStitch(StitchPart.BACK, _num_rows_below=0, _num_worked_into=2, _needle_dir=NeedleDirection.PURL_DIRECTION)
+        into_st = IntoStitch(StitchPart.BACK, _num_rows_below=0, _num_worked_into=2, _needle_instr=NeedleDirection.PURL_DIRECTION)
         self.assertEqual(into_st.get_str_rep(), "into back of 2 stitches (together) as if to purl")

@@ -16,18 +16,16 @@ class IntoStitch:
     # How many sts are worked into or at the same time (i.e. k2tog = 2 together): NOT for repeats
     num_worked_into = 1  # valid range: [0-4];  max = 4?
 
-    needle_direction = None # NeedleDirection: KNIT_DIRECTION (as if to knit), or PURL_DIRECTION (as if to purl)
+    needle_instr = None     # NeedleInstruction(from_needle, to_needle, needle_action, needle, needle_direction)
+
     num_rows_below = 0  # valid range: [0-4];  max = 4?
 
-    needle_action = None  # NeedleAction: INSERT
-
-    def __init__(self, _into_st_leg=StitchLeg.NONE, _into_st_part=None, _num_worked_into=1, _needle_dir=None, _num_rows_below=0):
+    def __init__(self, _into_st_leg=StitchLeg.NONE, _into_st_part=None, _num_worked_into=1, _needle_instr=None, _num_rows_below=0):
         self.into_st_leg = _into_st_leg
         self.into_st_part = _into_st_part
         self.num_worked_into = _num_worked_into
-        self.needle_direction = _needle_dir
+        self.needle_instr = _needle_instr
         self.num_rows_below = _num_rows_below
-
 
     def worked_into_sts(self):
         if self.num_worked_into > 1:
@@ -54,8 +52,8 @@ class IntoStitch:
                 str_rep += f" {self.num_worked_into} "
         elif self.num_worked_into > 0:
             str_rep += f" {self.num_worked_into} stitch" + self.worked_into_sts()
-        if self.needle_direction:
-            str_rep += f" {self.needle_direction.value} "
+        if self.needle_instr:
+            str_rep += f" {self.needle_instr} "
         return str_rep
 
     def __str__(self):

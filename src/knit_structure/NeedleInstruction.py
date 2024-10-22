@@ -1,20 +1,30 @@
-from src.knit_structure.enums.Needle import Needle
-
 
 class NeedleInstruction:
-    from_needle = Needle.LHN
-    to_needle = Needle.RHN
+    from_needle = None # Needle.LHN
+    to_needle = None # Needle.RHN
+    needle = None
+    needle_direction = None  # NeedleDirection: KNIT_DIRECTION "as if to knit", PURL_DIRECTION
+    needle_action = None   # NeedleAction: INSERT, HOLD
 
-    def __init__(self, from_n=Needle.LHN, to_n=Needle.RHN):
-        self.from_needle = from_n
-        self.to_needle = to_n
+    def __init__(self, _from_needle=None, _to_needle=None, _needle_direction=None, _needle_action=None, _needle=None):
+        self.from_needle = _from_needle
+        self.to_needle = _to_needle
+        self.needle_direction = _needle_direction
+        self.needle_action = _needle_action
+        self.needle = _needle
 
     def get_str_rep(self):
         str_rep = ""
+        if self.needle_action:
+            str_rep += f"{self.needle_action.value} "
+        if self.needle:
+            str_rep += f"{self.needle.value} "
         if self.from_needle:
-            str_rep = f"from {self.from_needle.value} "
+            str_rep += f"from {self.from_needle.value} "
         if self.to_needle:
             str_rep += f"to {self.to_needle.value} "
+        if self.needle_direction:
+            str_rep += f"to {self.needle_direction.value} "
         return str_rep
 
     def __str__(self):

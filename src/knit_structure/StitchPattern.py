@@ -25,11 +25,11 @@ class StitchPattern:
         self.ordered_sts = _ordered_sts
 
     def get_str_rep(self):
-        str_rep = ""
+        str_rep = f"Work \"{self.name}\" pattern as: \n"
         cnt = 0
         num_sts = len(self.ordered_sts)
         if num_sts > 0:
-            str_rep += f"Work \"{self.name}\" pattern as: \n"
+
             for a_patt in self.ordered_sts:
                 cnt += 1
                 str_rep += repr(a_patt)
@@ -43,8 +43,8 @@ class StitchPattern:
             str_rep += f" \n-- Pattern repeats over {self.width} st"
             if self.width > 1:
                 str_rep += f"s"
-        else:
-            str_rep += f"{self.min_width}"
+        elif self.min_width:
+            str_rep += f" \n-- Pattern repeats over {self.min_width.value} num of sts"
 
         if self.height > 1:
             str_rep += f" over {self.height} "
