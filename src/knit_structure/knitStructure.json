@@ -1,0 +1,60 @@
+{
+  "StitchPattern": {
+    "name": "patt name",
+    "width": 1,
+    "height": 1,
+    "min_width": "even",
+    "has_cross": false,
+    "rows_or_rnds": "rows",
+    "inc_or_dec": "dec",
+    "ordered_sts": [
+      {
+        "StitchInstruction": {
+          "stitch_action": "slip",
+          "needle_instr": {
+            "NeedleInstruction": {
+              "from_needle": "LHN",
+              "to_needle": "RHN",
+              "needle": "cable needle",
+              "needle_direction": "as if to knit",
+              "needle_action": "insert"
+            }
+          },
+          "working_yarn": {
+            "WorkingYarn": {
+              "num_wraps": 1,
+              "wrap_direction": "normal",
+              "yarn_action": "held",
+              "to_side": "front"
+            }
+          },
+          "into": {
+            "IntoStitch": {
+              "into_st_leg": "front leg",
+              "into_st_part": "bar",
+              "into_side": "back",
+              "num_workd_into": 1,
+              "needle_instr": {
+                "NeedleInstruction": {
+                  "from_needle": "LHN",
+                  "to_needle": "RHN",
+                  "needle": "cable needle",
+                  "needle_direction": "as if to knit",
+                  "needle_action": "insert"
+                }
+              }
+            },
+            "num_rows_below": 0
+          }
+        },
+        "st_side": "front",
+        "row_instr": {
+          "RowRndInstruction": {
+            "row_instr_num": 1,
+            "row_or_rnd": "Row"
+          }
+        }
+      }
+    ]
+  }
+}

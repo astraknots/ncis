@@ -4,12 +4,12 @@ from src.knit_structure.enums.StitchAction import StitchAction
 class StitchInstruction:
     stitch_action = StitchAction.NONE  # StitchAction: K, P, SLIP, HOLD
     needle_instr = None # NeedleInstruction(from_needle, to_needle, needle_action, needle, needle_direction)
-    worked = None # WorkingYarn()
+    working_yarn = None # WorkingYarn()
     into = None # IntoStitch()
     st_side = None   # Side: FRONT, BACK
-    row_instr = None
+    row_instr = None  # RowRndInstruction
     def __init__(self, _stitch_action=StitchAction.NONE, _needle_instr=None, _working_yarn=None, _into_st=None, _st_side=None, _row_instr=None):
-        self.worked = _working_yarn
+        self.working_yarn = _working_yarn
         self.into = _into_st
         self.needle_instr = _needle_instr
         self.stitch_action = _stitch_action
@@ -26,8 +26,8 @@ class StitchInstruction:
 
         if self.needle_instr:
             str_rep += f" {self.needle_instr} "
-        if self.worked:
-            str_rep += f" {self.worked} "
+        if self.working_yarn:
+            str_rep += f" {self.working_yarn} "
         if self.into:
             str_rep += f" {self.into} "
         if self.st_side:

@@ -58,7 +58,7 @@ knit_st_from_lhn = StitchInstruction(_stitch_action=StitchAction.K, _into_st=Int
 knit_from_cn = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoStitch(_needle_instr=NeedleInstruction(_from_needle=Needle.CN)))
 
 c4b_st = StitchPattern(name='C4B', _ordered_sts=[sl1_purlwise_to_cn, sl1_purlwise_to_cn, hold_back, knit_st_from_lhn, knit_st_from_lhn, knit_from_cn, knit_from_cn],
-                       _width=4, _height=4, _rows_or_rnds=RowsOrRounds.ROWS)
+                       _width=4, _height=1, _rows_or_rnds=RowsOrRounds.ROWS, _has_cross=True)
 
 
 print(knit_st, "\n")
@@ -78,11 +78,12 @@ Rnd 2: Slip 1 wyif, *k1, slip 1 wyif; repeat from * to end of pattern section.
 '''
 linen_rnd_1 = StitchInstruction(_row_instr=RowRndInstruction(_row_instr_num=1, _row_or_rnd=RowsOrRounds.RND), _stitch_action=StitchAction.K, _into_st=IntoStitch(_num_worked_into=1))
 sl1_wyif = StitchInstruction(_stitch_action=StitchAction.SLIP, _into_st=IntoStitch(_num_worked_into=1), _working_yarn=WorkingYarn(_yarn_action=YarnAction.HELD, _to_side=Side.FRONT))
-linen_rnd_2 = StitchInstruction(_row_instr=RowRndInstruction(_row_instr_num=2, _row_or_rnd=RowsOrRounds.RND), _stitch_action=StitchAction.SLIP, _into_st=IntoStitch(_num_worked_into=1), _working_yarn=WorkingYarn(_yarn_action=YarnAction.HELD, _to_side=Side.FRONT))
+linen_rnd_2 = StitchInstruction(_row_instr=RowRndInstruction(_row_instr_num=2, _row_or_rnd=RowsOrRounds.RND),
+                                _stitch_action=StitchAction.SLIP, _into_st=IntoStitch(_num_worked_into=1), _working_yarn=WorkingYarn(_yarn_action=YarnAction.HELD, _to_side=Side.FRONT))
 knit_1 = StitchInstruction(_stitch_action=StitchAction.K, _into_st=IntoStitch(_num_worked_into=1))
 
 linen_st = StitchPattern(name='linen st', _ordered_sts=[linen_rnd_1, sl1_wyif, linen_rnd_2, knit_1],
-                         _min_width=MinPattWidth.ODD,
+                         _min_width=MinPattWidth.EVEN,
                          _height=2, _rows_or_rnds=RowsOrRounds.ROUNDS)
 
 print(linen_st)

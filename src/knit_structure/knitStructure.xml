@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<StitchPattern>
+    <name>patt name</name>
+    <width>1</width>
+    <height>1</height>
+    <min_width>even</min_width>
+    <has_cross>false</has_cross>
+    <rows_or_rnds>rows</rows_or_rnds>
+    <inc_or_dec>dec</inc_or_dec>
+    <ordered_sts>
+        <StitchInstruction>
+            <stitch_action>slip</stitch_action>
+            <needle_instr>
+                <NeedleInstruction>
+                    <from_needle>LHN</from_needle>
+                    <to_needle>RHN</to_needle>
+                    <needle>cable needle</needle>
+                    <needle_direction>as if to knit</needle_direction>
+                    <needle_action>insert</needle_action>
+                </NeedleInstruction>
+            </needle_instr>
+            <working_yarn>
+                <WorkingYarn>
+                    <num_wraps>1</num_wraps>
+                    <wrap_direction>normal</wrap_direction>
+                    <yarn_action>held</yarn_action>
+                    <to_side>front</to_side>
+                </WorkingYarn>
+            </working_yarn>
+            <into>
+                <IntoStitch>
+                    <into_st_leg>front leg</into_st_leg>
+                    <into_st_part>bar</into_st_part>
+                    <into_side>back</into_side>
+                    <num_workd_into>1</num_workd_into>
+                    <needle_instr>
+                        <NeedleInstruction>
+                            <from_needle>LHN</from_needle>
+                            <to_needle>RHN</to_needle>
+                            <needle>cable needle</needle>
+                            <needle_direction>as if to knit</needle_direction>
+                            <needle_action>insert</needle_action>
+                        </NeedleInstruction>
+                    </needle_instr>
+                </IntoStitch>
+                <num_rows_below>0</num_rows_below>
+            </into>
+        </StitchInstruction>
+        <st_side>front</st_side>
+        <row_instr>
+            <RowRndInstruction>
+                <row_instr_num>1</row_instr_num>
+                <row_or_rnd>Row</row_or_rnd>
+            </RowRndInstruction>
+        </row_instr>
+    </ordered_sts>
+</StitchPattern>

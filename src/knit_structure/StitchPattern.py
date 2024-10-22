@@ -24,6 +24,11 @@ class StitchPattern:
         self.inc_or_dec = _inc_or_dec
         self.ordered_sts = _ordered_sts
 
+    def worked_into_sts(self):
+        if self.width > 1:
+            return f"s "
+        else:
+            return f""
     def get_str_rep(self):
         str_rep = f"Work \"{self.name}\" pattern as: \n"
         cnt = 0
@@ -40,16 +45,14 @@ class StitchPattern:
             str_rep += f"({self.inc_or_dec.value}) "
 
         if self.min_width == MinPattWidth.NUM:
-            str_rep += f" \n-- Pattern repeats over {self.width} st"
-            if self.width > 1:
-                str_rep += f"s"
+            str_rep += f" \n-- Pattern repeats over {self.width} st" + self.worked_into_sts()
         elif self.min_width:
-            str_rep += f" \n-- Pattern repeats over {self.min_width.value} num of sts"
+            str_rep += f" \n-- Pattern repeats over {self.min_width.value} num of sts "
 
         if self.height > 1:
             str_rep += f" over {self.height} "
-        if self.rows_or_rnds != RowsOrRounds.NONE:
-            str_rep += f"{self.rows_or_rnds.value}"
+            if self.rows_or_rnds != RowsOrRounds.NONE:
+                str_rep += f" {self.rows_or_rnds.value}"
         return str_rep
 
     def __str__(self):
