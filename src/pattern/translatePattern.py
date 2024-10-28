@@ -103,8 +103,30 @@ def find_repeating_patt(ordered_list):
         if ordered_list[0:first_half] == ordered_list[first_half:second_haf]:
             print("Stop! we have a repeat:")
             print(ordered_list[0:first_half], " == ", ordered_list[first_half:second_haf])
-            # new_rep_list = ordered_list[0:first_half]
-            # return
+            new_rep_list = convert_to_repeat(ordered_list[0:first_half], rep_phrase="twice")
+            print(new_rep_list)
+            return new_rep_list
+        else:
+            return find_repeating_patt(ordered_list[0:first_half]) + find_repeating_patt(ordered_list[first_half:second_haf])
+
+
+def find_repeating_patt_forward(ord_list, _num_reps=-1, _rep_phrase="twice", _rep_ind_l="(", _rep_ind_r=")"):
+    if len(ord_list) <= 1:
+        return ord_list
+    else:
+        if len(ord_list) < 4:
+            return ord_list
+        else:
+            first_two_instr = ord_list[0:2]
+            next_two_instr = ord_list[2:4]
+            if first_two_instr == next_two_instr:
+                # stop condition
+                print("Found a repeat! ", first_two_instr, " == ", next_two_instr)
+                new_rep = convert_to_repeat(first_two_instr, num_reps=_num_reps, rep_phrase=_rep_phrase, rep_ind_l=_rep_ind_l, rep_ind_r=_rep_ind_r)
+                print(new_rep)
+                return new_rep + find_repeating_patt_forward(ord_list[4:])
+            else:
+                return [ord_list[0]] + find_repeating_patt_forward(ord_list[1:])
 
 
 def consolidate_repeats_in_row_dict(row_dict):
@@ -113,19 +135,42 @@ def consolidate_repeats_in_row_dict(row_dict):
         row_instr = row_dict[arow]
         # look for repeating patterns and turn into repeat instruction
         print("Can we consolidate?", row_instr)
-        find_repeating_patt(row_instr)
+        rep_instrs = find_repeating_patt(row_instr)
+        new_row_dict[arow] = rep_instrs
+        print(rep_instrs)
 
-        for inst_num in range(0, len(row_instr) - 1):
-            if row_instr[inst_num] == row_instr[inst_num + 1]:
-                print("We've got a repeat!", row_instr[inst_num], " == ", row_instr[inst_num + 1])
-        # Do the first two instr match?
-        # if row_instr[0] == row_instr[1]:
+    for arow in new_row_dict:
+        row_instr = new_row_dict[arow]
+        # now do forward search to find repeats
+        print("Can we consolidate more?", row_instr)
+        rep_instrs = find_repeating_patt_forward(row_instr)
+        new_row_dict[arow] = rep_instrs
+        print(rep_instrs)
 
-        # TODO this is the start of our recursive fcn...
-        # first let's combine the first 2 instr and see if that repeats,
-        # already assuming due to our previous grouping at this point we have no repeats --> not true
-        if len(row_instr) > 3:  # and the array has to be longer than 3 instructions for this to be possible
-            first_group = row_instr[0:2]
-            print("first group:", first_group)
-        else:
-            print("Nope, array was only ", len(row_instr), " long.")
+    # do it again
+    for arow in new_row_dict:
+        row_instr = new_row_dict[arow]
+        # now do forward search to find repeats
+        print("Can we consolidate more?", row_instr)
+        rep_instrs = find_repeating_patt_forward(row_instr, _num_reps=2, _rep_phrase="times", _rep_ind_l="[", _rep_ind_r="]")
+        new_row_dict[arow] = rep_instrs
+        print(rep_instrs)
+
+    print(new_row_dict)
+    return new_row_dict
+
+''' for inst_num in range(0, len(row_instr) - 1):
+    if row_instr[inst_num] == row_instr[inst_num + 1]:
+        print("We've got a repeat!", row_instr[inst_num], " == ", row_instr[inst_num + 1])
+# Do the first two instr match?
+# if row_instr[0] == row_instr[1]:
+
+# TODO this is the start of our recursive fcn...
+# first let's combine the first 2 instr and see if that repeats,
+# already assuming due to our previous grouping at this point we have no repeats --> not true
+if len(row_instr) > 3:  # and the array has to be longer than 3 instructions for this to be possible
+    first_group = row_instr[0:2]
+    print("first group:", first_group)
+else:
+    print("Nope, array was only ", len(row_instr), " long.")
+'''

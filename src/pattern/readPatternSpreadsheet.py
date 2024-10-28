@@ -1,5 +1,6 @@
 import pandas as pd
 
+from src.pattern.checker.patternChecker import parse_patt_str, count_sts
 from src.pattern.translatePattern import group_sts_in_row_array, consolidate_repeats_in_row_dict
 
 
@@ -69,7 +70,12 @@ print(patt_dict)
 patt_row_dict = build_row_dict(patt_dict)
 print("\nInterpreted into instructions:\n")
 new_row_dict = group_sts_in_row_array(patt_row_dict)
-
-print(new_row_dict)
-consolidate_repeats_in_row_dict(new_row_dict)
+new_row_dict = consolidate_repeats_in_row_dict(new_row_dict)
+for arow in new_row_dict:
+    print(arow, " ", new_row_dict[arow])
+    st_cnt = 0
+    for patt_instr in new_row_dict[arow]:
+        parsed_patt_str = parse_patt_str(patt_instr)
+        st_cnt += count_sts(parsed_patt_str)
+    print(f"-- {st_cnt} sts")
 

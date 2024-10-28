@@ -86,7 +86,7 @@ def parse_patt_str(patt_str, skip_repeat=False):
     if len(single.strip()) > 0:
         instrs.append(single.strip())
 
-    print(instrs)  # debug
+    #print(instrs)  # debug
     return instrs
 
 
@@ -113,7 +113,7 @@ def count_instr_sts(instr):
         cnt += 1
     elif instr in ['SSK']:
         cnt += 1
-    elif instr in ['K2TOG']:
+    elif instr in ['K2TOG', 'P2TOG']:
         cnt += 1
     elif instr in ['K', 'P']:
         cnt += 1
