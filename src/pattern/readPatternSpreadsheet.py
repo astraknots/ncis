@@ -1,4 +1,8 @@
 import pandas as pd
+
+from src.pattern.translatePattern import interpret_row_instr_from_dict
+
+
 #from pathLib import Path
 #import lxml, html5lib, beautifulsoup4
 
@@ -36,25 +40,24 @@ def build_row_dict(col_dict):
         # Row numbers are in the first column A of spreadsheet
         for col in col_dict:
             col_keys.append(col)
-            print(col)
+            #print(col)
         row_nums = col_dict[col_keys[0]]
         num_rows = len(row_nums)
-        print('Num rows', num_rows)
+        print('\nNum rows', num_rows)
         print('Row nums', row_nums)
         for rown in row_nums:
             show_row_num = row_nums[rown]
             row_dict[show_row_num] = [f"Row {show_row_num}:"]
-        print(row_dict)
+        print("\nRow Dict:", row_dict)
 
         # Now pull the pattern into the rows
         for rown in range(0, num_rows):
             for col in range(1, len(col_dict)):
                 row_dict[row_nums[rown]].append(col_dict[col][rown])
 
+        print("\nRows of row dict:")
         for arow in row_dict:
             print(row_dict[arow])
-            print()
-        #print(row_dict)
 
     row_dict["Over Stitches:"] = len(col_dict) - 1
 
@@ -64,6 +67,6 @@ def build_row_dict(col_dict):
 patt_dict = read_file_to_dict(_file_name='./2x2 ribbing decrease.xlsx', _sheet_names=['Sheet1'], _read_sheet_name='Sheet1')
 print(patt_dict)
 patt_row_dict = build_row_dict(patt_dict)
-print(patt_row_dict)
-
+print("\nInterpretted into instructions:\n")
+interpret_row_instr_from_dict(patt_row_dict)
 
