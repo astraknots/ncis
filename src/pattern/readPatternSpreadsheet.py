@@ -88,63 +88,60 @@ def add_st_cnts_to_rows(patt_dict):
     '''
     row_dict = patt_dict[PATT_INSTRS]
     row_cnt_dict = {}
-    last_st_cnt = -1
-    st_cnt = 0
     for arow in row_dict:
-        if last_st_cnt > 0:
-            st_diff = last_st_cnt - st_cnt
-            if st_diff > 0:  # decrease
-                print(f", {st_diff} sts decreased.")
-        last_st_cnt = st_cnt
-        print(arow, " ", row_dict[arow])
         st_cnt = 0
         for patt_instr in row_dict[arow]:
             parsed_patt_str = parse_patt_str(patt_instr)
             st_cnt += count_sts(parsed_patt_str)
         row_cnt_dict[arow] = st_cnt
-        print(f"-- {st_cnt} sts")
-    if last_st_cnt > 0:
-        st_diff = last_st_cnt - st_cnt
-        if st_diff > 0:  # decrease
-            print(f", {st_diff} sts decreased.")
 
     patt_dict[PATT_ROW_ENDING_ST_CNT] = row_cnt_dict
     return patt_dict
 
 
+def determine_st_diff_inc_or_dec(last_st_cnt, st_cnt):
+    '''
+    Determine if the diff between last_st_cnt and st_cnt resulted in an inc or dec
+    Return list of the [<diff_value>, <IncOrDec>]
+    '''
+    st_diff = last_st_cnt - st_cnt
+    if st_diff > 0:  # decrease
+        return [st_diff, IncOrDec.DECREASE]
+    elif st_diff > 0:  # increase
+        st_diff = st_cnt - last_st_cnt
+        return [st_diff, IncOrDec.INCREASE]
+    return [0, IncOrDec.NONE]
+
+
 def add_shaping_to_rows(patt_dict):
     '''
     Adds metadata of inc'd or dec'd sts for rows in row_dict
+    Requires that the st count dict is set on pattern
+    ! Determines this based on diff from count of previous row (i.e. it's not smart enough to look at shaping sts yet)
     '''
     row_dict = patt_dict[PATT_INSTRS]
+    row_cnt_dict = patt_dict[PATT_ROW_ENDING_ST_CNT]
+    starting_patt_st_cnt = patt_dict[PATT_ST_CNT]
     row_diff_dict = {}
     row_shape_dict = {}
     last_st_cnt = -1
-    st_cnt = 0
+
     for arow in row_dict:
-        if last_st_cnt > 0:
-            st_diff = last_st_cnt - st_cnt
-            if st_diff > 0:  # decrease
-                row_diff_dict[arow] = st_diff
-                row_shape_dict[arow] = IncOrDec.DECREASE
+        st_cnt = row_cnt_dict[arow]
+        if last_st_cnt < 0: # first row
+            cnt_diff_shape = determine_st_diff_inc_or_dec(starting_patt_st_cnt, st_cnt)
+        else:
+            cnt_diff_shape = determine_st_diff_inc_or_dec(last_st_cnt, st_cnt)
+
+        row_diff_dict[arow] = cnt_diff_shape[0]
+        row_shape_dict[arow] = cnt_diff_shape[1]
 
         last_st_cnt = st_cnt
-
-        st_cnt = 0
-        for patt_instr in row_dict[arow]:
-            parsed_patt_str = parse_patt_str(patt_instr)
-            st_cnt += count_sts(parsed_patt_str)
-
-    # to get the info on the last row once we're done looping:
-    if last_st_cnt > 0:
-        st_diff = last_st_cnt - st_cnt
-        if st_diff > 0:  # decrease
-            row_diff_dict[arow] = st_diff
-            row_shape_dict[arow] = IncOrDec.DECREASE
 
     patt_dict[PATT_ROW_ENDING_ST_CHANGE_CNT] = row_diff_dict
     patt_dict[PATT_ROW_SHAPING] = row_shape_dict
     return patt_dict
+
 
 def print_patt(patt_dict):
     '''
