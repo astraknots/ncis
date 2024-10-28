@@ -154,12 +154,11 @@ def print_patt(patt_dict):
 
     for arow in row_dict:
         if row_cnt_dict.get(arow) and row_diff_dict.get(arow) and row_shape_dict.get(arow):
-            print(f"{arow} {row_dict[arow]}. {row_cnt_dict[arow]} sts -- {row_diff_dict[arow]} sts {row_shape_dict[arow].value}.\n")
+            print(f"{arow} {row_dict[arow][0]}. {row_cnt_dict[arow]} sts -- {row_diff_dict[arow]} sts {row_shape_dict[arow].value}.\n")
         elif row_cnt_dict.get(arow):
-            print(f"{arow} {row_dict[arow]}. {row_cnt_dict[arow]} sts.\n")
+            print(f"{arow} {row_dict[arow][0]}. {row_cnt_dict[arow]} sts.\n")
         else:
-            print(f"{arow} {row_dict[arow]}.\n")
-
+            print(f"{arow} {row_dict[arow][0]}.\n")
 
 
 patt_dict = read_file_to_dict(_file_name='./2x2 ribbing decrease.xlsx', _sheet_names=['Sheet1'], _read_sheet_name='Sheet1')

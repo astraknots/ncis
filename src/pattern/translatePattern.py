@@ -97,7 +97,7 @@ def convert_to_repeat(ord_list, rep_ind_l='(', delim=', ', rep_ind_r=')', num_re
     return [rep_str]
 
 
-def find_repeating_patt(ordered_list, _num_reps=-1, _rep_phrase="twice", _rep_ind_l="(", _rep_ind_r=")"):
+def find_repeating_patt_half(ordered_list, _num_reps=-1, _rep_phrase="twice", _rep_ind_l="(", _rep_ind_r=")"):
     if len(ordered_list) <= 1:
         # also a stop condition
         return ordered_list
@@ -112,7 +112,7 @@ def find_repeating_patt(ordered_list, _num_reps=-1, _rep_phrase="twice", _rep_in
           #  print(new_rep_list)
             return new_rep_list
         else:
-            return find_repeating_patt(ordered_list[0:first_half]) + find_repeating_patt(ordered_list[first_half:second_haf])
+            return find_repeating_patt_half(ordered_list[0:first_half]) + find_repeating_patt_half(ordered_list[first_half:second_haf])
 
 
 def find_repeating_patt_forward(ord_list, _num_reps=-1, _rep_phrase="twice", _rep_ind_l="(", _rep_ind_r=")"):
@@ -142,7 +142,7 @@ def consolidate_repeats_in_row_dict(row_dict):
     for arow in row_dict:
         row_instr = row_dict[arow]
         # look for repeating patterns and turn into repeat instruction
-        rep_instrs = find_repeating_patt(row_instr)
+        rep_instrs = find_repeating_patt_half(row_instr, _rep_phrase="twice") # , _rep_ind_l="*", _rep_ind_r="*"
         new_row_dict[arow] = rep_instrs
 
     for arow in new_row_dict:
