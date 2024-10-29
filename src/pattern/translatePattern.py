@@ -259,13 +259,15 @@ def consolidate_repeats_in_row_dict(row_dict):
     '''
     Takes the pattern's row dictionary, looks to find repeating patterns and consolidate the instructions
     '''
-    n = 1
+    new_dict = row_dict
+    for n in range(1, len(row_dict)):
+        new_dict = find_reps_n_forward(new_dict, n)
+        new_dict = find_reps_n_forward_step(new_dict, n)
+        if n % 4 == 0:
+            new_dict = find_reps_in_half(new_dict)
 
-    forward_n_rep_row_dict = find_reps_n_forward(row_dict, n)
-    n_forward_step = find_reps_n_forward_step(forward_n_rep_row_dict, n)
-    halfrep_row_dict = find_reps_in_half(n_forward_step)
     #forward_rep_row_dict = find_reps_forward(row_dict)
     #more_forward_rep_row_dict = find_reps_forward(forward_rep_row_dict) #, _num_reps=2, _rep_phrase="times", _rep_ind_l="[", _rep_ind_r="]")
 
 
-    return halfrep_row_dict
+    return new_dict
