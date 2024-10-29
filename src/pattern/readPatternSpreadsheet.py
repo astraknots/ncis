@@ -143,7 +143,20 @@ def add_shaping_to_rows(patt_dict):
     return patt_dict
 
 
+def pretty_row_instr(row_instr_list):
+    pretty_str = ""
+    if len(row_instr_list) > 0:
+        for ri in row_instr_list:
+            pretty_str += str(ri) + ", "
+
+        # trim off the extra comma
+        pretty_str = pretty_str[0:-2]
+
+    return pretty_str
+
+
 def print_patt(patt_dict):
+
     '''
     Prints the pattern as defined in the pattern dictionary
     '''
@@ -153,12 +166,14 @@ def print_patt(patt_dict):
     row_shape_dict = patt_dict[PATT_ROW_SHAPING]
 
     for arow in row_dict:
+        print_row = row_dict[arow]
+        pretty_row = pretty_row_instr(print_row)
         if row_cnt_dict.get(arow) and row_diff_dict.get(arow) and row_shape_dict.get(arow):
-            print(f"{arow} {row_dict[arow][0]}. {row_cnt_dict[arow]} sts -- {row_diff_dict[arow]} sts {row_shape_dict[arow].value}.\n")
+            print(f"{arow} {pretty_row}. {row_cnt_dict[arow]} sts -- {row_diff_dict[arow]} sts {row_shape_dict[arow].value}.\n")
         elif row_cnt_dict.get(arow):
-            print(f"{arow} {row_dict[arow][0]}. {row_cnt_dict[arow]} sts.\n")
+            print(f"{arow} {pretty_row}. {row_cnt_dict[arow]} sts.\n")
         else:
-            print(f"{arow} {row_dict[arow][0]}.\n")
+            print(f"{arow} {pretty_row}.\n")
 
 
 patt_dict = read_file_to_dict(_file_name='./2x2 ribbing decrease.xlsx', _sheet_names=['Sheet1'], _read_sheet_name='Sheet1')
