@@ -180,8 +180,10 @@ patt_dict = read_file_to_dict(_file_name='./2x2 ribbing decrease.xlsx', _sheet_n
 print(patt_dict)
 apatt_row_dict = build_patt_into_dict_by_rows(patt_dict)
 apatt_row_dict = group_sts_into_row_list(apatt_row_dict)
-consolidated_rep_patt_dict = consolidate_repeats_in_patt_dict(apatt_row_dict)
-cnt_patt_dict = add_st_cnts_to_rows(consolidated_rep_patt_dict)
+
+cnt_patt_dict = add_st_cnts_to_rows(apatt_row_dict)
 shape_patt_dict = add_shaping_to_rows(cnt_patt_dict)
-print_patt(shape_patt_dict)
+consolidated_rep_patt_dict = consolidate_repeats_in_patt_dict(shape_patt_dict)
+
+print_patt(consolidated_rep_patt_dict)
 

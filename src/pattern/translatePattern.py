@@ -260,7 +260,7 @@ def consolidate_repeats_in_row_dict(row_dict):
     Takes the pattern's row dictionary, looks to find repeating patterns and consolidate the instructions
     '''
     new_dict = row_dict
-    for n in range(1, len(row_dict)):
+    for n in range(1, 4):
         new_dict = find_reps_n_forward(new_dict, n)
         new_dict = find_reps_n_forward_step(new_dict, n)
         if n % 4 == 0:
