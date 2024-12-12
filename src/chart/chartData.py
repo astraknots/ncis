@@ -49,6 +49,10 @@ mvchart_r = { 'SUN' : ['VIRGO',3], 'MOON' : ['PISCES', 12], 'ASC' : ['SAGITTARIU
 cschart = { 'SUN' : ['AQUARIUS',26], 'MOON' : ['AQUARIUS', 20], 'ASC' : ['GEMINI', 14], 'MERCURY' : ['PISCES', 5], 'VENUS' : ['PISCES', 22], 'MARS' : ['SCORPIO', 7], 'JUPITER' : ['ARIES', 0], 'SATURN' : ['ARIES', 28], 'URANUS' : ['AQUARIUS', 13], 'NEPTUNE' : ['AQUARIUS', 2], 'PLUTO' : ['SAGITTARIUS', 10]}
 
 
+#G Career chart IH offer hint
+gcihoh = { 'SUN' : ['SAGITTARIUS',13], 'MOON' : ['CAPRICORN', 26], 'ASC' : ['TAURUS', 15], 'MERCURY' : ['SAGITTARIUS', 16, 'R'], 'VENUS' : ['CAPRICORN', 27], 'MARS' : ['LEO', 6], 'JUPITER' : ['GEMINI', 16, 'R'], 'SATURN' : ['PISCES', 13], 'URANUS' : ['TAURUS', 24, 'R'], 'NEPTUNE' : ['PISCES', 27, 'R'], 'PLUTO' : ['AQUARIUS', 0], 'CHIRON' : ['ARIES', 19, 'R']}
+
+
 def get_chart_person(chartname):
     '''Mapping of names to chart data is in this method'''
     if chartname == 'gchart':
@@ -79,6 +83,8 @@ def get_chart_person(chartname):
         return 'Marie V'
     elif chartname == 'cschart':
         return 'Callia Stylianou'
+    elif chartname == 'gcihoh':
+        return 'G Career IH Offer Hint'
     else:
         return 'Other User'
 

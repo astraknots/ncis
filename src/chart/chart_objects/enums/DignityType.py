@@ -7,3 +7,4 @@ class DignityType(Enum):
     DETRIMENT = 2
     FALL = 1
     PEREGRINE = 0
+    NONE = -1
