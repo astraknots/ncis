@@ -38,36 +38,28 @@ def calc_retro_ranges(mr_df, _printc=False):
     return retro_ranges
 
 
-def calc_proj_started_mr(proj_df, retro_ranges, _printc=False):
-    proj_started_mr = []
+def calc_proj_during_mr(proj_df, retro_ranges, _compare_date_colname, _printc=False):
+    proj_during_mr = []
     for row in proj_df.index:
-        start_date = proj_df.loc[row, 'Started']
+        start_date = proj_df.loc[row, _compare_date_colname]
         for retro_range in retro_ranges:
             if retro_range[0] <= start_date <= retro_range[1]:
-                proj_started_mr.append(proj_df.loc[row])
+                proj_during_mr.append(proj_df.loc[row])
                 if _printc:
-                    print(proj_df.loc[row, 'Project Name'], " started during Mercury Retrograde")
+                    print(proj_df.loc[row, 'Project Name'], _compare_date_colname, " during Mercury Retrograde")
 
     if _printc:
-        print(len(proj_started_mr), " projects started during Mercury Retrograde")
+        print(len(proj_during_mr), " projects ", _compare_date_colname, " during Mercury Retrograde")
         print()
-    return proj_started_mr
+    return proj_during_mr
+
+
+def calc_proj_started_mr(proj_df, retro_ranges, _printc=False):
+    return calc_proj_during_mr(proj_df, retro_ranges, 'Started', _printc)
 
 
 def calc_proj_completed_mr(proj_df, retro_ranges, _printc=False):
-    proj_completed_mr = []
-    for row in proj_df.index:
-        completed_date = proj_df.loc[row, 'Completed']
-        for retro_range in retro_ranges:
-            if retro_range[0] <= completed_date <= retro_range[1]:
-                proj_completed_mr.append(proj_df.loc[row])
-                if _printc:
-                    print(proj_df.loc[row, 'Project Name'], " completed during Mercury Retrograde")
-
-    if _printc:
-        print(len(proj_completed_mr), " projects completed during Mercury Retrograde")
-        print()
-    return proj_completed_mr
+    return calc_proj_during_mr(proj_df, retro_ranges, 'Completed', _printc)
 
 
 # Work on knitting project and Mercury Retrograde files specifically
@@ -89,5 +81,5 @@ proj_started_mr = calc_proj_started_mr(proj_df, mretro_ranges, True)
 proj_competed_mr = calc_proj_completed_mr(proj_df, mretro_ranges, True)
 
 # Projects Started during mercury retrograde
-#proj_started_mr = proj_df[mr_df['Retrograde Start'] < proj_df['Started']]
-#print(proj_started_mr.to_string())
+# proj_started_mr = proj_df[mr_df['Retrograde Start'] < proj_df['Started']]
+# print(proj_started_mr.to_string())
